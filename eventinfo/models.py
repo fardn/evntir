@@ -38,6 +38,8 @@ class Event_organizers(models.Model):
         verbose_name_plural = 'برگزارکننده'
 
     organizer_name = models.CharField('برگزارکننده', max_length=50)
+    organizer_logo = models.ImageField('تصویر', upload_to='main_image/organizers/logo/', null=True, blank=True, default=None)
+    organizer_instagram = models.CharField('اینستاگرام', max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.organizer_name

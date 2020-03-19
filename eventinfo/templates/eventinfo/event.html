@@ -455,18 +455,23 @@
 			<!-- Contact -->
 			<div class="boxed-widget margin-top-35">
 				<div class="hosted-by-title">
-					<h4><span>میزبانی توسط</span> <a href="pages-user-profile.html">تام پرین</a></h4>
-					<a href="pages-user-profile.html" class="hosted-by-avatar"><img src="images/dashboard-avatar.jpg" alt=""></a>
+					<h4><span>برگزار کننده:</span> <a href="pages-user-profile.html">{{ event.event_organizer.organizer_name }}</a></h4>
+					<a href="pages-user-profile.html" class="hosted-by-avatar"><img src="{{ event.event_organizer.organizer_logo.url }}" alt=""></a>
 				</div>
 				<ul class="listing-details-sidebar">
-					<li><i class="sl sl-icon-phone"></i> (123) 123-456</li>
+					<li><i class="sl sl-icon-phone"></i>02122267686</li>
 					<!-- <li><i class="sl sl-icon-globe"></i> <a href="#">http://example.com</a></li> -->
-					<li><i class="fa fa-envelope-o"></i> <a href="#"><span class="__cf_email__" data-cfemail="a1d5cecce1c4d9c0ccd1cdc48fc2cecc">[email&#160;protected]</span></a></li>
+					<!--<li><i class="fa fa-envelope-o"></i> <a href="#"><span class="__cf_email__" data-cfemail="a1d5cecce1c4d9c0ccd1cdc48fc2cecc">[email&#160;protected]</span></a></li> -->
 				</ul>
 
 				<ul class="listing-details-sidebar social-profiles">
-					<li><a href="#" class="facebook-profile"><i class="fa fa-facebook-square"></i> فیس بوک</a></li>
-					<li><a href="#" class="twitter-profile"><i class="fa fa-twitter"></i> توییتر</a></li>
+                    {%  if event.event_organizer.organizer_instagram %}
+                    <li>
+                        <a href="Https://instagram.com/{{ event.event_organizer.organizer_instagram }}" class="instagram-profile">
+                        <i class="fa fa-instagram"></i> اینستاگرام</a>
+                    </li>
+					{% endif %}
+                    <li><a href="#" class="twitter-profile"><i class="fa fa-twitter"></i> توییتر</a></li>
 					<!-- <li><a href="#" class="gplus-profile"><i class="fa fa-google-plus"></i> Google Plus</a></li> -->
 				</ul>
 
@@ -480,6 +485,11 @@
 						<button class="button">ارسال پیام</button>
 					</div>
 				</div>
+                <!-- Folow Organizer -->
+                <!-- TODO: FOLLOW ORGANIZER -->
+
+
+
 
 				<a href="#small-dialog" class="send-message-to-owner button popup-with-zoom-anim"><i class="sl sl-icon-envelope-open"></i> ارسال پیام</a>
 			</div>
