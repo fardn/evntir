@@ -14,7 +14,7 @@
 		<div class="row">
 			<div class="col-md-12">
 
-				<h2>رزرو</h2>
+				<h2>رزرو بلیت</h2>
 
 				<!-- Breadcrumbs -->
 				<nav id="breadcrumbs">
@@ -156,15 +156,22 @@
 			<!-- Booking Summary -->
 			<div class="listing-item-container compact order-summary-widget">
 				<div class="listing-item">
-					<img src="images/listing-item-04.jpg" alt="">
+					<img src="{{ event.event_main_image.url}}" alt="">
 
 					<div class="listing-item-content">
+                        <span class="tag">گفت‌وگو</span>
 						<div class="numerical-rating" data-rating="5.0"></div>
-						<h3>خانه برگر</h3>
-						<span>خیابان شین 2726، نیویورک</span>
+						<h3>{{ event.event_title }}</h3>
+						<span><i class="fa fa-map-marker"></i>
+							{{ event.event_venue.venue_city}}
+                            ،
+                            {{ event.event_venue.venue_name }}
+                        </span>
 					</div>
 				</div>
 			</div>
+
+            <!-- TODO: BOOKING DETAIL UPDTAE -->
 			<div class="boxed-widget opening-hours summary margin-top-0">
 				<h3><i class="fa fa-calendar-check-o"></i> خلاصه رزرو</h3>
 				<ul>
