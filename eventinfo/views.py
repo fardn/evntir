@@ -1,4 +1,7 @@
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
+from django.contrib.auth import authenticate, login, logout
+from django.urls import reverse
 
 from eventinfo.models import Event, Event_types
 from eventinfo.forms import EventSearchForm
@@ -42,3 +45,35 @@ def event_booking(request, event_id):
     }
 
     return render(request, 'eventinfo/event_booking.html', context)
+
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return HttpResponseRedirect(reverse('eventinfo:event_list'))
+        else:
+
+            # TODO: LOAD ERROR MESSAGES IN POPUP FORM
+
+            context = {
+                'user': username,
+                'error': 'کاربری یا این مشخصات یافت نشد.',
+            }
+            return render(request, 'eventinfo/events.html/', context)
+
+    else:
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('eventinfo:event_list'))
+        else:
+            context = {}
+
+    return render(request, 'eventinfo/events.html', context)
+
+
+def logout_view(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('eventinfo:event_list'))
