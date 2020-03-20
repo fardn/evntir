@@ -408,30 +408,28 @@
 			</div>
 
 			<!-- Book Now -->
+
 			<div class="boxed-widget booking-widget margin-top-35">
-				<h3><i class="fa fa-calendar-check-o "></i> رزرو</h3>
+				<h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
 				<div class="row with-forms  margin-top-0">
 
-					<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
+					<!-- Date Range Picker - docs: http://www.daterangepicker.com/
 					<div class="col-lg-12">
 						<input type="text" id="date-picker" placeholder="تاریخ" readonly="readonly">
 					</div>
+					-->
 
 					<!-- Panel Dropdown -->
 					<div class="col-lg-12">
 						<div class="panel-dropdown">
-							<a href="#">مهمان ها <span class="qtyTotal" name="qtyTotal">1</span></a>
+							<a href="#"> بلیت‌ها <span class="qtyTotal" name="qtyTotal">1</span></a>
 							<div class="panel-dropdown-content">
 
 								<!-- Quantity Buttons -->
 								<div class="qtyButtons">
 									<div class="qtyTitle">بزرگسالان</div>
 									<input type="text" name="qtyInput" value="1">
-								</div>
 
-								<div class="qtyButtons">
-									<div class="qtyTitle">بچه ها</div>
-									<input type="text" name="qtyInput" value="0">
 								</div>
 
 							</div>
@@ -442,13 +440,14 @@
 				</div>
 				
 				<!-- Book Now -->
-				<a href="pages-booking.html" class="button book-now fullwidth margin-top-5">درخواست رزرو</a>
+				<a href="{% url "eventinfo:event_booking" event_id=event.id %}" class="button book-now fullwidth margin-top-5">درخواست رزرو</a>
 				
 				<!-- Estimated Cost -->
-<!-- 				<div class="booking-estimated-cost">
-					<strong>Total Cost</strong>
-					<span>$49</span>
-				</div> -->
+				<div class="booking-estimated-cost">
+                    <span>۱۰ هزار تومان</span>
+					<strong>جمع کل</strong>
+
+				</div>
 			</div>
 			<!-- Book Now / End -->
 

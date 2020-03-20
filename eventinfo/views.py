@@ -30,3 +30,15 @@ def event_detail(request, event_id):
     }
 
     return render(request, 'eventinfo/event.html', context)
+
+
+def event_booking(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    guests = event.event_guests.all()
+
+    context = {
+        'guests': guests,
+        'event': event,
+    }
+
+    return render(request, 'eventinfo/event_booking.html', context)

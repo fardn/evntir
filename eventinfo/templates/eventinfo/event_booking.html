@@ -1,0 +1,185 @@
+{% extends 'eventinfo/base_page.html' %}
+{% load static %}
+
+{% block title %}
+{{ salam }} |
+    ایونت‌اینفو
+{% endblock %}
+
+{% block titlebar %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2>رزرو</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="#">صفحه اصلی</a></li>
+						<li>رزرو</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Content
+================================================== -->
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+
+		<!-- Content
+		================================================== -->
+		<div class="col-lg-8 col-md-8 padding-right-30">
+
+			<h3 class="margin-top-0 margin-bottom-30">اطلاعات شخصی</h3>
+
+			<div class="row">
+
+				<div class="col-md-6">
+					<label>نام</label>
+					<input type="text" value="">
+				</div>
+
+				<div class="col-md-6">
+					<label>نام خانوادگی</label>
+					<input type="text" value="">
+				</div>
+
+				<div class="col-md-6">
+					<div class="input-with-icon medium-icons">
+						<label>آدرس ایمیل</label>
+						<input type="text" value="">
+						<i class="im im-icon-Mail"></i>
+					</div>
+				</div>
+
+				<div class="col-md-6">
+					<div class="input-with-icon medium-icons">
+						<label>تلفن</label>
+						<input type="text" value="">
+						<i class="im im-icon-Phone-2"></i>
+					</div>
+				</div>
+
+			</div>
+
+
+			<h3 class="margin-top-55 margin-bottom-30">روش پرداخت</h3>
+
+			<!-- Payment Methods Accordion -->
+			<div class="payment">
+
+				<div class="payment-tab payment-tab-active">
+					<div class="payment-tab-trigger">
+						<input checked id="paypal" name="cardType" type="radio" value="paypal">
+						<label for="paypal">پی پال</label>
+						<img class="payment-logo paypal" src="../../../i.imgur.com/ApBxkXU.png" alt="">
+					</div>
+
+					<div class="payment-tab-content">
+						<p>شما برای تکمیل پرداخت به PayPal هدایت می شوید.</p>
+					</div>
+				</div>
+
+
+				<div class="payment-tab">
+					<div class="payment-tab-trigger">
+						<input type="radio" name="cardType" id="creditCart" value="creditCard">
+						<label for="creditCart">کارت اعتباری / شماره کارت</label>
+						<img class="payment-logo" src="../../../i.imgur.com/IHEKLgm.png" alt="">
+					</div>
+
+					<div class="payment-tab-content">
+						<div class="row">
+
+							<div class="col-md-6">
+								<div class="card-label">
+									<label for="nameOnCard">نام بر روی کارت</label>
+									<input id="nameOnCard" name="nameOnCard" required type="text">
+								</div>
+							</div>
+
+							<div class="col-md-6">
+								<div class="card-label">
+									<label for="cardNumber">شماره کارت</label>
+									<input id="cardNumber" name="cardNumber" placeholder="1234  5678  9876  5432" required type="text">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="card-label">
+									<label for="expirynDate">ماه انقضاء</label>
+									<input id="expiryDate" placeholder="ماه" required type="text">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="card-label">
+									<label for="expiryDate">سال انقضا</label>
+									<input id="expirynDate" placeholder="سال" required type="text">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="card-label">
+									<label for="cvv">CVV</label>
+									<input id="cvv" required type="text">
+								</div>
+							</div>
+
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!-- Payment Methods Accordion / End -->
+		
+			<a href="pages-booking-confirmation.html" class="button booking-confirmation-btn margin-top-40 margin-bottom-65">تایید و پرداخت</a>
+		</div>
+
+
+		<!-- Sidebar
+		================================================== -->
+		<div class="col-lg-4 col-md-4 margin-top-0 margin-bottom-60">
+
+			<!-- Booking Summary -->
+			<div class="listing-item-container compact order-summary-widget">
+				<div class="listing-item">
+					<img src="images/listing-item-04.jpg" alt="">
+
+					<div class="listing-item-content">
+						<div class="numerical-rating" data-rating="5.0"></div>
+						<h3>خانه برگر</h3>
+						<span>خیابان شین 2726، نیویورک</span>
+					</div>
+				</div>
+			</div>
+			<div class="boxed-widget opening-hours summary margin-top-0">
+				<h3><i class="fa fa-calendar-check-o"></i> خلاصه رزرو</h3>
+				<ul>
+					<li>تاریخ <span>1398/2/1</span></li>
+					<li>ساعت <span>5:30 بعد ظهر</span></li>
+					<li>مهمان <span>2 بزرگسالان</span></li>
+					<li class="total-costs">هزینه کل <span>9.00 تومان</span></li>
+				</ul>
+
+			</div>
+			<!-- Booking Summary / End -->
+
+		</div>
+
+	</div>
+</div>
+<!-- Container / End -->
+{% endblock %}
