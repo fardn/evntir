@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
@@ -97,11 +98,34 @@ class Event(models.Model):
     event_venue = models.ForeignKey('Event_venues', on_delete=models.PROTECT, null=True, blank=True, default=None, verbose_name='محل برگزاری')
     event_description = models.TextField('توضیحات')
     event_main_image = models.ImageField('تصویر', upload_to='main_image/', null=True, blank=True)
-    event_guests = models.ManyToManyField('Guest', null=True, blank=True, default=None)
+    event_guests = models.ManyToManyField('Guest', blank=True, default=None)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
 
+
+class Profile(models.Model):
+    """
+    Representing user profile
+    """
+
+    class Meta:
+        verbose_name_plural = 'پروفایل کاربری'
+        verbose_name = 'پروفایل کاربری'
+
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='حساب کاربری')
+    mobile = models.CharField('موبایل', max_length=11)
+    GENDER_CHOICES = (('MALE', 'مرد'), ('FEMALE', 'زن'))
+    gender = models.IntegerField('جنسیت', choices=GENDER_CHOICES, null=True, blank=True)
+    bday = models.DateField('تاریخ تولد', null=True, blank=True)
+    user_image = models.ImageField('', upload_to='main_image/users/avatar/', null=True, blank=True)
+    balance = models.IntegerField('اعتبار', default=0)
+
+    def __str__(self):
+        return self.user.get_full_name()
+
+    def get_balance_display(self):
+        return '{} تومان'.format(self.balance)
 
 
 

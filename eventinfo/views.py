@@ -1,6 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from eventinfo.models import Event, Event_types
@@ -77,3 +78,12 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('eventinfo:event_list'))
+
+@login_required
+def account_profile(request):
+    profile = request.user.profile
+    context = {
+        'profile': profile
+    }
+
+    return render(request, 'eventinfo/account/profile.html', context)
