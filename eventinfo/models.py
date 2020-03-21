@@ -115,7 +115,7 @@ class Profile(models.Model):
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='حساب کاربری')
     mobile = models.CharField('موبایل', max_length=11)
-    GENDER_CHOICES = (('MALE', 'مرد'), ('FEMALE', 'زن'))
+    GENDER_CHOICES = ((1, 'مرد'), (0, 'زن'))
     gender = models.IntegerField('جنسیت', choices=GENDER_CHOICES, null=True, blank=True)
     bday = models.DateField('تاریخ تولد', null=True, blank=True)
     user_image = models.ImageField('', upload_to='main_image/users/avatar/', null=True, blank=True)

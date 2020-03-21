@@ -1,279 +1,154 @@
 {% extends 'eventinfo/account/dashboard-base-page.html' %}
+{% load static %}
 
 {% block title %}
 {{ profile.user.get_full_name }} |
     ایونت‌اینفو
 {% endblock %}
 
-{% block titlebar %}
-<!-- Titlebar
-================================================== -->
-<div id="titlebar" class="gradient">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-
-				<div class="user-profile-titlebar">
-					<div class="user-profile-avatar"><img src="images/user-profile-avatar.jpg" alt=""></div>
-					<div class="user-profile-name">
-						<h2>جعفر عباسی</h2>
-						<div class="star-rating" data-rating="5">
-							<div class="rating-counter"><a href="#listing-reviews">(60 نظر)</a></div>
-						</div>
-					</div>
-				</div>
-
-			</div>
-		</div>
-	</div>
-</div>
-
-{% endblock %}
 
 {% block content %}
 
 <!-- Content
-================================================== -->
-<div class="container">
-	<div class="row sticky-wrapper">
+	================================================== -->
+	<div class="dashboard-content">
 
-
-		<!-- Sidebar
-		================================================== -->
-		<div class="col-lg-4 col-md-4 margin-top-0">
-				
-			<!-- Verified Badge -->
-			<div class="verified-badge with-tip" data-tip-content="حساب تأیید شده و متعلق به فرد یا سازمان نماینده است.">
-				<i class="sl sl-icon-user-following"></i> حساب تایید شده
-			</div>
-
-			<!-- Contact -->
-			<div class="boxed-widget margin-top-30 margin-bottom-50">
-				<h3>تماس</h3>
-				<ul class="listing-details-sidebar">
-					<li><i class="sl sl-icon-phone"></i> (123) 123-456</li>
-					<li><i class="fa fa-envelope-o"></i> <a href="#"><span class="__cf_email__" data-cfemail="fc889391bc99849d918c9099d29f9391">[email&#160;protected]</span></a></li>
-				</ul>
-
-				<ul class="listing-details-sidebar social-profiles">
-					<li><a href="#" class="facebook-profile"><i class="fa fa-facebook-square"></i> فیس بوک</a></li>
-					<li><a href="#" class="twitter-profile"><i class="fa fa-twitter"></i> توییتر</a></li>
-					<!-- <li><a href="#" class="gplus-profile"><i class="fa fa-google-plus"></i> Google Plus</a></li> -->
-				</ul>
-
-				<!-- Reply to review popup -->
-				<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
-					<div class="small-dialog-header">
-						<h3>ارسال پیام</h3>
-					</div>
-					<div class="message-reply margin-top-0">
-						<textarea cols="40" rows="3" placeholder="پیام شما به جعفر"></textarea>
-						<button class="button">ارسال پیام</button>
-					</div>
-				</div>
-
-				<a href="#small-dialog" class="send-message-to-owner button popup-with-zoom-anim"><i class="sl sl-icon-envelope-open"></i> ارسال پیام</a>
-			</div>
-			<!-- Contact / End-->
-
-		</div>
-		<!-- Sidebar / End -->
-
-
-		<!-- Content
-		================================================== -->
-		<div class="col-lg-8 col-md-8 padding-left-30">
-
-			<h3 class="margin-top-0 margin-bottom-40">آگهی های جعفر</h3>
-
-			<!-- Listings Container -->
+		<!-- Titlebar -->
+		<div id="titlebar">
 			<div class="row">
-
-				<!-- Listing Item -->
-				<div class="col-lg-12 col-md-12">
-					<div class="listing-item-container list-layout">
-						<a href="listings-single-page.html" class="listing-item">
-							
-							<!-- Image -->
-							<div class="listing-item-image">
-								<img src="images/listing-item-01.jpg" alt="">
-								<span class="tag">نوشیدن و خوردن</span>
-							</div>
-							
-							<!-- Content -->
-							<div class="listing-item-content">
-								<div class="listing-badge now-open">هم اکنون باز است</div>
-
-								<div class="listing-item-inner">
-									<h3>رستوران جعفر</h3>
-									<span>خیابان شین 2726، نیویورک</span>
-									<div class="star-rating" data-rating="3.5">
-										<div class="rating-counter">(12 نظر)</div>
-									</div>
-								</div>
-
-								<span class="like-icon"></span>
-							</div>
-						</a>
-					</div>
+				<div class="col-md-12">
+					<h2>پروفایل من</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">صفحه اصلی</a></li>
+							<li><a href="#">داشبورد</a></li>
+							<li>پروفایل من</li>
+						</ul>
+					</nav>
 				</div>
-				<!-- Listing Item / End -->
-
-				<!-- Listing Item -->
-				<div class="col-lg-12 col-md-12">
-					<div class="listing-item-container list-layout">
-						<a href="listings-single-page.html" class="listing-item">
-							
-							<!-- Image -->
-							<div class="listing-item-image">
-								<img src="images/listing-item-03.jpg" alt="">
-								<span class="tag">هتل ها</span>
-							</div>
-							
-							<!-- Content -->
-							<div class="listing-item-content">
-
-								<div class="listing-item-inner">
-								<h3>هتل پیروزی</h3>
-								<span>خیابان شین 2726، نیویورک</span>
-									<div class="star-rating" data-rating="2.0">
-										<div class="rating-counter">(17 نظر)</div>
-									</div>
-								</div>
-
-								<span class="like-icon"></span>
-
-								<div class="listing-item-details">شروع از 59 دلار در هر شب</div>
-							</div>
-						</a>
-					</div>
-				</div>
-				<!-- Listing Item / End -->
-
-				<!-- Listing Item -->
-				<div class="col-lg-12 col-md-12">
-					<div class="listing-item-container list-layout">
-						<a href="listings-single-page.html" class="listing-item">
-							
-							<!-- Image -->
-							<div class="listing-item-image">
-								<img src="images/listing-item-04.jpg" alt="">
-								<span class="tag">خوردن و نوشیدن</span>
-							</div>
-							
-							<!-- Content -->
-							<div class="listing-item-content">
-								<div class="listing-badge now-open">هم اکنون باز است</div>
-								
-								<div class="listing-item-inner">
-								<h3>خانه برگر</h3>
-								<span>خیابان شین 2726، نیویورک</span>
-									<div class="star-rating" data-rating="5.0">
-										<div class="rating-counter">(31 نظر)</div>
-									</div>
-								</div>
-
-								<span class="like-icon"></span>
-							</div>
-						</a>
-					</div>
-				</div>
-				<!-- Listing Item / End -->
-
-				<div class="col-md-12 browse-all-user-listings">
-					<a href="#">مرور همه آگهی ها <i class="fa fa-angle-right"></i> </a>
-				</div>
-
 			</div>
-			<!-- Listings Container / End -->
+		</div>
 
-				
-			<!-- Reviews -->
-			<div id="listing-reviews" class="listing-section">
-				<h3 class="margin-top-60 margin-bottom-20">نظرات</h3>
+		<div class="row">
 
-				<div class="clearfix"></div>
+			<!-- Profile -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">جزئیات مشخصات</h4>
+					<div class="dashboard-list-box-static">
 
-				<!-- Reviews -->
-				<section class="comments listing-reviews">
-
-					<ul>
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">طاهر خان <div class="comment-by-listing">بر <a href="#">خانه برگر</a></div> <span class="date">خرداد 1398</span>
-									<div class="star-rating" data-rating="5"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-								
-								<div class="review-images mfp-gallery-container">
-									<a href="images/review-image-01.jpg" class="mfp-gallery"><img src="images/review-image-01.jpg" alt=""></a>
+						<!-- Avatar -->
+						<div class="edit-profile-photo">
+							<img src="{{ profile.user_image.url}}" alt="">
+							<div class="change-photo-btn">
+								<div class="photoUpload">
+								    <span><i class="fa fa-upload"></i> آپلود عکس</span>
+								    <input type="file" class="upload" />
 								</div>
 							</div>
-						</li>
-
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /> </div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">مجتبی خان <div class="comment-by-listing">بر <a href="#">رستوران جعفر</a></div> <span class="date">خرداد 1398</span>
-									<div class="star-rating" data-rating="4"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-							</div>
-						</li>
-
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">فرشید خان <div class="comment-by-listing">بر <a href="#">خانه برگر</a></div> <span class="date">خرداد 1398</span>
-									<div class="star-rating" data-rating="5"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-								
-								<div class="review-images mfp-gallery-container">
-									<a href="images/review-image-02.jpg" class="mfp-gallery"><img src="images/review-image-02.jpg" alt=""></a>
-									<a href="images/review-image-03.jpg" class="mfp-gallery"><img src="images/review-image-03.jpg" alt=""></a>
-								</div>
-							</div>
-						</li>
-
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /> </div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">صیدار خان <div class="comment-by-listing">بر <a href="#">هتل پیروزی</a></div> <span class="date">خرداد 1398</span>
-									<div class="star-rating" data-rating="5"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-							</div>
-
-						</li>
-					 </ul>
-				</section>
-
-				<!-- Pagination -->
-				<div class="clearfix"></div>
-				<div class="row">
-					<div class="col-md-12">
-						<!-- Pagination -->
-						<div class="pagination-container margin-top-30">
-							<nav class="pagination">
-								<ul>
-									<li><a href="#" class="current-page">1</a></li>
-									<li><a href="#">2</a></li>
-									<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
-								</ul>
-							</nav>
 						</div>
+
+						<!-- Details -->
+						<div class="my-profile">
+
+							<label>نام</label>
+							<input value="{{ profile.user.first_name}}" type="text">
+
+                            <label>نام خانوادگی</label>
+                                <input value="{{ profile.user.last_name}}" type="text">
+
+                            <label>جنسیت</label>
+                            <select data-placeholder="جنسیت" name="gender" class="chosen-select" style="display: none;">
+                                <option value="" selected="">-</option>
+                                <option value="0" selected="">زن</option>
+                                <option value="1" selected="">مرد</option>
+							</select>
+
+                            <label>تاریخ تولد</label>
+                                <input type="text" id="date-picker" value="{{ profile.bday|date:"m/d/Y" }}" readonly="readonly">
+
+
+							<label>موبایل</label>
+							<input value="{{ profile.mobile }}" type="text">
+
+							<label>ایمیل</label>
+							<input value="{{profile.user.email}}" type="text">
+
+							<label>یادداشت</label>
+							<textarea name="notes" id="notes" cols="30" rows="10"> از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون واز صنعت چاپ و با استفاده از طراحان گرافیک اس. </textarea>
+
+						</div>
+
+						<button class="button margin-top-15">ذخیره تنظیمات</button>
+
 					</div>
 				</div>
-				<div class="clearfix"></div>
-				<!-- Pagination / End -->
 			</div>
 
+			<!-- Change Password -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">تغییر رمز عبور</h4>
+					<div class="dashboard-list-box-static">
+
+						<!-- Change Password -->
+						<div class="my-profile">
+							<label class="margin-top-0">رمز عبور فعلی</label>
+							<input type="password">
+
+							<label>رمز عبور جدید</label>
+							<input type="password">
+
+							<label>تایید رمز عبور جدید</label>
+							<input type="password">
+
+							<button class="button margin-top-15">تغییر رمز عبور</button>
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 1398 لیستئو. تمامی حقوق محفوظ است.</div>
+			</div>
 
 		</div>
 
 	</div>
-</div>
+	<!-- Content / End -->
+
+{% endblock %}
+
+{% block script %}
+<script src="{% static 'eventinfo/scripts/moment.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'eventinfo/scripts/daterangepicker.js' %}"></script>
+<script>
+// Calendar Init
+$(function() {
+	$('#date-picker').daterangepicker({
+		"opens": "left",
+		singleDatePicker: true,
+        showDropdowns: true,
+
+	});
+});
+
+// Calendar animation
+$('#date-picker').on('showCalendar.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-animated');
+});
+$('#date-picker').on('show.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-visible');
+	$('.daterangepicker').removeClass('calendar-hidden');
+});
+$('#date-picker').on('hide.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').removeClass('calendar-visible');
+	$('.daterangepicker').addClass('calendar-hidden');
+});
+</script>
 
 {% endblock %}
