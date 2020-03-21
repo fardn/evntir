@@ -79,6 +79,7 @@ def logout_view(request):
     logout(request)
     return HttpResponseRedirect(reverse('eventinfo:event_list'))
 
+
 @login_required
 def account_profile(request):
     profile = request.user.profile
