@@ -91,8 +91,6 @@ class Event(models.Model):
         verbose_name_plural = 'رویداد'
 
     event_title = models.CharField(max_length=200, verbose_name='عنوان')
-    event_start_date = models.DateTimeField('تاریخ و ساعت شروع')
-    event_end_date = models.DateTimeField('تاریخ و ساعت پایان')
     event_type = models.ForeignKey('Event_types', on_delete=models.PROTECT, null=True, blank=True, default=None, verbose_name='نوع رویداد')
     event_organizer = models.ForeignKey('Event_organizers', on_delete=models.PROTECT, null=True, blank=True, default=None, verbose_name='برگزارکننده')
     event_venue = models.ForeignKey('Event_venues', on_delete=models.PROTECT, null=True, blank=True, default=None, verbose_name='محل برگزاری')
@@ -128,6 +126,21 @@ class Profile(models.Model):
         return '{} تومان'.format(self.balance)
 
 
+class Time_Slots(models.Model):
+    """
+    Representing Event time slots
+    """
+
+    class Meta:
+        verbose_name = 'سانس'
+        verbose_name_plural = 'سانس'
+
+    event_id = models.ForeignKey('Event', on_delete=models.CASCADE, verbose_name='شناسه رویداد')
+    event_start_date = models.DateTimeField('تاریخ و ساعت شروع')
+    event_end_date = models.DateTimeField('تاریخ و ساعت پایان')
+
+    def __str__(self):
+        return '{} - {}'.format(self.event_id, self.event_start_date)
 
 
 

@@ -50,10 +50,14 @@
 			<div id="listing-overview" class="listing-section">
 
 				<!-- Event Description -->
-                <ul class="apartment-details">
-                    <li class="main-detail-_event_date">شروع رویداد: <span>{{ event.event_start_date }}</span></li>
-                    <li class="main-detail-_event_date_end">پایان رویداد: <span>{{ event.event_end_date }}</span></li>
-                </ul>
+                {% for time_slot in time_slots %}
+                    <ul class="apartment-details">
+                        <li class="main-detail-_event_date">شروع رویداد: <span>{{ time_slot.event_start_date }}</span></li>
+                        <li class="main-detail-_event_date_end">پایان رویداد: <span>{{ time_slot.event_end_date }}</span></li>
+                    </ul>
+                {% endfor %}
+
+
 
 				<!-- Description -->
 				<p>
