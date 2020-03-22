@@ -420,24 +420,53 @@
 				<h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
 				<div class="row with-forms  margin-top-0">
 
-					<!-- Date Range Picker - docs: http://www.daterangepicker.com/
+					<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
 					<div class="col-lg-12">
 						<input type="text" id="date-picker" placeholder="تاریخ" readonly="readonly">
 					</div>
-					-->
+                    <!-- Time Slots Dropdown -->
+                    <div class="col-lg-12">
+						<div class="panel-dropdown time-slots-dropdown">
+							<a href="#">اسلات زمان</a>
+							<div class="panel-dropdown-content padding-reset" style="width: 309px;">
+								<div class="panel-dropdown-scrollable">
 
+                                    {% for time_slot in time_slots %}
+									<!-- Time Slot -->
+									<div class="time-slot">
+										<input type="radio" name="time-slot" id="time-slot-{{ time_slot.id }}">
+										<label for="time-slot-{{ time_slot.id }}">
+											<strong>
+                                                {{ time_slot.event_start_date|date:'l j b Y' }}
+                                            </strong>
+											<span>
+                                            ساعت
+                                            {{ time_slot.event_start_date|date:'H:i' }}
+                                            تا
+                                            {{ time_slot.event_end_date|date:'H:i' }}
+                                            </span>
+										</label>
+									</div>
+                                    {% endfor %}
+
+								</div>
+							</div>
+						</div>
+					</div>
+                    <!-- Time Slots Dropdown / End -->
 					<!-- Panel Dropdown -->
 					<div class="col-lg-12">
 						<div class="panel-dropdown">
 							<a href="#"> بلیت‌ها <span class="qtyTotal" name="qtyTotal">1</span></a>
 							<div class="panel-dropdown-content">
-
+                                {% for ticket in tickets %}
 								<!-- Quantity Buttons -->
 								<div class="qtyButtons">
-									<div class="qtyTitle">بزرگسالان</div>
-									<input type="text" name="qtyInput" value="1">
+									<div class="qtyTitle">{{ ticket.ticket_title }}</div>
+									<input type="text" name="qtyInput" value="0">
 
 								</div>
+                                {% endfor %}
 
 							</div>
 						</div>
@@ -539,26 +568,71 @@
 <!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
 <script src="{% static 'eventinfo/scripts/moment.min.js' %}"></script>
 <script src="{% static 'eventinfo/scripts/daterangepicker.js' %}"></script>
+    <!-- Date Range Picker
 <script>
 // Calendar Init
-$(function() {
-	$('#date-picker').daterangepicker({
-		"opens": "left",
-		// singleDatePicker: true,
 
-		// Disabling Date Ranges
-		isInvalidDate: function(date) {
-		// Disabling Date Range
-		var disabled_start = moment('09/02/2018', 'MM/DD/YYYY');
-		var disabled_end = moment('09/06/2018', 'MM/DD/YYYY');
-		return date.isAfter(disabled_start) && date.isBefore(disabled_end);
+    jQuery(function($) {
+        $("#date-picker").daterangepicker({
+            singleDatePicker: true,
+            opens:'center',
+            isInvalidDate: function(date) {
+				var dateRanges = [
+					{ 'start': moment('2020-03-10'), 'end': moment('2020-03-13') },
+					{ 'start': moment('2020-03-13'), 'end': moment('2020-03-15') }
+				];
+				return dateRanges.reduce(function(bool, range) {
+					return bool || ( date <= range.start || date >= range.end );
+				}, false);
+            }
+        });
+    });
 
-		// Disabling Single Day
-		// if (date.format('MM/DD/YYYY') == '08/08/2018') {
-		//     return true;
-		// }
-		}
+
+// Calendar animation
+$('#date-picker').on('showCalendar.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-animated');
+});
+$('#date-picker').on('show.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-visible');
+	$('.daterangepicker').removeClass('calendar-hidden');
+});
+$('#date-picker').on('hide.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').removeClass('calendar-visible');
+	$('.daterangepicker').addClass('calendar-hidden');
+});
+</script>
+-->
+<script>
+$(".time-slot").each(function() {
+	var timeSlot = $(this);
+	$(this).find('input').on('change',function() {
+		var timeSlotVal = timeSlot.find('strong').text();
+
+		$('.panel-dropdown.time-slots-dropdown a').html(timeSlotVal);
+		$('.panel-dropdown').removeClass('active');
 	});
+});
+</script>
+
+<script>
+jQuery(function($) {
+
+    var dates = [];
+
+    {% for time_slot in time_slots %}
+    var a = moment("{{ time_slot.event_start_date|date:'Y-m-d' }}");
+    var b = moment("{{ time_slot.event_end_date|date:'Y-m-d' }}");
+    {% endfor %}
+
+
+    $("#date-picker").daterangepicker({
+        singleDatePicker: true,
+        opens:'center',
+        isInvalidDate: function(date) {
+            return !(date <= a && date >= b);
+        }
+    });
 });
 
 // Calendar animation
@@ -574,5 +648,7 @@ $('#date-picker').on('hide.daterangepicker', function(ev, picker) {
 	$('.daterangepicker').addClass('calendar-hidden');
 });
 </script>
+
+
 
 {% endblock %}
