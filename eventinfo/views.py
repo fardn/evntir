@@ -4,7 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from eventinfo.models import Event, Event_types, Time_Slots
+from eventinfo.models import Event, Event_types, Time_Slots, Tickets
 from eventinfo.forms import EventSearchForm
 
 
@@ -28,11 +28,13 @@ def event_detail(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     guests = event.event_guests.all()
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
+    tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
 
     context = {
         'guests': guests,
         'event': event,
         'time_slots': time_slots,
+        'tickets': tickets,
     }
 
     return render(request, 'eventinfo/event.html', context)
