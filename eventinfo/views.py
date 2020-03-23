@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from eventinfo.models import Event, Event_types, Time_Slots, Tickets
-from eventinfo.forms import EventSearchForm
+from eventinfo.forms import EventSearchForm, ProfileForm, UserForm
 
 
 def event_list(request):
@@ -84,11 +84,34 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('eventinfo:event_list'))
 
 
-@login_required
+@login_required #(login_url='/accounts/login/')
 def account_profile(request):
-    profile = request.user.profile
-    context = {
-        'profile': profile
-    }
+    if request.method == 'POST':
+        profile_form = ProfileForm(request.POST, files=request.FILES, instance=request.user.profile)
+        user_form = UserForm(request.POST, instance=request.user)
+        try:
+            profile_form.save() and user_form.save()
+            context = {
+                'user_form': user_form,
+                'profile_form': profile_form,
+                'message': 'پروفایل با موفقیت ویرایش شد.',
+                'error': True
+            }
+
+        except:
+            context = {
+                'user_form': user_form,
+                'profile_form': profile_form,
+                'message': 'خطا در ویرایش اطلاعات',
+                'error': False
+            }
+
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=request.user.profile)
+        context = {
+            'user_form': user_form,
+            'profile_form': profile_form
+        }
 
     return render(request, 'eventinfo/account/profile.html', context)

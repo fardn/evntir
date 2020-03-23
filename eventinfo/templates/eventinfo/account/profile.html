@@ -29,7 +29,12 @@
 				</div>
 			</div>
 		</div>
-
+        {% if message %}
+        <div class="notification {% if error %}{{ 'success' }}{% else %}{{ 'error' }}{% endif %} closeable margin-bottom-35">
+            <p>{{ message }}</p>
+            <a class="close"></a>
+        </div>
+        {% endif %}
 		<div class="row">
 
 			<!-- Profile -->
@@ -37,9 +42,10 @@
 				<div class="dashboard-list-box margin-top-0">
 					<h4 class="gray">جزئیات مشخصات</h4>
 					<div class="dashboard-list-box-static">
-
+                        <form method="POST" enctype="multipart/form-data">{% csrf_token %}
 						<!-- Avatar -->
 						<div class="edit-profile-photo">
+                            {{ profile_form.user_image }}
 							<img src="{{ profile.user_image.url}}" alt="">
 							<div class="change-photo-btn">
 								<div class="photoUpload">
@@ -53,27 +59,25 @@
 						<div class="my-profile">
 
 							<label>نام</label>
-							<input value="{{ profile.user.first_name}}" type="text">
+							{{ user_form.first_name}}
 
                             <label>نام خانوادگی</label>
-                                <input value="{{ profile.user.last_name}}" type="text">
+                            {{ user_form.last_name }}
 
                             <label>جنسیت</label>
-                            <select data-placeholder="جنسیت" name="gender" class="chosen-select" style="display: none;">
-                                <option value="" selected="">-</option>
-                                <option value="0" selected="">زن</option>
-                                <option value="1" selected="">مرد</option>
-							</select>
+                            {{ profile_form.gender }}
 
                             <label>تاریخ تولد</label>
-                                <input type="text" id="date-picker" value="{{ profile.bday|date:"m/d/Y" }}" readonly="readonly">
+                            {{ profile_form.bday }}
+                               <!--  <input type="text" id="date-picker" value="{# {{ profile.bday|date:"m/d/Y" }} #}" readonly="readonly"> -->
 
 
 							<label>موبایل</label>
-							<input value="{{ profile.mobile }}" type="text">
+							{{ profile_form.mobile }}
 
 							<label>ایمیل</label>
-							<input value="{{profile.user.email}}" type="text">
+                            {{ user_form.email }}
+
 
 							<label>یادداشت</label>
 							<textarea name="notes" id="notes" cols="30" rows="10"> از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون واز صنعت چاپ و با استفاده از طراحان گرافیک اس. </textarea>
@@ -81,11 +85,11 @@
 						</div>
 
 						<button class="button margin-top-15">ذخیره تنظیمات</button>
-
+                        </form>
 					</div>
 				</div>
 			</div>
-
+            <!-- # TODO: change paswword form -->
 			<!-- Change Password -->
 			<div class="col-lg-6 col-md-12">
 				<div class="dashboard-list-box margin-top-0">
