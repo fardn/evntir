@@ -53,21 +53,21 @@
 
 				<div class="col-md-6">
 					<label>نام خانوادگی</label>
-					<input type="text" value="">
+					<input type="text" value="{{ user.last_name }}">
 				</div>
 
 				<div class="col-md-6">
 					<div class="input-with-icon medium-icons">
 						<label>آدرس ایمیل</label>
-						<input type="text" value="">
+						<input type="text" value="{{ user.email }}">
 						<i class="im im-icon-Mail"></i>
 					</div>
 				</div>
 
 				<div class="col-md-6">
 					<div class="input-with-icon medium-icons">
-						<label>تلفن</label>
-						<input type="text" value="">
+						<label>موبایل</label>
+						<input type="text" value="{{ user.profile.mobile }}">
 						<i class="im im-icon-Phone-2"></i>
 					</div>
 				</div>

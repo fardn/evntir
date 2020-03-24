@@ -415,8 +415,8 @@
 
 			<div class="boxed-widget booking-widget margin-top-35">
 				<h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
+                <form method="post" action="event_booking.html">{% csrf_token %}
 				<div class="row with-forms  margin-top-0">
-
 					<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
                     <!---
 					<div class="col-lg-12">
@@ -500,6 +500,7 @@
 					<strong>جمع کل</strong>
 
 				</div>
+            </form>
 			</div>
 			<!-- Book Now / End -->
 
