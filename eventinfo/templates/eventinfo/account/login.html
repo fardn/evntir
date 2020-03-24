@@ -1,0 +1,152 @@
+{% extends 'eventinfo/base_page.html' %}
+
+{% block title %}
+ورود | عضویت
+{% endblock %}
+
+
+{% block titlebar %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2>ورود / عضویت</h2><span>برای دسترسی به تمامی امکانات وارد سایت شوید</span>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="#">صفحه اصلی</a></li>
+						<li>ورود / عضویت</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock titlebar %}
+
+{% block content %}
+<!-- Content
+================================================== -->
+<div class="container">
+    <div class="row">
+
+			<!-- Profile -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">ورود</h4>
+					<div class="dashboard-list-box-static">
+                        <form action="/account/login/" method="post" class="ورود">{% csrf_token %}
+
+						<!-- Details -->
+						<div class="my-profile">
+                            {% if message %}
+                            <div class="notification {% if error %}{{ 'success' }}{% else %}{{ 'error' }}{% endif %} closeable margin-bottom-35">
+                                <p>{{ message }}</p>
+                                <a class="close"></a>
+                            </div>
+                            {% endif %}
+                            <label for="username">نام کاربری:
+                                <i class="im im-icon-Male"></i>
+                                <input type="text" class="input-text" name="username" id="username" value="">
+                            </label>
+
+                            <label for="password">رمز عبور:
+                                <i class="im im-icon-Lock-2"></i>
+                                <input class="input-text" type="password" name="password" id="password">
+                            </label>
+                            <span class="lost_password">
+                                <a href="#">فراموشی رمز عبور؟</a>
+                            </span>
+                        <div class="form-row">
+                            <input type="submit" class="button border margin-top-5" name="login" value="ورود">
+                            <div class="checkboxes margin-top-10">
+                                <input id="remember-me" type="checkbox" name="check">
+                                <label for="remember-me">مرا به خاطر داشته باش</label>
+                            </div>
+                        </div>
+						</div>
+                        </form>
+					</div>
+				</div>
+			</div>
+            <!-- # TODO: change paswword form -->
+			<!-- Change Password -->
+			<div class="col-lg-6 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					<h4 class="gray">ثبت نام</h4>
+					<div class="dashboard-list-box-static">
+
+						<!-- Change Password -->
+						<div class="my-profile">
+                        <form method="post" class="register">
+
+								<label for="username2">نام کاربری:
+									<i class="im im-icon-Male"></i>
+									<input type="text" class="input-text" name="username" id="username2" value="">
+								</label>
+
+								<label for="email2">آدرس ایمیل:
+									<i class="im im-icon-Mail"></i>
+									<input type="text" class="input-text" name="email" id="email2" value="">
+								</label>
+
+								<label for="password1">رمز عبور:
+									<i class="im im-icon-Lock-2"></i>
+									<input class="input-text" type="password" name="password1" id="password1">
+								</label>
+
+								<label for="password2">تایید رمز عبور:
+									<i class="im im-icon-Lock-2"></i>
+									<input class="input-text" type="password" name="password2" id="password2">
+								</label>
+
+							<input type="submit" class="button border fw margin-top-10" name="register" value="ثبت نام">
+
+							</form>
+
+						</div>
+
+					</div>
+				</div>
+			</div>
+
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+			</div>
+
+		</div>
+
+</div>
+{% endblock %}
+
+{% block script %}
+    <!-- Google Autocomplete -->
+<script>
+  function initAutocomplete() {
+    var input = document.getElementById('autocomplete-input');
+    var autocomplete = new google.maps.places.Autocomplete(input);
+
+    autocomplete.addListener('place_changed', function() {
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        window.alert("هیچ اطلاعاتی برای ورودی موجود نیست: '" + place.name + "'");
+        return;
+      }
+    });
+
+	if ($('.main-search-input-item')[0]) {
+	    setTimeout(function(){
+	        $(".pac-container").prependTo("#autocomplete-container");
+	    }, 300);
+	}
+}
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g&amp;libraries=places&amp;callback=initAutocomplete"></script>
+
+{% endblock %}

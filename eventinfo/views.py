@@ -40,6 +40,7 @@ def event_detail(request, event_id):
     return render(request, 'eventinfo/event.html', context)
 
 
+@login_required
 def event_booking(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     guests = event.event_guests.all()
@@ -66,9 +67,10 @@ def login_view(request):
 
             context = {
                 'user': username,
-                'error': 'کاربری یا این مشخصات یافت نشد.',
+                'error': False,
+                'message': 'کاربری با این مشخصات یافت نشد.'
             }
-            return render(request, 'eventinfo/events.html/', context)
+            return render(request, 'eventinfo/account/login.html/', context)
 
     else:
         if request.user.is_authenticated:
@@ -76,7 +78,7 @@ def login_view(request):
         else:
             context = {}
 
-    return render(request, 'eventinfo/events.html', context)
+    return render(request, 'eventinfo/account/login.html/', context)
 
 
 def logout_view(request):
@@ -84,7 +86,7 @@ def logout_view(request):
     return HttpResponseRedirect(reverse('eventinfo:event_list'))
 
 
-@login_required #(login_url='/accounts/login/')
+@login_required
 def account_profile(request):
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, files=request.FILES, instance=request.user.profile)
