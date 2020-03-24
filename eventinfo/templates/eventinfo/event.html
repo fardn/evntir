@@ -421,11 +421,17 @@
 				<div class="row with-forms  margin-top-0">
 
 					<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
+                    <!---
 					<div class="col-lg-12">
 						<input type="text" id="date-picker" placeholder="تاریخ" readonly="readonly">
 					</div>
+					-->
+
+
+
                     <!-- Time Slots Dropdown -->
-                    <div class="col-lg-12">
+                    {% if time_slots.count > 1 %}
+                        <div class="col-lg-12">
 						<div class="panel-dropdown time-slots-dropdown">
 							<a href="#">اسلات زمان</a>
 							<div class="panel-dropdown-content padding-reset" style="width: 309px;">
@@ -453,6 +459,15 @@
 							</div>
 						</div>
 					</div>
+                    <!-- check Time Slots -->
+                    {% else %}
+                        {% for time_slot in time_slots %}
+                        <div class="col-lg-12">
+                        <input type="text"readonly="readonly" class="date-picker-listing-service" placeholder="{{ time_slot.event_start_date|date:'l j b Y'  }}" value="" disabled>
+                        <input type="text"readonly="readonly" class="date-picker-listing-service" placeholder="{{ time_slot.event_start_date|date:'H:i' }} تا {{ time_slot.event_end_date|date:'H:i' }}" value="" disabled>
+                        </div>
+                        {% endfor %}
+                    {% endif %}
                     <!-- Time Slots Dropdown / End -->
 					<!-- Panel Dropdown -->
 					<div class="col-lg-12">
@@ -476,8 +491,11 @@
 				</div>
 				
 				<!-- Book Now -->
+                {% if user.is_authenticated %}
 				<a href="{% url "eventinfo:event_booking" event_id=event.id %}" class="button book-now fullwidth margin-top-5">درخواست رزرو</a>
-				
+				{% else %}
+                <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">ابتدا وارد شوید.</a>
+                {% endif %}
 				<!-- Estimated Cost -->
                 <!-- TODO: COPY STYLE FROM EVENT BOOKING PAGE -->
 				<div class="booking-estimated-cost">
