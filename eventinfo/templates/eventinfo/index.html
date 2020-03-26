@@ -22,33 +22,26 @@
 					</h2>
 					<h4>کشف جاذبه های برتر، فعالیت ها و موارد دیگر</h4>
 
-					<div class="main-search-input">
+                    <form action="{% url 'eventinfo:event_list' %}" method="GET">
+                        <div class="main-search-input">
+                            <div class="main-search-input-item">
+                                {{ search_form.q }}
+                            </div>
 
-						<div class="main-search-input-item">
-							<input type="text" placeholder="دنبال چی میگردی؟" value=""/>
-						</div>
+                            <div class="main-search-input-item location">
+                                <div id="autocomplete-container">
+                                    <input id="autocomplete-input" type="text" placeholder="موقعیت">
+                                </div>
+                                <a href="#"><i class="fa fa-map-marker"></i></a>
+                            </div>
 
-						<div class="main-search-input-item location">
-							<div id="autocomplete-container">
-								<input id="autocomplete-input" type="text" placeholder="موقعیت">
-							</div>
-							<a href="#"><i class="fa fa-map-marker"></i></a>
-						</div>
+                            <div class="main-search-input-item">
+                            {{ search_form.event_type }}
+                            </div>
 
-						<div class="main-search-input-item">
-							<select data-placeholder="تمام دسته ها" class="chosen-select" >
-								<option>تمام دسته ها</option>	
-								<option>فروشگاه</option>
-								<option>هتل ها</option>
-								<option>رستوران ها</option>
-								<option>باشگاه</option>
-								<option>رویداد ها</option>
-							</select>
-						</div>
-
-						<button class="button" onclick="window.location.href='listings-half-screen-map-list.html'">جستجو</button>
-
-					</div>
+                            <button class="button" onclick="window.location.href='listings-half-screen-map-list.html'">جستجو</button>
+                        </div>
+                    </form>
 				</div>
 			</div>
 			

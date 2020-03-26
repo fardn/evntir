@@ -5,8 +5,8 @@ from eventinfo.models import Profile, Event_types
 
 
 class EventSearchForm(forms.Form):
-    q = forms.CharField(label='دنبال چی می‌گردی؟', required=False)
-    event_type = forms.ModelChoiceField(label='دسته‌بندی', queryset=Event_types.objects.all(), required=False)
+    q = forms.CharField(label='دنبال چی می‌گردی؟', required=False, widget=forms.TextInput(attrs={'placeholder': "دنبال چی میگردی؟"}))
+    event_type = forms.ModelChoiceField(label='دسته‌بندی', queryset=Event_types.objects.all(), empty_label='تمام دسته‌ها', required=False, widget=forms.Select(attrs={'class': "chosen-select"}))
     EVENT_SORT_CHOICES = (
         ('default', 'پیش‌فرض'),
         ('views', 'پربازدید‌ترین‌ها'),

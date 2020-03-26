@@ -129,10 +129,12 @@ def account_profile(request):
 
 
 def index(request):
+    search_form = EventSearchForm(request.GET)
     events = Event.objects.all().order_by('-updated_at')
     event_type_list = events.values('event_type', 'event_type__type_title', 'event_type__type_icon').annotate(count=Count('event_type'))
     types = Event_types.objects.all()
     context = {
+        'search_form': search_form,
         'event_type_list': event_type_list,
         'events': events,
         'types': types,
