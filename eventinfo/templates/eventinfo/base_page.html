@@ -16,7 +16,7 @@
 
 </head>
 
-<body>
+<body {% block index_css %}{% endblock %}>
 
 <!-- Wrapper -->
 <div id="wrapper">
@@ -50,14 +50,7 @@
 				<nav id="navigation" class="style-1">
 					<ul id="responsive">
 
-						<li><a href="#">صفحه اصلی</a>
-							<ul>
-								<li><a href="index.html">صفحه اصلی 1</a></li>
-								<li><a href="index-2.html">صفحه اصلی 2</a></li>
-								<li><a href="index-3.html">صفحه اصلی 3</a></li>
-								<li><a href="index-4.html">صفحه اصلی 4</a></li>
-								<li><a href="index-5.html">صفحه اصلی 5</a></li>
-							</ul>
+						<li><a href="{% url 'eventinfo:index' %}">صفحه اصلی</a>
 						</li>
 
 						<li><a class="current" href="/events/">آگهی ها</a>
@@ -276,7 +269,7 @@
 <div class="clearfix"></div>
 <!-- Header Container / End -->
 
-
+{% block banner %}{% endblock %}
 {% block titlebar %}{% endblock %}
 
 {% block content %}{% endblock %}

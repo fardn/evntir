@@ -27,6 +27,7 @@ class Event_types(models.Model):
         verbose_name_plural = 'نوع'
 
     type_title = models.CharField('عنوان', max_length=50)
+    type_icon = models.CharField('آیکن', max_length=50, blank=True, null=True, default=None)
 
     def __str__(self):
         return self.type_title
@@ -107,6 +108,8 @@ class Event(models.Model):
     event_description = models.TextField('توضیحات')
     event_main_image = models.ImageField('تصویر', upload_to='main_image/', null=True, blank=True)
     event_guests = models.ManyToManyField('Guest', blank=True, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)

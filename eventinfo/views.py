@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
@@ -13,7 +14,15 @@ def event_list(request):
     events = Event.objects.all()
     if search_form.is_valid():
         events = events.filter(event_title__contains=search_form.cleaned_data['q'])
+        if search_form.cleaned_data['event_type']:
+            events = events.filter(event_type=search_form.cleaned_data['event_type'])
+        # TODO: get time slots for every events
+        '''
+        if search_form.cleaned_data['sort']:
+            if search_form.cleaned_data['sort'] == 'date-desc'
+                events = events.order_by('event_')
 
+        '''
     types = Event_types.objects.all()
     context = {
         'search_form': search_form,
@@ -117,3 +126,16 @@ def account_profile(request):
         }
 
     return render(request, 'eventinfo/account/profile.html', context)
+
+
+def index(request):
+    events = Event.objects.all().order_by('-updated_at')
+    event_type_list = events.values('event_type', 'event_type__type_title', 'event_type__type_icon').annotate(count=Count('event_type'))
+    types = Event_types.objects.all()
+    context = {
+        'event_type_list': event_type_list,
+        'events': events,
+        'types': types,
+    }
+
+    return render(request, 'eventinfo/index.html', context)

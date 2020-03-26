@@ -77,7 +77,7 @@
 							<!-- Image -->
 							<div class="listing-item-image">
 								<img src="{{ event.event_main_image.url}}" alt="">
-								<span class="tag">{{ event.event_type}}</span>
+								<span class="tag">{{ event.event_type }}</span>
 							</div>
 							
 							<!-- Content -->
@@ -133,96 +133,17 @@
 				<!-- Widget -->
 				<div class="widget margin-bottom-40">
 					<h3 class="margin-top-0 margin-bottom-30">فیلترها</h3>
-                    <form action="" method="get">
+                    <form action="" method="GET">
 					<!-- Row -->
 					<div class="row with-forms">
 						<!-- Cities -->
 						<div class="col-md-12">
-
                             {{ search_form }}
-							<input type="text" placeholder="دنبال چی میگردی؟" value=""/>
 						</div>
 					</div>
 					<!-- Row / End -->
-
-
-					<!-- Row -->
-					<div class="row with-forms">
-						<!-- Type -->
-						<div class="col-md-12">
-							<select data-placeholder="تمام رویدادها" class="chosen-select" >
-                                <option>تمام رویدادها</option>
-                                {% for type in types %}
-					  	    	<option>{{ type.type_title }}</option>
-                                {% endfor %}
-							</select>
-						</div>
-					</div>
-					<!-- Row / End -->
-
-
-					<!-- Row -->
-					<div class="row with-forms">
-						<!-- Cities -->
-						<div class="col-md-12">
-
-							<div class="input-with-icon location">
-								<div id="autocomplete-container">
-									<input id="autocomplete-input" type="text" placeholder="موقعیت">
-								</div>
-								<a href="#"><i class="fa fa-map-marker"></i></a>
-							</div>
-
-						</div>
-					</div>
-					<!-- Row / End -->
-					<br>
-
-					<!-- Area Range -->
-					<div class="range-slider">
-						<input class="distance-radius" type="range" min="1" max="100" step="1" value="50" data-title="شعاع اطراف مقصد انتخاب شده">
-					</div>
-
-
-					<!-- More Search Options -->
-					<a href="#" class="more-search-options-trigger margin-bottom-5 margin-top-20" data-open-title="فیلتر های بیشتر" data-close-title="فیلتر های بیشتر"></a>
-
-					<div class="more-search-options relative">
-
-						<!-- Checkboxes -->
-						<div class="checkboxes one-in-row margin-bottom-15">
-					
-							<input id="check-a" type="checkbox" name="check">
-							<label for="check-a">آسانسور در ساختمان</label>
-
-							<input id="check-b" type="checkbox" name="check">
-							<label for="check-b">فضای کاری دوستانه</label>
-
-							<input id="check-c" type="checkbox" name="check">
-							<label for="check-c">رزرو فوری</label>
-
-							<input id="check-d" type="checkbox" name="check">
-							<label for="check-d">اینترنت بیسیم</label>
-
-							<input id="check-e" type="checkbox" name="check" >
-							<label for="check-e">پارکینگ رایگان در محل</label>
-
-							<input id="check-f" type="checkbox" name="check" >
-							<label for="check-f">پارکینگ رایگان در خیابان</label>
-
-							<input id="check-g" type="checkbox" name="check">
-							<label for="check-g">سیگار کشیدن مجاز است</label>	
-
-							<input id="check-h" type="checkbox" name="check">
-							<label for="check-h">رویداد ها</label>
-					
-						</div>
-						<!-- Checkboxes / End -->
-
-					</div>
-					<!-- More Search Options / End -->
-
-					<button class="button fullwidth margin-top-25" type="submit">به روز رسانی</button>
+					<button class="button fullwidth margin-top-10" type="submit">به روز رسانی</button>
+                    <button class="button fullwidth margin-top-5" type="reset">پاک کردن فیلترها</button>
                 </form>
 				</div>
 				<!-- Widget / End -->
@@ -257,6 +178,5 @@
 	}
 }
 </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g&amp;libraries=places&amp;callback=initAutocomplete"></script>
 
 {% endblock %}

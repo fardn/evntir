@@ -1,289 +1,22 @@
-<!DOCTYPE html>
+{% extends 'eventinfo/base_page.html' %}
+{% load static %}
 
-<head>
+{% block index_css %}{{ 'class="transparent-header"' }}{% endblock %}
 
-<!-- Basic Page Needs
-================================================== -->
-<title>لیستئو</title>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-
-<!-- CSS
-================================================== -->
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/main-color.css" id="colors">
-
-</head>
-
-<body class="transparent-header">
-
-<!-- Wrapper -->
-<div id="wrapper">
-
-<!-- Header Container
-================================================== -->
-<header id="header-container">
-
-	<!-- Header -->
-	<div id="header">
-		<div class="container">
-			
-			<!-- Left Side Content -->
-			<div class="left-side">
-				
-				<!-- Logo -->
-				<div id="logo">
-					<a href="index.html"><img src="images/logo2.png" data-sticky-logo="images/logo.png" alt=""></a>
-				</div>
-
-				<!-- Mobile Navigation -->
-				<div class="mmenu-trigger">
-					<button class="hamburger hamburger--collapse" type="button">
-						<span class="hamburger-box">
-							<span class="hamburger-inner"></span>
-						</span>
-					</button>
-				</div>
-
-				<!-- Main Navigation -->
-				<nav id="navigation" class="style-1">
-					<ul id="responsive">
-
-						<li><a class="current" href="#">صفحه اصلی</a>
-							<ul>
-								<li><a href="index.html">صفحه اصلی 1</a></li>
-								<li><a href="index-2.html">صفحه اصلی 2</a></li>
-								<li><a href="index-3.html">صفحه اصلی 3</a></li>
-								<li><a href="index-4.html">صفحه اصلی 4</a></li>
-								<li><a href="index-4.html">صفحه اصلی 5</a></li>
-							</ul>
-						</li>
-
-						<li><a href="#">آگهی ها</a>
-							<ul>
-								<li><a href="#">طرح آگهی</a>
-									<ul>
-										<li><a href="listings-list-with-sidebar.html">با نوار کناری</a></li>
-										<li><a href="listings-list-full-width.html">تمام عرض</a></li>
-										<li><a href="listings-list-full-width-with-map.html">عرض کامل + نقشه</a></li>
-									</ul>
-								</li>
-								<li><a href="#">طرح شبکه</a>
-									<ul>
-										<li><a href="listings-grid-with-sidebar-1.html">با نوار کناری 1</a></li>
-										<li><a href="listings-grid-with-sidebar-2.html">با نوار کناری 2</a></li>
-										<li><a href="listings-grid-full-width.html">تمام عرض</a></li>
-										<li><a href="listings-grid-full-width-with-map.html">عرض کامل + نقشه</a></li>
-									</ul>
-								</li>
-								<li><a href="#">نقشه نیمه صفحه</a>
-									<ul>
-										<li><a href="listings-half-screen-map-list.html">چیدمان لیست</a></li>
-										<li><a href="listings-half-screen-map-grid-1.html">چیدمان شبکه 1</a></li>
-										<li><a href="listings-half-screen-map-grid-2.html">چیدمان شبکه 2</a></li>
-									</ul>
-								</li>
-								<li><a href="#">آگهی های تک</a>
-									<ul>
-										<li><a href="listings-single-page.html">آگهی های تک 1</a></li>
-										<li><a href="listings-single-page-2.html">آگهی های تک 2</a></li>
-										<li><a href="listings-single-page-3.html">آگهی های تک 3</a></li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-
-						<li><a href="#">پنل کاربری</a>
-							<ul>
-								<li><a href="dashboard.html">داشبورد</a></li>
-								<li><a href="dashboard-messages.html">پیام ها</a></li>
-								<li><a href="dashboard-bookings.html">رزرو ها</a></li>
-								<li><a href="dashboard-wallet.html">کیف پول</a></li>
-								<li><a href="dashboard-my-listings.html">آگهی های من</a></li>
-								<li><a href="dashboard-reviews.html">نظرات</a></li>
-								<li><a href="dashboard-bookmarks.html">نشانکها</a></li>
-								<li><a href="dashboard-add-listing.html">افزودن آگهی</a></li>
-								<li><a href="dashboard-my-profile.html">پروفایل من</a></li>
-								<li><a href="dashboard-invoice.html">صورتحساب</a></li>
-							</ul>
-						</li>
-
-						<li><a href="#">صفحات</a>
-							<div class="mega-menu mobile-styles three-columns">
-
-									<div class="mega-menu-section">
-										<ul>
-											<li class="mega-menu-headline">صفحات #1</li>
-											<li><a href="pages-user-profile.html"><i class="sl sl-icon-user"></i> پروفایل کاربر</a></li>
-											<li><a href="pages-booking.html"><i class="sl sl-icon-check"></i> صفحه رزرو</a></li>
-											<li><a href="pages-add-listing.html"><i class="sl sl-icon-plus"></i> افزودن آگهی</a></li>
-											<li><a href="pages-blog.html"><i class="sl sl-icon-docs"></i> بلاگ</a></li>
-										</ul>
-									</div>
-		
-									<div class="mega-menu-section">
-										<ul>
-											<li class="mega-menu-headline">صفحات #2</li>
-											<li><a href="pages-contact.html"><i class="sl sl-icon-envelope-open"></i> تماس</a></li>
-											<li><a href="pages-coming-soon.html"><i class="sl sl-icon-hourglass"></i> به زودی</a></li>
-											<li><a href="pages-404.html"><i class="sl sl-icon-close"></i> صفحه 404</a></li>
-											<li><a href="pages-masonry-filtering.html"><i class="sl sl-icon-equalizer"></i> ساختار فیلتر</a></li>
-										</ul>
-									</div>
-
-									<div class="mega-menu-section">
-										<ul>
-											<li class="mega-menu-headline">و دیگر</li>
-											<li><a href="pages-elements.html"><i class="sl sl-icon-settings"></i> المنت ها</a></li>
-											<li><a href="pages-pricing-tables.html"><i class="sl sl-icon-tag"></i> جداول قیمت</a></li>
-											<li><a href="pages-typography.html"><i class="sl sl-icon-pencil"></i> تایپوگرافی</a></li>
-											<li><a href="pages-icons.html"><i class="sl sl-icon-diamond"></i> آیکن ها</a></li>
-										</ul>
-									</div>
-									
-							</div>
-						</li>
-						
-					</ul>
-				</nav>
-				<div class="clearfix"></div>
-				<!-- Main Navigation / End -->
-				
-			</div>
-			<!-- Left Side Content / End -->
-
-
-			<!-- Right Side Content / End -->
-			<div class="right-side">
-				<div class="header-widget">
-					<!-- User Menu -->
-					<div class="user-menu">
-						<div class="user-name"><span><img src="images/dashboard-avatar.jpg" alt=""></span>سلام، جعفر</div>
-						<ul>
-							<li><a href="dashboard.html"><i class="sl sl-icon-settings"></i> داشبورد</a></li>
-							<li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> پیام ها</a></li>
-							<li><a href="dashboard-bookings.html"><i class="fa fa-calendar-check-o"></i> رزرو ها</a></li>
-							<li><a href="index.html"><i class="sl sl-icon-power"></i> خروج</a></li>
-						</ul>
-					</div>
-
-
-					<a href="dashboard-add-listing.html" class="button border with-icon">افزودن آگهی <i class="sl sl-icon-plus"></i></a>
-				</div>
-			</div>
-			<!-- Right Side Content / End -->
-
-			<!-- Sign In Popup -->
-			<div id="sign-in-dialog" class="zoom-anim-dialog mfp-hide">
-
-				<div class="small-dialog-header">
-					<h3>ورود</h3>
-				</div>
-
-				<!--Tabs -->
-				<div class="sign-in-form style-1">
-
-					<ul class="tabs-nav">
-						<li class=""><a href="#tab1">ورود</a></li>
-						<li><a href="#tab2">ثبت نام</a></li>
-					</ul>
-
-					<div class="tabs-container alt">
-
-						<!-- Login -->
-						<div class="tab-content" id="tab1" style="display: none;">
-							<form method="post" class="ورود">
-
-								<p class="form-row form-row-wide">
-									<label for="username">نام کاربری:
-										<i class="im im-icon-Male"></i>
-										<input type="text" class="input-text" name="username" id="username" value="" />
-									</label>
-								</p>
-
-								<p class="form-row form-row-wide">
-									<label for="password">رمز عبور:
-										<i class="im im-icon-Lock-2"></i>
-										<input class="input-text" type="password" name="password" id="password"/>
-									</label>
-									<span class="lost_password">
-										<a href="#" >فراموشی رمز عبور؟</a>
-									</span>
-								</p>
-
-								<div class="form-row">
-									<input type="submit" class="button border margin-top-5" name="login" value="ورود" />
-									<div class="checkboxes margin-top-10">
-										<input id="remember-me" type="checkbox" name="check">
-										<label for="remember-me">مرا به خاطر داشته باش</label>
-									</div>
-								</div>
-								
-							</form>
-						</div>
-
-						<!-- Register -->
-						<div class="tab-content" id="tab2" style="display: none;">
-
-							<form method="post" class="register">
-								
-							<p class="form-row form-row-wide">
-								<label for="username2">نام کاربری:
-									<i class="im im-icon-Male"></i>
-									<input type="text" class="input-text" name="username" id="username2" value="" />
-								</label>
-							</p>
-								
-							<p class="form-row form-row-wide">
-								<label for="email2">آدرس ایمیل:
-									<i class="im im-icon-Mail"></i>
-									<input type="text" class="input-text" name="email" id="email2" value="" />
-								</label>
-							</p>
-
-							<p class="form-row form-row-wide">
-								<label for="password1">رمز عبور:
-									<i class="im im-icon-Lock-2"></i>
-									<input class="input-text" type="password" name="password1" id="password1"/>
-								</label>
-							</p>
-
-							<p class="form-row form-row-wide">
-								<label for="password2">تایید رمز عبور:
-									<i class="im im-icon-Lock-2"></i>
-									<input class="input-text" type="password" name="password2" id="password2"/>
-								</label>
-							</p>
-
-							<input type="submit" class="button border fw margin-top-10" name="register" value="ثبت نام" />
-	
-							</form>
-						</div>
-
-					</div>
-				</div>
-			</div>
-			<!-- Sign In Popup / End -->
-
-		</div>
-	</div>
-	<!-- Header / End -->
-
-</header>
-<div class="clearfix"></div>
-<!-- Header Container / End -->
-
-
+{% block title %}
+صفحه اصلی
+{% endblock %}
+{% block banner %}
 <!-- Banner
 ================================================== -->
-<div class="main-search-container centered" data-background-image="images/main-search-background-01.jpg">
+<div class="main-search-container centered" data-background-image="media/main_image/main-search-video-poster.jpg">
 	<div class="main-search-inner">
 
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
 					<h2>
-						پیدا کردن نزدیک ترین 
+						پیدا کردن نزدیک‌ترین
 						<!-- Typed words can be configured in script settings at the bottom of this HTML file -->
 						<span class="typed-words"></span>
 					</h2>
@@ -358,8 +91,9 @@
 
 	</div>
 </div>
+{% endblock %}
 
-
+{% block content %}
 <!-- Content
 ================================================== -->
 <div class="container">
@@ -373,48 +107,14 @@
 
 		<div class="col-md-12">
 			<div class="categories-boxes-container margin-top-5 margin-bottom-30">
-				
-				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
-					<i class="im im-icon-Hamburger"></i>
-					<h4>خوردن و نوشیدن</h4>
-					<span class="category-box-counter">12</span>
-				</a>
-
-				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
-					<i class="im  im-icon-Sleeping"></i>
-					<h4>هتل ها</h4>
-					<span class="category-box-counter">32</span>
-				</a>
-
-				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
-					<i class="im im-icon-Shopping-Bag"></i>
-					<h4>فروشگاه ها</h4>
-					<span class="category-box-counter">11</span>
-				</a>
-
-				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
-					<i class="im im-icon-Cocktail"></i>
-					<h4>شب زنده داری</h4>
-					<span class="category-box-counter">15</span>
-				</a>
-
-				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
-					<i class="im im-icon-Electric-Guitar"></i>
-					<h4>رویداد ها</h4>
-					<span class="category-box-counter">21</span>
-				</a>
-
-				<!-- Box -->
-				<a href="listings-list-with-sidebar.html" class="category-small-box">
-					<i class="im im-icon-Dumbbell"></i>
-					<h4>باشگاه ها</h4>
-					<span class="category-box-counter">28</span>
-				</a>
+                {% for type in event_type_list %}
+                    <!-- Box -->
+                    <a href="{% url "eventinfo:event_list" %}?event_type={{ type.event_type }}" class="category-small-box">
+                        <i class="{{ type.event_type__type_icon }}"></i>
+                        <h4>{{ type.event_type__type_title }}</h4>
+                        <span class="category-box-counter">{{ type.count }}</span>
+                    </a>
+                {% endfor %}
 
 			</div>
 		</div>
@@ -433,7 +133,7 @@
 
 			<div class="col-md-12">
 				<h3 class="headline centered margin-bottom-45">
-					<strong class="headline-with-separator">بیشترین مکانهای بازدید شده</strong>
+					<strong class="headline-with-separator">جدید‌ترین رویدادهای اضافه شده</strong>
 					<span>کشف کسب و کارهای محلی با رتبه بالا</span>
 				</h3>
 			</div>
@@ -441,42 +141,21 @@
 			<div class="col-md-12">
 				<div class="simple-slick-carousel dots-nav">
 
+                {% for event in events|slice:":4" %}
 				<!-- Listing Item -->
 				<div class="carousel-item">
-					<a href="listings-single-page.html" class="listing-item-container">
+					<a href="{% url "eventinfo:event_detail" event_id=event.id %}" class="listing-item-container">
 						<div class="listing-item">
-							<img src="images/listing-item-01.jpg" alt="">
-
-							<div class="listing-badge now-open">هم اکنون باز است</div>
-							
+                            <div class="listing-small-badges-container">
+                                <!-- TODO: listing badge load from model -->
+                                <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>رایگان</div>
+                                <div class="listing-small-badge"><i class="fa fa-calendar-check-o"></i>دوشنبه ۱۴ فروردین</div>
+                            </div>
+							<img src="{{ event.event_main_image.url}}" alt="">
 							<div class="listing-item-content">
-								<span class="tag">خوردن و نوشیدن</span>
-								<h3>رستوران تام <i class="verified-icon"></i></h3>
-								<span>نیویورک، خیابان بیسکو</span>
-							</div>
-							<span class="like-icon"></span>
-						</div>
-						<div class="star-rating" data-rating="3.5">
-							<div class="rating-counter">(12 نظر)</div>
-						</div>
-					</a>
-				</div>
-				<!-- Listing Item / End -->
-
-				<!-- Listing Item -->
-				<div class="carousel-item">
-					<a href="listings-single-page.html" class="listing-item-container">
-						<div class="listing-item">
-							<img src="images/listing-item-02.jpg" alt="">
-							<div class="listing-item-details">
-								<ul>
-									<li>شنبه، اردیبهشت 10</li>
-								</ul>
-							</div>
-							<div class="listing-item-content">
-								<span class="tag">رویداد</span>
-								<h3>باند چسبنده</h3>
-								<span>نیویورک، خیابان بیسکو</span>
+								<span class="tag">{{ event.event_type }}</span>
+								<h3>{{ event.event_title }}</h3>
+								<span>{{ event.event_venue.venue_name }}</span>
 							</div>
 							<span class="like-icon"></span>
 						</div>
@@ -486,93 +165,7 @@
 					</a>
 				</div>
 				<!-- Listing Item / End -->		
-
-				<!-- Listing Item -->
-				<div class="carousel-item">
-					<a href="listings-single-page.html" class="listing-item-container">
-						<div class="listing-item">
-							<img src="images/listing-item-03.jpg" alt="">
-							<div class="listing-item-details">
-								<ul>
-									<li>شروع از 59 دلار در هر شب</li>
-								</ul>
-							</div>
-							<div class="listing-item-content">
-								<span class="tag">هتل ها</span>
-								<h3>هتل پیروزی</h3>
-								<span>نیویورک، خیابان بیسکو</span>
-							</div>
-							<span class="like-icon"></span>
-						</div>
-						<div class="star-rating" data-rating="2.0">
-							<div class="rating-counter">(17 نظر)</div>
-						</div>
-					</a>
-				</div>
-				<!-- Listing Item / End -->
-
-				<!-- Listing Item -->
-				<div class="carousel-item">
-					<a href="listings-single-page.html" class="listing-item-container">
-						<div class="listing-item">
-							<img src="images/listing-item-04.jpg" alt="">
-
-							<div class="listing-badge now-open">هم اکنون باز است</div>
-
-							<div class="listing-item-content">
-								<span class="tag">خوردن و نوشیدن</span>
-								<h3>خانه برگر <i class="verified-icon"></i></h3>
-								<span>نیویورک، خیابان بیسکو</span>
-							</div>
-							<span class="like-icon"></span>
-						</div>
-						<div class="star-rating" data-rating="5.0">
-							<div class="rating-counter">(31 نظر)</div>
-						</div>
-					</a>
-				</div>
-				<!-- Listing Item / End -->
-
-				<!-- Listing Item -->
-				<div class="carousel-item">
-					<a href="listings-single-page.html" class="listing-item-container">
-						<div class="listing-item">
-							<img src="images/listing-item-05.jpg" alt="">
-							<div class="listing-item-content">
-								<span class="tag">دیگر</span>
-								<h3>فرودگاه</h3>
-								<span>نیویورک، خیابان بیسکو</span>
-							</div>
-							<span class="like-icon"></span>
-						</div>
-						<div class="star-rating" data-rating="3.5">
-							<div class="rating-counter">(46 نظر)</div>
-						</div>
-					</a>
-				</div>
-				<!-- Listing Item / End -->
-
-				<!-- Listing Item -->
-				<div class="carousel-item">
-					<a href="listings-single-page.html" class="listing-item-container">
-						<div class="listing-item">
-							<img src="images/listing-item-06.jpg" alt="">
-
-							<div class="listing-badge now-closed">هم اکنون بسته است</div>
-
-							<div class="listing-item-content">
-								<span class="tag">خوردن و نوشیدن</span>
-								<h3>کافه قهوه</h3>
-								<span>نیویورک، خیابان بیسکو</span>
-							</div>
-							<span class="like-icon"></span>
-						</div>
-						<div class="star-rating" data-rating="4.5">
-							<div class="rating-counter">(15 نظر)</div>
-						</div>
-					</a>
-				</div>
-				<!-- Listing Item / End -->
+                {% endfor %}
 				</div>
 				
 			</div>
@@ -767,122 +360,10 @@
 	</div>
 </section>
 <!-- Recent Blog Posts / End -->
-
-
-<!-- Footer
-================================================== -->
-<div id="footer" class="sticky-footer">
-	<!-- Main -->
-	<div class="container">
-		<div class="row">
-			<div class="col-md-5 col-sm-6">
-				<img class="footer-logo" src="images/logo.png" alt="">
-				<br><br>
-				<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم استلورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است</p>
-			</div>
-
-			<div class="col-md-4 col-sm-6 ">
-				<h4>لینک های کمکی</h4>
-				<ul class="footer-links">
-					<li><a href="#">ورود</a></li>
-					<li><a href="#">ثبت نام</a></li>
-					<li><a href="#">حساب من</a></li>
-					<li><a href="#">افزودن آگهی</a></li>
-					<li><a href="#">قیمت ها</a></li>
-					<li><a href="#">حریم خصوصی</a></li>
-				</ul>
-
-				<ul class="footer-links">
-					<li><a href="#">گفت و گو</a></li>
-					<li><a href="#">بلاگ</a></li>
-					<li><a href="#">همکاران ما</a></li>
-					<li><a href="#">داستان ما</a></li>
-					<li><a href="#">تماس</a></li>
-				</ul>
-				<div class="clearfix"></div>
-			</div>		
-
-			<div class="col-md-3  col-sm-12">
-				<h4>تماس با ما</h4>
-				<div class="text-widget">
-					<span>ایران، ارومیه، شاهین دژ</span> <br>
-					تلفن: <span>(123) 123-456 </span><br>
-					ایمیل:<span> <a href="#"><span class="__cf_email__" data-cfemail="8ce3eaeae5efe9cce9f4ede1fce0e9a2efe3e1">[email&#160;protected]</span></a> </span><br>
-				</div>
-
-				<ul class="social-icons margin-top-20">
-					<li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-					<li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-					<li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-					<li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
-				</ul>
-
-			</div>
-
-		</div>
-		
-		<!-- Copyright -->
-		<div class="row">
-			<div class="col-md-12">
-				<div class="copyrights">© 1398 لیستئو. تمامی حقوق محفوظ است.</div>
-			</div>
-		</div>
-
-	</div>
-
-</div>
-<!-- Footer / End -->
-
-
-<!-- Back To Top Button -->
-<div id="backtotop"><a href="#"></a></div>
-
-
-</div>
-<!-- Wrapper / End -->
-
-
-<!-- Scripts
-================================================== -->
-<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="scripts/jquery-2.2.0.min.js"></script>
-<script type="text/javascript" src="scripts/mmenu.min.js"></script>
-<script type="text/javascript" src="scripts/chosen.min.js"></script>
-<script type="text/javascript" src="scripts/slick.min.js"></script>
-<script type="text/javascript" src="scripts/rangeslider.min.js"></script>
-<script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
-<script type="text/javascript" src="scripts/waypoints.min.js"></script>
-<script type="text/javascript" src="scripts/counterup.min.js"></script>
-<script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
-<script type="text/javascript" src="scripts/tooltips.min.js"></script>
-<script type="text/javascript" src="scripts/custom.js"></script>
-
-
-<!-- Google Autocomplete -->
-<script>
-  function initAutocomplete() {
-    var input = document.getElementById('autocomplete-input');
-    var autocomplete = new google.maps.places.Autocomplete(input);
-
-    autocomplete.addListener('place_changed', function() {
-      var place = autocomplete.getPlace();
-      if (!place.geometry) {
-        window.alert("No details available for input: '" + place.name + "'");
-        return;
-      }
-    });
-
-	if ($('.main-search-input-item')[0]) {
-	    setTimeout(function(){ 
-	        $(".pac-container").prependTo("#autocomplete-container");
-	    }, 300);
-	}
-}
-</script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g&amp;libraries=places&amp;callback=initAutocomplete"></script>
-
-
+{% endblock %}
+{% block script %}
 <!-- Typed Script -->
-<script type="text/javascript" src="scripts/typed.js"></script>
+<script type="text/javascript" src="{% static 'eventinfo/scripts/typed.js' %}"></script>
 <script>
 var typed = new Typed('.typed-words', {
 strings: ["جاذبه ها"," رستوران ها"," هتل ها"],
@@ -894,40 +375,23 @@ strings: ["جاذبه ها"," رستوران ها"," هتل ها"],
 	showCursor: true
 });
 </script>
+<style type="text/css" data-typed-js-css="true">
+        .typed-cursor{
+          opacity: 1;
+        }
+        .typed-cursor.typed-cursor--blink{
+          animation: typedjsBlink 0.7s infinite;
+          -webkit-animation: typedjsBlink 0.7s infinite;
+                  animation: typedjsBlink 0.7s infinite;
+        }
+        @keyframes typedjsBlink{
+          50% { opacity: 0.0; }
+        }
+        @-webkit-keyframes typedjsBlink{
+          0% { opacity: 1; }
+          50% { opacity: 0.0; }
+          100% { opacity: 1; }
+        }
+</style>
 
-
-<!-- Style Switcher
-================================================== -->
-<script src="scripts/switcher.js"></script>
-
-<div id="style-switcher">
-	<h2>تغییر رنگ <a href="#"><i class="sl sl-icon-settings"></i></a></h2>
-	
-	<div>
-		<ul class="colors" id="color1">
-			<li><a href="#" class="main" title="اصلی"></a></li>
-			<li><a href="#" class="blue" title="آبی"></a></li>
-			<li><a href="#" class="green" title="سبز"></a></li>
-			<li><a href="#" class="orange" title="نارنجی"></a></li>
-			<li><a href="#" class="navy" title="آبی پررنگ"></a></li>
-			<li><a href="#" class="yellow" title="زرد"></a></li>
-			<li><a href="#" class="peach" title="هلویی"></a></li>
-			<li><a href="#" class="beige" title="بژ"></a></li>
-			<li><a href="#" class="purple" title="بنفش"></a></li>
-			<li><a href="#" class="celadon" title="سبز کم رنگ"></a></li>
-			<li><a href="#" class="red" title="قرمز"></a></li>
-			<li><a href="#" class="brown" title="قهوه ای"></a></li>
-			<li><a href="#" class="cherry" title="گیلاسی"></a></li>
-			<li><a href="#" class="cyan" title="فیروزه ای"></a></li>
-			<li><a href="#" class="gray" title="خاکستری"></a></li>
-			<li><a href="#" class="olive" title="زیتونی"></a></li>
-		</ul>
-	</div>
-		
-</div>
-<!-- Style Switcher / End -->
-
-
-</body>
-
-</html>
+{%  endblock %}

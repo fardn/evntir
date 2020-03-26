@@ -1,12 +1,23 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 
-from eventinfo.models import Profile
+from eventinfo.models import Profile, Event_types
 
 
 class EventSearchForm(forms.Form):
     q = forms.CharField(label='دنبال چی می‌گردی؟', required=False)
-    # gi_profile = forms.BooleanField(required=False)
+    event_type = forms.ModelChoiceField(label='دسته‌بندی', queryset=Event_types.objects.all(), required=False)
+    EVENT_SORT_CHOICES = (
+        ('default', 'پیش‌فرض'),
+        ('views', 'پربازدید‌ترین‌ها'),
+        ('date-desc', 'جدیدترین‌ها'),
+        ('date-asc', 'قدیمی‌ترین‌ها'),
+        ('featured', 'ویژه'),
+        ('rand', 'تصادفی')
+    )
+    sort = forms.ChoiceField(label='چیدمان', choices=EVENT_SORT_CHOICES, required=False)
+
+    # TODO: filter event city, event price, status, search in title/ desc/ venue/
 
 
 class ProfileForm(forms.ModelForm):
