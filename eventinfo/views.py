@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
 from eventinfo.models import Event, Event_types, Time_Slots, Tickets
-from eventinfo.forms import EventSearchForm, ProfileForm, UserForm
+from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm
 
 
 def event_list(request):
@@ -34,12 +34,14 @@ def event_list(request):
 
 
 def event_detail(request, event_id):
+    booking_form = BookingForm(request.GET)
     event = get_object_or_404(Event, pk=event_id)
     guests = event.event_guests.all()
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
 
     context = {
+        'booking_form': booking_form,
         'guests': guests,
         'event': event,
         'time_slots': time_slots,
@@ -51,15 +53,28 @@ def event_detail(request, event_id):
 
 @login_required
 def event_booking(request, event_id):
-    event = get_object_or_404(Event, pk=event_id)
-    guests = event.event_guests.all()
 
-    context = {
-        'guests': guests,
-        'event': event,
-    }
+    if request.method == 'POST':
+        book_ticket = get_object_or_404(Tickets, pk=request.POST['book_ticket'])
+        book_seats = request.POST['book_seats']
+        event = get_object_or_404(Event, pk=event_id)
+        guests = event.event_guests.all()
+        book_total_cost = int(book_ticket.ticket_price)*int(book_seats)
+        context = {
+            'book_ticket': book_ticket,
+            'book_seats': book_seats,
+            'book_total_cost': book_total_cost,
+            'event': event,
+            'guests': guests,
+            'message': 'پروفایل با موفقیت ویرایش شد.',
+            'error': True,
+        }
+        return render(request, 'eventinfo/event_booking.html', context)
 
-    return render(request, 'eventinfo/event_booking.html', context)
+    else:
+        return HttpResponseRedirect(reverse('eventinfo:event_list'))
+
+
 
 
 def login_view(request):

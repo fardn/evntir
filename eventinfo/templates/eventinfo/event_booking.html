@@ -48,7 +48,7 @@
 
 				<div class="col-md-6">
 					<label>نام</label>
-					<input type="text" value="{{ user.first_name }}">
+                    <input type="text" value="{{ user.first_name }}">
 				</div>
 
 				<div class="col-md-6">
@@ -83,12 +83,15 @@
 				<div class="payment-tab payment-tab-active">
 					<div class="payment-tab-trigger">
 						<input checked id="paypal" name="cardType" type="radio" value="paypal">
-						<label for="paypal">پی پال</label>
+						<label for="paypal">پرداخت از اعتبار</label>
 						<img class="payment-logo paypal" src="../../../i.imgur.com/ApBxkXU.png" alt="">
 					</div>
 
 					<div class="payment-tab-content">
-						<p>شما برای تکمیل پرداخت به PayPal هدایت می شوید.</p>
+						<p>اعتبار حساب شما در حال حاضر
+                            {{ user.profile.balance }}
+                            می‌باشد.
+                        </p>
 					</div>
 				</div>
 
@@ -96,7 +99,7 @@
 				<div class="payment-tab">
 					<div class="payment-tab-trigger">
 						<input type="radio" name="cardType" id="creditCart" value="creditCard">
-						<label for="creditCart">کارت اعتباری / شماره کارت</label>
+						<label for="creditCart">پرداخت اینترنتی</label>
 						<img class="payment-logo" src="../../../i.imgur.com/IHEKLgm.png" alt="">
 					</div>
 
@@ -175,10 +178,10 @@
 			<div class="boxed-widget opening-hours summary margin-top-0">
 				<h3><i class="fa fa-calendar-check-o"></i> خلاصه رزرو</h3>
 				<ul>
-					<li>تاریخ <span>1398/2/1</span></li>
-					<li>ساعت <span>5:30 بعد ظهر</span></li>
-					<li>مهمان <span>2 بزرگسالان</span></li>
-					<li class="total-costs">هزینه کل <span>9.00 تومان</span></li>
+					<li>تاریخ <span>{{ book_ticket.ticket_time_slot.event_start_date|date:'l j b Y'}}</span></li>
+					<li>ساعت <span>{{ book_ticket.ticket_time_slot.event_start_date|date:'H:i' }}</span></li>
+					<li>{{ book_ticket.ticket_title }} <span>{{ book_seats }} عدد </span></li>
+					<li class="total-costs">هزینه کل <span>{{ book_total_cost }} تومان</span></li>
 				</ul>
 
 			</div>

@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserChangeForm
 
-from eventinfo.models import Profile, Event_types
+from eventinfo.models import Profile, Event_types, Booking
 
 
 class EventSearchForm(forms.Form):
@@ -30,3 +30,10 @@ class UserForm(UserChangeForm):
     class Meta(UserChangeForm.Meta):
         fields = ['first_name', 'last_name', 'email']
         password = None
+
+
+class BookingForm(forms.ModelForm):
+    class Meta:
+        model = Booking
+        fields = '__all__'
+

@@ -415,86 +415,26 @@
 
 			<div class="boxed-widget booking-widget margin-top-35">
 				<h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
-                <form method="post" action="event_booking.html">{% csrf_token %}
-				<div class="row with-forms  margin-top-0">
-					<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
-                    <!---
-					<div class="col-lg-12">
-						<input type="text" id="date-picker" placeholder="تاریخ" readonly="readonly">
-					</div>
-					-->
+                <form method="POST" action="{% url "eventinfo:event_booking" event_id=event.id %}">{% csrf_token %}
 
+                    {% for ticket in tickets %}
+                        <input type="hidden" name="book_ticket" value="{{ ticket.id }}">
+                        <input type="text" name="book_seats" data-max="2" id="tickets-{{ ticket.id }}" value="0">
+                    {% endfor %}
+                    {% for time_slot in time_slots %}
+                        <input type="hidden" name="book_time_slot" value="{{ time_slot.id }}">
+                        <input type="text"readonly="readonly" placeholder="{{ time_slot.event_start_date|date:'l j b Y'  }}" value="" disabled>
+                        <input type="text"readonly="readonly" placeholder="{{ time_slot.event_start_date|date:'H:i' }} تا {{ time_slot.event_end_date|date:'H:i' }}" value="" disabled>
+                    {% endfor %}
 
-
-                    <!-- Time Slots Dropdown -->
-                    {% if time_slots.count > 1 %}
-                        <div class="col-lg-12">
-						<div class="panel-dropdown time-slots-dropdown">
-							<a href="#">اسلات زمان</a>
-							<div class="panel-dropdown-content padding-reset" style="width: 309px;">
-								<div class="panel-dropdown-scrollable">
-
-                                    {% for time_slot in time_slots %}
-									<!-- Time Slot -->
-									<div class="time-slot">
-										<input type="radio" name="time-slot" id="time-slot-{{ time_slot.id }}">
-										<label for="time-slot-{{ time_slot.id }}">
-											<strong>
-                                                {{ time_slot.event_start_date|date:'l j b Y' }}
-                                            </strong>
-											<span>
-                                            ساعت
-                                            {{ time_slot.event_start_date|date:'H:i' }}
-                                            تا
-                                            {{ time_slot.event_end_date|date:'H:i' }}
-                                            </span>
-										</label>
-									</div>
-                                    {% endfor %}
-
-								</div>
-							</div>
-						</div>
-					</div>
-                    <!-- check Time Slots -->
-                    {% else %}
-                        {% for time_slot in time_slots %}
-                        <div class="col-lg-12">
-                        <input type="text"readonly="readonly" class="date-picker-listing-service" placeholder="{{ time_slot.event_start_date|date:'l j b Y'  }}" value="" disabled>
-                        <input type="text"readonly="readonly" class="date-picker-listing-service" placeholder="{{ time_slot.event_start_date|date:'H:i' }} تا {{ time_slot.event_end_date|date:'H:i' }}" value="" disabled>
-                        </div>
-                        {% endfor %}
-                    {% endif %}
-                    <!-- Time Slots Dropdown / End -->
-					<!-- Panel Dropdown -->
-
-                    <!-- TODO: compile form with django form -->
-					<div class="col-lg-12">
-						<div class="panel-dropdown">
-							<a href="#"> بلیت‌ها <span class="qtyTotal" name="qtyTotal">1</span></a>
-							<div class="panel-dropdown-content">
-                                {% for ticket in tickets %}
-								<!-- Quantity Buttons -->
-								<div class="qtyButtons">
-									<div class="qtyTitle">{{ ticket.ticket_title }}</div>
-                                    <input type="text" name="qtyInput" data-max="2" id="tickets-{{ ticket.id }}" value="0">
-
-								</div>
-                                {% endfor %}
-
-							</div>
-						</div>
-					</div>
-					<!-- Panel Dropdown / End -->
-
-				</div>
 				
 				<!-- Book Now -->
                 {% if user.is_authenticated %}
-				<a href="{% url "eventinfo:event_booking" event_id=event.id %}" class="button book-now fullwidth margin-top-5">درخواست رزرو</a>
+                <button class="button fullwidth margin-top-10" type="submit">درخواست رزرو</button>
 				{% else %}
                 <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">ابتدا وارد شوید.</a>
                 {% endif %}
+
 				<!-- Estimated Cost -->
                 <!-- TODO: COPY STYLE FROM EVENT BOOKING PAGE -->
 				<div class="booking-estimated-cost">

@@ -188,3 +188,18 @@ class Tickets(models.Model):
     # TODO: get status for checking if ticket is available
     def get_status(self):
         return 1
+
+
+class Booking(models.Model):
+    class Meta:
+        verbose_name = 'رزرو'
+        verbose_name_plural = 'رزرو'
+
+    book_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    book_event = models.ForeignKey('Event', on_delete=models.CASCADE, verbose_name='رویداد')
+    book_time_slot = models.ForeignKey('Time_Slots', on_delete=models.CASCADE, verbose_name='سانس')
+    book_ticket = models.ForeignKey('Tickets', on_delete=models.CASCADE, verbose_name='بلیت')
+    book_seats = models.IntegerField('تعداد')
+    book_created_at = models.DateTimeField(auto_now_add=True)
+    book_total_cost = models.IntegerField('قیمت کل')
+

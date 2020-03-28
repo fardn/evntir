@@ -1,22 +1,21 @@
-{% load static %}
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/html" dir="rtl" lang="fa">
+
 <head>
 
 <!-- Basic Page Needs
 ================================================== -->
-<title>{% block title %}{% endblock %}</title>
+<title>لیستئو</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
 <!-- CSS
 ================================================== -->
-<link rel="stylesheet" href="{% static 'eventinfo/css/style.css' %}">
-<link rel="stylesheet" href="{% static 'eventinfo/css/main-color.css' %}" id="colors">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/main-color.css" id="colors">
 
 </head>
 
-<body {% block index_css %}{% endblock %}>
+<body>
 
 <!-- Wrapper -->
 <div id="wrapper">
@@ -28,10 +27,10 @@
 	<!-- Header -->
 	<div id="header">
 		<div class="container">
-
+			
 			<!-- Left Side Content -->
 			<div class="left-side">
-
+				
 				<!-- Logo -->
 				<div id="logo">
 					<a href="index.html"><img src="images/logo.png" alt=""></a>
@@ -50,14 +49,21 @@
 				<nav id="navigation" class="style-1">
 					<ul id="responsive">
 
-						<li><a href="{% url 'eventinfo:index' %}">صفحه اصلی</a>
+						<li><a href="#">صفحه اصلی</a>
+							<ul>
+								<li><a href="index.html">صفحه اصلی 1</a></li>
+								<li><a href="index-2.html">صفحه اصلی 2</a></li>
+								<li><a href="index-3.html">صفحه اصلی 3</a></li>
+								<li><a href="index-4.html">صفحه اصلی 4</a></li>
+								<li><a href="index-5.html">صفحه اصلی 5</a></li>
+							</ul>
 						</li>
 
-						<li><a class="current" href="{% url 'eventinfo:event_list' %}">آگهی ها</a>
+						<li><a href="#" class="current">آگهی ها</a>
 							<ul>
 								<li><a href="#">طرح آگهی</a>
 									<ul>
-										<li><a href="events.html">با نوار کناری</a></li>
+										<li><a href="listings-list-with-sidebar.html">با نوار کناری</a></li>
 										<li><a href="listings-list-full-width.html">تمام عرض</a></li>
 										<li><a href="listings-list-full-width-with-map.html">عرض کامل + نقشه</a></li>
 									</ul>
@@ -114,7 +120,7 @@
 											<li><a href="pages-blog.html"><i class="sl sl-icon-docs"></i> بلاگ</a></li>
 										</ul>
 									</div>
-
+		
 									<div class="mega-menu-section">
 										<ul>
 											<li class="mega-menu-headline">صفحات #2</li>
@@ -134,36 +140,22 @@
 											<li><a href="pages-icons.html"><i class="sl sl-icon-diamond"></i> آیکن ها</a></li>
 										</ul>
 									</div>
-
+									
 							</div>
 						</li>
-
+						
 					</ul>
 				</nav>
 				<div class="clearfix"></div>
 				<!-- Main Navigation / End -->
-
+				
 			</div>
 			<!-- Left Side Content / End -->
 
 			<!-- Right Side Content / End -->
 			<div class="right-side">
 				<div class="header-widget">
-                    {% if user.is_authenticated %}
-                        <div class="user-menu">
-                            <div class="user-name"><span><img src="{{ user.profile.user_image.url }}" alt=""></span>حساب من</div>
-                            <ul>
-                                <li><a href="dashboard.html"><i class="sl sl-icon-settings"></i> داشبورد</a></li>
-                                <li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> پیام ها</a></li>
-                                <li><a href="dashboard-bookings.html"><i class="fa fa-calendar-check-o"></i> رزرو ها</a></li>
-                                <li><a href="{% url "eventinfo:account_profile" %}"><i class="sl sl-icon-user"></i>حساب کاربری </a></li>
-                                <li><a href="{% url "eventinfo:logout" %}"><i class="sl sl-icon-power"></i> خروج</a></li>
-                            </ul>
-                        </div>
-                    {% else %}
-                        <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim">
-                        <i class="sl sl-icon-login"></i> ورود</a>
-                    {% endif %}
+					<a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim"><i class="sl sl-icon-login"></i> ورود</a>
 					<a href="dashboard-add-listing.html" class="button border with-icon">افزودن آگهی <i class="sl sl-icon-plus"></i></a>
 				</div>
 			</div>
@@ -188,7 +180,7 @@
 
 						<!-- Login -->
 						<div class="tab-content" id="tab1" style="display: none;">
-							<form action="{% url "eventinfo:login" %}" method="post" class="ورود">{% csrf_token %}
+							<form method="post" class="ورود">
 
 								<p class="form-row form-row-wide">
 									<label for="username">نام کاربری:
@@ -214,7 +206,7 @@
 										<label for="remember-me">مرا به خاطر داشته باش</label>
 									</div>
 								</div>
-
+								
 							</form>
 						</div>
 
@@ -222,14 +214,14 @@
 						<div class="tab-content" id="tab2" style="display: none;">
 
 							<form method="post" class="register">
-
+								
 							<p class="form-row form-row-wide">
 								<label for="username2">نام کاربری:
 									<i class="im im-icon-Male"></i>
 									<input type="text" class="input-text" name="username" id="username2" value="" />
 								</label>
 							</p>
-
+								
 							<p class="form-row form-row-wide">
 								<label for="email2">آدرس ایمیل:
 									<i class="im im-icon-Mail"></i>
@@ -252,7 +244,7 @@
 							</p>
 
 							<input type="submit" class="button border fw margin-top-10" name="register" value="ثبت نام" />
-
+	
 							</form>
 						</div>
 
@@ -269,15 +261,55 @@
 <div class="clearfix"></div>
 <!-- Header Container / End -->
 
-{% block banner %}{% endblock %}
-{% block titlebar %}{% endblock %}
 
-{% block content %}{% endblock %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2>رزرو فرآیند</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="#">صفحه اصلی</a></li>
+						<li>رزرو فرآیند</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+
+
+<!-- Content
+================================================== -->
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="booking-confirmation-page">
+				<i class="fa fa-check-circle"></i>
+				<h2 class="margin-top-30">از رزرو شما متشکرم!</h2>
+				<p>شما یک ایمیل تأیید دریافت خواهید کرد <a href="http://www.vasterad.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aac7cbc3c6eacfd2cbc7dac6cf84c9c5c7">[email&#160;protected]</a></p>
+				<a href="dashboard-invoice.html" class="button margin-top-30">مشاهده صورتحساب</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- Container / End -->
+
 
 
 <!-- Footer
 ================================================== -->
-<div id="footer" class="margin-top-15">
+<div id="footer" class="margin-top-65">
 	<!-- Main -->
 	<div class="container">
 		<div class="row">
@@ -306,7 +338,7 @@
 					<li><a href="#">تماس</a></li>
 				</ul>
 				<div class="clearfix"></div>
-			</div>
+			</div>		
 
 			<div class="col-md-3  col-sm-12">
 				<h4>تماس با ما</h4>
@@ -326,7 +358,7 @@
 			</div>
 
 		</div>
-
+		
 		<!-- Copyright -->
 		<div class="row">
 			<div class="col-md-12">
@@ -351,20 +383,49 @@
 
 <!-- Scripts
 ================================================== -->
-<!--<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script> -->
-<script type="text/javascript" src="{% static 'eventinfo/scripts/jquery-2.2.0.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/mmenu.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/chosen.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/slick.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/rangeslider.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/magnific-popup.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/waypoints.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/counterup.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/jquery-ui.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/tooltips.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'eventinfo/scripts/custom.js' %}"></script>
+<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script type="text/javascript" src="scripts/jquery-2.2.0.min.js"></script>
+<script type="text/javascript" src="scripts/mmenu.min.js"></script>
+<script type="text/javascript" src="scripts/chosen.min.js"></script>
+<script type="text/javascript" src="scripts/slick.min.js"></script>
+<script type="text/javascript" src="scripts/rangeslider.min.js"></script>
+<script type="text/javascript" src="scripts/magnific-popup.min.js"></script>
+<script type="text/javascript" src="scripts/waypoints.min.js"></script>
+<script type="text/javascript" src="scripts/counterup.min.js"></script>
+<script type="text/javascript" src="scripts/jquery-ui.min.js"></script>
+<script type="text/javascript" src="scripts/tooltips.min.js"></script>
+<script type="text/javascript" src="scripts/custom.js"></script>
 
-{% block script %}{% endblock %}
+
+<!-- Style Switcher
+================================================== -->
+<script src="scripts/switcher.js"></script>
+
+<div id="style-switcher">
+	<h2>تغییر ناوبری <a href="#"><i class="sl sl-icon-settings"></i></a></h2>
+	
+	<div>
+		<ul class="colors" id="color1">
+			<li><a href="#" class="main" title="اصلی"></a></li>
+			<li><a href="#" class="blue" title="آبی"></a></li>
+			<li><a href="#" class="green" title="سبز"></a></li>
+			<li><a href="#" class="orange" title="نارنجی"></a></li>
+			<li><a href="#" class="navy" title="آبی پررنگ"></a></li>
+			<li><a href="#" class="yellow" title="زرد"></a></li>
+			<li><a href="#" class="peach" title="هلویی"></a></li>
+			<li><a href="#" class="beige" title="بژ"></a></li>
+			<li><a href="#" class="purple" title="بنفش"></a></li>
+			<li><a href="#" class="celadon" title="سبز کم رنگ"></a></li>
+			<li><a href="#" class="red" title="قرمز"></a></li>
+			<li><a href="#" class="brown" title="قهوه ای"></a></li>
+			<li><a href="#" class="cherry" title="گیلاسی"></a></li>
+			<li><a href="#" class="cyan" title="فیروزه ای"></a></li>
+			<li><a href="#" class="gray" title="خاکستری"></a></li>
+			<li><a href="#" class="olive" title="زیتونی"></a></li>
+		</ul>
+	</div>
+		
+</div>
+<!-- Style Switcher / End -->
 
 
 </body>
