@@ -56,11 +56,13 @@ def event_booking(request, event_id):
 
     if request.method == 'POST':
         book_ticket = get_object_or_404(Tickets, pk=request.POST['book_ticket'])
-        book_seats = request.POST['book_seats']
+        book_seats = int(request.POST['book_seats'])
         event = get_object_or_404(Event, pk=event_id)
         guests = event.event_guests.all()
-        book_total_cost = int(book_ticket.ticket_price)*int(book_seats)
+        book_total_cost = int(book_ticket.ticket_price)*book_seats
+        ticket_status = book_ticket.get_status
         context = {
+            'ticket_status': ticket_status,
             'book_ticket': book_ticket,
             'book_seats': book_seats,
             'book_total_cost': book_total_cost,

@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+import datetime
+from django.utils import timezone
 
 
 class Cities(models.Model):
@@ -165,7 +167,7 @@ class Tickets(models.Model):
         verbose_name = 'بلیت'
         verbose_name_plural = 'بلیت'
 
-    ticket_time_slot = models.ForeignKey('Time_Slots', on_delete=models.CASCADE, verbose_name='سانس')
+    ticket_time_slot = models.ForeignKey('Time_Slots', on_delete=models.PROTECT, verbose_name='سانس')
     TICKET_TYPE_CHOICES = ((0, 'رایگان'), (1, 'پولی'), (2, 'حمایتی'))
     ticket_type = models.IntegerField('نوع بلیت', choices=TICKET_TYPE_CHOICES)
     ticket_title = models.CharField('عنوان', max_length=50)
@@ -178,6 +180,25 @@ class Tickets(models.Model):
     ticket_is_passed = models.BooleanField('رویداد گذشته', default=False)
     ticket_is_canceled = models.BooleanField('بلیت لغو شده', default=False)
 
+    SALE_NOT_STATED = 1
+    SALE_OPEN = 2
+    SOLD_OUT = 3
+    SALE_CLOSED = 4
+    TICKET_PASSED = 5
+    TICKET_CANCELED = 6
+    TICKET_ARCHIVED = 7
+    status_choices = (
+        (SALE_NOT_STATED, 'بلیت فروشی آغاز نشده.'),
+        (SALE_OPEN, 'بلیت فروشی آغاز شده.'),
+        (SOLD_OUT, 'بلیت‌ها تمام شد.'),
+        (SALE_CLOSED, 'بلیت فروشی بسته شد.'),
+        (TICKET_PASSED, 'رویداد به پایان رسیده'),
+        (TICKET_CANCELED, 'بلیت لغو شده'),
+        (TICKET_ARCHIVED, 'بلیت حذف شده'),
+
+    )
+    ticket_status = models.IntegerField(choices=status_choices)
+
     def __str__(self):
         return '{} | {} | {} | sold: {}'.format(self.ticket_time_slot, self.ticket_type, self.ticket_price,
                                                 self.ticket_sold)
@@ -185,9 +206,12 @@ class Tickets(models.Model):
     def get_available_tickets(self):
         return self.ticket_count - self.ticket_sold
 
-    # TODO: get status for checking if ticket is available
     def get_status(self):
-        return 1
+        now = timezone.now()
+        if self.ticket_time_slot.event_start_date > now:
+            return 2
+        else:
+            return 5
 
 
 class Booking(models.Model):
@@ -195,10 +219,9 @@ class Booking(models.Model):
         verbose_name = 'رزرو'
         verbose_name_plural = 'رزرو'
 
-    book_user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
-    book_event = models.ForeignKey('Event', on_delete=models.CASCADE, verbose_name='رویداد')
-    book_time_slot = models.ForeignKey('Time_Slots', on_delete=models.CASCADE, verbose_name='سانس')
-    book_ticket = models.ForeignKey('Tickets', on_delete=models.CASCADE, verbose_name='بلیت')
+    book_user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='کاربر')
+    book_time_slot = models.ForeignKey('Time_Slots', on_delete=models.PROTECT, verbose_name='سانس')
+    book_ticket = models.ForeignKey('Tickets', on_delete=models.PROTECT, verbose_name='بلیت')
     book_seats = models.IntegerField('تعداد')
     book_created_at = models.DateTimeField(auto_now_add=True)
     book_total_cost = models.IntegerField('قیمت کل')
