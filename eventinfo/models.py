@@ -1,6 +1,8 @@
 from django.contrib.auth.models import User
 from django.db import models
 import datetime
+
+from django.db.models import F
 from django.utils import timezone
 
 
@@ -174,13 +176,13 @@ class Tickets(models.Model):
     ticket_description = models.TextField('توضیحات بلیت', null=True, blank=True)
     ticket_count = models.IntegerField('تعداد بلیت')
     ticket_price = models.IntegerField('قیمت بلیت', null=True, blank=True)
-    ticket_order_start_date = models.DateTimeField('ساعت شروع فروش بلیت', null=True, blank=True)
+    ticket_order_start_date = models.DateTimeField('ساعت شروع فروش بلیت', null=True, blank=True, default=timezone.now)
     ticket_order_end_date = models.DateTimeField('ساعت پایان فروش بلیت', null=True, blank=True)
     ticket_sold = models.IntegerField('بلیت‌های فروخته شده', default=0)
     ticket_is_passed = models.BooleanField('رویداد گذشته', default=False)
     ticket_is_canceled = models.BooleanField('بلیت لغو شده', default=False)
 
-    SALE_NOT_STATED = 1
+    SALE_NOT_STARTED = 1
     SALE_OPEN = 2
     SOLD_OUT = 3
     SALE_CLOSED = 4
@@ -188,7 +190,7 @@ class Tickets(models.Model):
     TICKET_CANCELED = 6
     TICKET_ARCHIVED = 7
     status_choices = (
-        (SALE_NOT_STATED, 'بلیت فروشی آغاز نشده.'),
+        (SALE_NOT_STARTED, 'بلیت فروشی آغاز نشده.'),
         (SALE_OPEN, 'بلیت فروشی آغاز شده.'),
         (SOLD_OUT, 'بلیت‌ها تمام شد.'),
         (SALE_CLOSED, 'بلیت فروشی بسته شد.'),
@@ -197,7 +199,7 @@ class Tickets(models.Model):
         (TICKET_ARCHIVED, 'بلیت حذف شده'),
 
     )
-    ticket_status = models.IntegerField(choices=status_choices)
+    ticket_status = models.IntegerField(choices=status_choices, null=True, blank=True)
 
     def __str__(self):
         return '{} | {} | {} | sold: {}'.format(self.ticket_time_slot, self.ticket_type, self.ticket_price,
@@ -207,11 +209,29 @@ class Tickets(models.Model):
         return self.ticket_count - self.ticket_sold
 
     def get_status(self):
-        now = timezone.now()
-        if self.ticket_time_slot.event_start_date > now:
-            return 2
-        else:
-            return 5
+        NOW = timezone.now()
+        if self.ticket_status not in (Tickets.TICKET_CANCELED, Tickets.TICKET_ARCHIVED):
+            if self.ticket_order_end_date is None:
+                self.ticket_order_end_date = self.ticket_time_slot.event_start_date
+                self.save()
+
+            if self.ticket_order_start_date > NOW:
+                self.ticket_status = Tickets.SALE_NOT_STARTED
+                self.save()
+
+            if self.ticket_order_start_date < NOW < self.ticket_order_end_date:
+                self.ticket_status = Tickets.SALE_OPEN
+                self.save()
+
+            if self.ticket_order_end_date < NOW:
+                self.ticket_status = Tickets.SALE_CLOSED
+                self.save()
+
+            if self.ticket_time_slot.event_start_date < NOW:
+                self.ticket_status = Tickets.TICKET_PASSED
+                self.save()
+
+        return self.ticket_status
 
 
 class Booking(models.Model):
