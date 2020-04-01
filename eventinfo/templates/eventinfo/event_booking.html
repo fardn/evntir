@@ -43,6 +43,10 @@
 		<div class="col-lg-8 col-md-8 padding-right-30">
 
 			<h3 class="margin-top-0 margin-bottom-30">اطلاعات شخصی</h3>
+            {% for value,key in ticket_list %}
+                {{ value }} - {{ key }}
+            {% endfor %}
+
 
 			<div class="row">
 

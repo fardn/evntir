@@ -57,17 +57,23 @@ def event_detail(request, event_id):
 def event_booking(request, event_id):
 
     if request.method == 'POST':
-        book_ticket = get_object_or_404(Tickets, pk=request.POST['book_ticket'])
-        book_seats = int(request.POST['book_seats'])
+        ticket_list = request.POST.items()
+        #ticket_id = ticket_list['ticket-id']
+        book_ticket = get_object_or_404(Tickets, pk=10)
+        #book_seats = int(request.POST['book_seats'])
         event = get_object_or_404(Event, pk=event_id)
         guests = event.event_guests.all()
-        book_total_cost = int(book_ticket.ticket_price)*book_seats
+        #book_total_cost = int(book_ticket.ticket_price)*book_seats
         ticket_status = book_ticket.get_status
         context = {
+            #'ticket_id':ticket_id,
+            #'ticket_key': ticket_key,
+            #'ticket_value': ticket_value,
+            'ticket_list':ticket_list,
             'ticket_status': ticket_status,
             'book_ticket': book_ticket,
-            'book_seats': book_seats,
-            'book_total_cost': book_total_cost,
+            #'book_seats': book_seats,
+            #'book_total_cost': book_total_cost,
             'event': event,
             'guests': guests,
             'message': 'پروفایل با موفقیت ویرایش شد.',
