@@ -11,6 +11,51 @@
 <div class="single-listing-page-titlebar"></div>
 {% endblock %}
 
+{% block book_popup %}
+    <!-- Book Popup -->
+    <!-- Sign In Popup -->
+			<div id="book-popup" class="zoom-anim-dialog mfp-hide">
+
+				<div class="small-dialog-header">
+					<h3>عنوان رویداد</h3>
+				</div>
+
+				<!--Tabs -->
+            <!-- Ticket List -->
+			<div id="listing-pricing-list" class="listing-section">
+
+				<div class="show-more">
+					<div class="pricing-list-container">
+
+						<!--  Time slots -->
+                        {% for time_slot in time_slots %}
+                        <h4>
+                            {{ time_slot.event_start_date|date:'l j b' }}
+                             ساعت
+                            {{ time_slot.event_start_date|date:'H:i' }}
+                        </h4>
+                        <ul>
+                            {% for ticket in time_slot.get_tickets %}
+							<li>
+								<h5>{{ ticket.ticket_title }}</h5>
+                                <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>{{ ticket.get_price }}</div>
+                                <div class="listing-small-badge success-badge"><i class="fa fa-info"></i>{{ ticket.get_status.1 }}</div>
+								<p>{{ ticket.ticket_description }}</p>
+								<span><input type="number" min="0" max="10" value="0"/></span>
+							</li>
+                            {% endfor %}
+						</ul>
+                        {% endfor %}
+
+					</div>
+				</div>
+				<a href="#" class="show-more-button" data-more-title="نمایش بیشتر" data-less-title="نمایش کمتر"><i class="fa fa-angle-down"></i></a>
+			</div>
+			<!-- Ticket List / End -->
+                </div>
+    <!-- Book Popup / End -->
+{% endblock %}
+
 {% block content %}
 <!-- Content
 ================================================== -->
@@ -415,6 +460,9 @@
 
 			<div class="boxed-widget booking-widget margin-top-35">
 				<h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
+                <div class="notification notice">
+                    <p><span>{{ time_slot_status }}</span> - {% for ticket in tickets %}{{ ticket.get_status.0 }}( {{ ticket.get_free_seats }})|{% endfor %} - </p>
+			    </div>
                 <form method="POST" action="{% url "eventinfo:event_booking" event_id=event.id %}">{% csrf_token %}
 
                     {% for ticket in tickets %}
@@ -430,7 +478,8 @@
 				
 				<!-- Book Now -->
                 {% if user.is_authenticated %}
-                <button class="button fullwidth margin-top-10" type="submit">درخواست رزرو</button>
+                <!-- <button class="button fullwidth margin-top-10" type="submit">درخواست رزرو</button> -->
+                <a href="#book-popup" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">رزرو بلیت</a>
 				{% else %}
                 <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">ابتدا وارد شوید.</a>
                 {% endif %}

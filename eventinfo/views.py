@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from eventinfo.models import Event, Event_types, Time_Slots, Tickets
+from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status
 from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm
 
 
@@ -39,6 +39,7 @@ def event_detail(request, event_id):
     guests = event.event_guests.all()
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
+    time_slot_status = Time_slot_status(4)
 
     context = {
         'booking_form': booking_form,
@@ -46,6 +47,7 @@ def event_detail(request, event_id):
         'event': event,
         'time_slots': time_slots,
         'tickets': tickets,
+        'time_slot_status': time_slot_status,
     }
 
     return render(request, 'eventinfo/event.html', context)
@@ -75,8 +77,6 @@ def event_booking(request, event_id):
 
     else:
         return HttpResponseRedirect(reverse('eventinfo:event_list'))
-
-
 
 
 def login_view(request):
@@ -158,3 +158,7 @@ def index(request):
     }
 
     return render(request, 'eventinfo/index.html', context)
+
+@login_required
+def booking_confirmation(request):
+    pass

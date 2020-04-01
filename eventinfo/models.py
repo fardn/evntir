@@ -3,6 +3,7 @@ from django.db import models
 import datetime
 
 from django.db.models import F
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
 
@@ -155,9 +156,34 @@ class Time_Slots(models.Model):
     event_id = models.ForeignKey('Event', on_delete=models.CASCADE, verbose_name='شناسه رویداد')
     event_start_date = models.DateTimeField('تاریخ و ساعت شروع')
     event_end_date = models.DateTimeField('تاریخ و ساعت پایان')
+    SALE_NOT_STARTED = 1
+    SALE_OPEN = 2
+    SOLD_OUT = 3
+    SALE_CLOSED = 4
+    TIME_SLOT_PASSED = 5
+    TIME_SLOT_CANCELED = 6
+    TIME_SLOT_ARCHIVED = 7
+    status_choices = (
+        (SALE_NOT_STARTED, 'بلیت فروشی آغاز نشده.'),
+        (SALE_OPEN, 'بلیت فروشی آغاز شده.'),
+        (SOLD_OUT, 'بلیت‌ها تمام شد.'),
+        (SALE_CLOSED, 'بلیت فروشی بسته شد.'),
+        (TIME_SLOT_PASSED, 'سانس به پایان رسیده'),
+        (TIME_SLOT_CANCELED, 'بلیت لغو شده'),
+        (TIME_SLOT_ARCHIVED, 'بلیت حذف شده'),
+
+    )
+
+    time_slot_status = models.IntegerField(choices=status_choices, null=True, blank=True)
+    total_seats = models.IntegerField(default=0)
+    free_seats = models.IntegerField()
 
     def __str__(self):
         return '{} - {}'.format(self.event_id.event_title, self.event_start_date)
+
+    def get_tickets(self):
+        time_slot_tickets = Tickets.objects.filter(ticket_time_slot_id=self.id).order_by('ticket_order_start_date')
+        return time_slot_tickets
 
 
 class Tickets(models.Model):
@@ -174,11 +200,11 @@ class Tickets(models.Model):
     ticket_type = models.IntegerField('نوع بلیت', choices=TICKET_TYPE_CHOICES)
     ticket_title = models.CharField('عنوان', max_length=50)
     ticket_description = models.TextField('توضیحات بلیت', null=True, blank=True)
-    ticket_count = models.IntegerField('تعداد بلیت')
+    ticket_seats = models.IntegerField('تعداد بلیت')
+    ticket_sold = models.IntegerField('بلیت‌های فروخته شده', default=0)
     ticket_price = models.IntegerField('قیمت بلیت', null=True, blank=True)
     ticket_order_start_date = models.DateTimeField('ساعت شروع فروش بلیت', null=True, blank=True, default=timezone.now)
     ticket_order_end_date = models.DateTimeField('ساعت پایان فروش بلیت', null=True, blank=True)
-    ticket_sold = models.IntegerField('بلیت‌های فروخته شده', default=0)
     ticket_is_passed = models.BooleanField('رویداد گذشته', default=False)
     ticket_is_canceled = models.BooleanField('بلیت لغو شده', default=False)
 
@@ -202,11 +228,19 @@ class Tickets(models.Model):
     ticket_status = models.IntegerField(choices=status_choices, null=True, blank=True)
 
     def __str__(self):
-        return '{} | {} | {} | sold: {}'.format(self.ticket_time_slot, self.ticket_type, self.ticket_price,
-                                                self.ticket_sold)
+        return '{} | {} | {} | sold: {} | {}'.format(self.ticket_time_slot, self.ticket_type, self.ticket_price,
+                                                     self.ticket_sold, self.ticket_order_start_date)
 
-    def get_available_tickets(self):
-        return self.ticket_count - self.ticket_sold
+    def get_free_seats(self):
+        return self.ticket_seats - self.ticket_sold
+
+    def get_price(self):
+        if self.ticket_price == 0:
+            return 'رایگان'
+        if self.ticket_price > 0:
+            return '{} تومان'.format(self.ticket_price)
+        if self.ticket_type == 2:
+            return 'حمایتی'
 
     def get_status(self):
         NOW = timezone.now()
@@ -231,7 +265,12 @@ class Tickets(models.Model):
                 self.ticket_status = Tickets.TICKET_PASSED
                 self.save()
 
-        return self.ticket_status
+            if self.get_free_seats() == 0:
+                self.ticket_status = Tickets.SOLD_OUT
+                self.save()
+
+        return self.ticket_status, self.get_ticket_status_display
+
 
 
 class Booking(models.Model):
@@ -246,3 +285,32 @@ class Booking(models.Model):
     book_created_at = models.DateTimeField(auto_now_add=True)
     book_total_cost = models.IntegerField('قیمت کل')
 
+
+def Time_slot_status(time_slot_id):
+
+    NOW = timezone.now()
+    this_time_slot = get_object_or_404(Time_Slots, pk=time_slot_id)
+    time_slot_tickets = Tickets.objects.filter(ticket_time_slot_id=time_slot_id).order_by(
+        'ticket_order_start_date')
+    first_ticket_order_start_date = time_slot_tickets[0].ticket_order_start_date
+
+    time_slot_tickets = time_slot_tickets.order_by('-ticket_order_end_date')
+    last_ticket_order_end_date = time_slot_tickets[0].ticket_order_end_date
+
+    if first_ticket_order_start_date > NOW:
+        this_time_slot.time_slot_status = Time_Slots.SALE_NOT_STARTED
+        this_time_slot.save()
+
+    elif last_ticket_order_end_date < NOW:
+        this_time_slot.time_slot_status = Time_Slots.SALE_CLOSED
+        this_time_slot.save()
+
+    elif this_time_slot.free_seats == 0:
+        this_time_slot.time_slot_status = Time_Slots.SOLD_OUT
+        this_time_slot.save()
+
+    elif this_time_slot.time_slot_status not in (Time_Slots.TIME_SLOT_CANCELED, Time_Slots.TIME_SLOT_ARCHIVED):
+        this_time_slot.time_slot_status = Time_Slots.SALE_OPEN
+        this_time_slot.save()
+
+    return this_time_slot.time_slot_status
