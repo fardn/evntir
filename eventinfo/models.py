@@ -232,7 +232,7 @@ class Tickets(models.Model):
                                                      self.ticket_sold, self.ticket_order_start_date)
 
     def get_free_seats(self):
-        return self.ticket_seats - self.ticket_sold
+        return int(self.ticket_seats - self.ticket_sold)
 
     def get_price(self):
         if self.ticket_type == 2:
@@ -278,8 +278,8 @@ class Booking(models.Model):
         verbose_name = 'رزرو'
         verbose_name_plural = 'رزرو'
 
+    book_number = models.IntegerField('شماره سفارش')
     book_user = models.ForeignKey(User, on_delete=models.PROTECT, verbose_name='کاربر')
-    book_time_slot = models.ForeignKey('Time_Slots', on_delete=models.PROTECT, verbose_name='سانس')
     book_ticket = models.ForeignKey('Tickets', on_delete=models.PROTECT, verbose_name='بلیت')
     book_seats = models.IntegerField('تعداد')
     book_created_at = models.DateTimeField(auto_now_add=True)

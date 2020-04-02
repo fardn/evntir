@@ -1,0 +1,51 @@
+{% extends 'eventinfo/base_page.html' %}
+
+{% block title %}
+{{ salam }} |
+    ایونت‌اینفو
+{% endblock %}
+{% block titlebar %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2> رزرو فرآیند</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="#">صفحه اصلی</a></li>
+						<li>رزرو فرآیند</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+{% block content %}
+<!-- Content
+================================================== -->
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+		<div class="col-md-12">
+
+			<div class="booking-confirmation-page">
+				<i class="fa fa-check-circle"></i>
+				<h2 class="margin-top-30">{{ first_name }} از رزرو شما متشکرم!</h2>
+				<p>شما یک ایمیل تأیید دریافت خواهید کرد <a href="http://www.vasterad.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="aac7cbc3c6eacfd2cbc7dac6cf84c9c5c7">[email&#160;protected]</a></p>
+				<p>{{ error }}</p>
+                <a href="dashboard-invoice.html" class="button margin-top-30">مشاهده صورتحساب</a>
+			</div>
+
+		</div>
+	</div>
+</div>
+<!-- Container / End -->
+{% endblock %}

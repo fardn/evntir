@@ -5,7 +5,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status
+from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking
 from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm
 
 
@@ -166,5 +166,46 @@ def index(request):
 
 
 @login_required
-def booking_confirmation(request):
-    pass
+def booking_confirmation(request, event_id):
+    if request.method == 'POST':
+        i = 0
+        tickets = []
+        total_cost = 0
+        for key, value in request.POST.items():
+            if key.isdigit():
+                ticket = get_object_or_404(Tickets, pk=key)
+                seats = value
+                total_cost += int(ticket.ticket_price) * int(seats)
+                item = {
+                    'ticket': ticket,
+                    'seats': seats,
+                }
+                tickets.append(item)
+                i += 1
+
+        first_name = request.POST['first-name']
+        last_name = request.POST['last-name']
+        email = request.POST['email']
+        mobile = request.POST['mobile']
+        book_number = 123
+
+        context = {
+            'tickets': tickets,
+            'first_name': first_name,
+        }
+
+        try:
+            assert int(total_cost) <= int(request.user.profile.balance), 'حساب'
+            for ticket in tickets:
+                assert ticket['ticket'].ticket_status == ticket['ticket'].SALE_OPEN, 'وضعیت'
+                free_seats = ticket['ticket'].get_free_seats
+                assert 25 >= int(ticket['seats']), 'ظرفیت'
+                Booking.objects.create(book_number=book_number, book_user=request.user, book_ticket=ticket['ticket'], book_seats=ticket['seats'], book_total_cost=total_cost)
+
+        except Exception as e:
+            context['error'] = str(e)
+
+        return render(request, 'eventinfo/booking_confirmation.html', context)
+
+    else:
+        return HttpResponseRedirect(reverse('eventinfo:event_list'))

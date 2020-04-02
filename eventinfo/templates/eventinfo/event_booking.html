@@ -36,6 +36,7 @@
 
 <!-- Container -->
 <div class="container">
+<form method="POST" action="{% url "eventinfo:booking_confirmation" event_id=event.id %}">{% csrf_token %}
 	<div class="row">
 
 		<!-- Content
@@ -47,20 +48,21 @@
 
 			<div class="row">
 
+
 				<div class="col-md-6">
 					<label>نام</label>
-                    <input type="text" value="{{ user.first_name }}">
+                    <input name="first-name" type="text" value="{{ user.first_name }}">
 				</div>
 
 				<div class="col-md-6">
 					<label>نام خانوادگی</label>
-					<input type="text" value="{{ user.last_name }}">
+					<input name="last-name" type="text" value="{{ user.last_name }}">
 				</div>
 
 				<div class="col-md-6">
 					<div class="input-with-icon medium-icons">
 						<label>آدرس ایمیل</label>
-						<input type="text" value="{{ user.email }}">
+						<input name="email" type="text" value="{{ user.email }}">
 						<i class="im im-icon-Mail"></i>
 					</div>
 				</div>
@@ -68,10 +70,19 @@
 				<div class="col-md-6">
 					<div class="input-with-icon medium-icons">
 						<label>موبایل</label>
-						<input type="text" value="{{ user.profile.mobile }}">
+						<input name="mobile" type="text" value="{{ user.profile.mobile }}">
 						<i class="im im-icon-Phone-2"></i>
 					</div>
 				</div>
+
+                <div class="col-md-6">
+					<div class="input-with-icon medium-icons">
+                        {% for ticket in tickets %}
+						<input name="{{ ticket.ticket.id }}" type="hidden" value="{{ ticket.seats }}">
+                        {% endfor %}
+					</div>
+				</div>
+
 
 			</div>
 
@@ -83,7 +94,7 @@
 
 				<div class="payment-tab payment-tab-active">
 					<div class="payment-tab-trigger">
-						<input checked id="paypal" name="cardType" type="radio" value="paypal">
+						<input checked id="paypal" name="cardType" type="radio" value="credit">
 						<label for="paypal">پرداخت از اعتبار</label>
 						<img class="payment-logo paypal" src="../../../i.imgur.com/ApBxkXU.png" alt="">
 					</div>
@@ -107,7 +118,7 @@
 
 					<div class="payment-tab-content">
 						<div class="row">
-
+                        <!--
 							<div class="col-md-6">
 								<div class="card-label">
 									<label for="nameOnCard">نام بر روی کارت</label>
@@ -142,15 +153,15 @@
 									<input id="cvv" required type="text">
 								</div>
 							</div>
-
+                            -->
 						</div>
 					</div>
 				</div>
 
 			</div>
 			<!-- Payment Methods Accordion / End -->
-		
-			<a href="pages-booking-confirmation.html" class="button booking-confirmation-btn margin-top-40 margin-bottom-65">تایید و پرداخت</a>
+            <button class="button margin-top-10" type="submit">تایید و پرداخت</button>
+        </form>
 		</div>
 
 
@@ -176,7 +187,6 @@
 				</div>
 			</div>
 
-            <!-- TODO: BOOKING DETAIL UPDTAE -->
 			<div class="boxed-widget opening-hours summary margin-top-0">
 				<h3><i class="fa fa-calendar-check-o"></i> خلاصه رزرو</h3>
                 {% for ticket in tickets %}
