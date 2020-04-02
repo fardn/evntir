@@ -42,10 +42,7 @@
 		================================================== -->
 		<div class="col-lg-8 col-md-8 padding-right-30">
 
-			<h3 class="margin-top-0 margin-bottom-30">اطلاعات شخصی</h3>
-            {% for value,key in ticket_list %}
-                {{ value }} - {{ key }}
-            {% endfor %}
+			<h3 class="margin-top-0 margin-bottom-30">مشخصات شرکت‌کننده</h3>
 
 
 			<div class="row">
@@ -182,16 +179,21 @@
             <!-- TODO: BOOKING DETAIL UPDTAE -->
 			<div class="boxed-widget opening-hours summary margin-top-0">
 				<h3><i class="fa fa-calendar-check-o"></i> خلاصه رزرو</h3>
+                {% for ticket in tickets %}
 				<ul>
-					<li>تاریخ <span>{{ book_ticket.ticket_time_slot.event_start_date|date:'l j b Y'}}</span></li>
-					<li>ساعت <span>{{ book_ticket.ticket_time_slot.event_start_date|date:'H:i' }}</span></li>
-					<li>{{ book_ticket.ticket_title }} <span>{{ book_seats }} عدد </span></li>
-					<li class="total-costs">هزینه کل <span>{{ book_total_cost }} تومان</span></li>
+					<li>تاریخ <span>{{ ticket.ticket.ticket_time_slot.event_start_date|date:'l j b Y'}}</span></li>
+					<li>ساعت <span>{{ ticket.ticket.ticket_time_slot.event_start_date|date:'H:i' }}</span></li>
+					<li>{{ ticket.ticket.ticket_title }} <span>{{ ticket.seats }} عدد </span></li>
+                    <li>قیمت <span>{{ ticket.ticket.get_price }} </span></li>
+                    <li class="total-costs"></li>
 				</ul>
+                {% endfor %}
+                <ul>
+                    <li class="total-costs" style="border-top:0px; margin-top: 0px">هزینه کل <span>{{ total_cost }} تومان</span></li>
+                </ul>
 
 			</div>
 			<!-- Booking Summary / End -->
-
 		</div>
 
 	</div>

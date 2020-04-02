@@ -235,12 +235,12 @@ class Tickets(models.Model):
         return self.ticket_seats - self.ticket_sold
 
     def get_price(self):
+        if self.ticket_type == 2:
+            return 'حمایتی'
         if self.ticket_price == 0:
             return 'رایگان'
         if self.ticket_price > 0:
             return '{} تومان'.format(self.ticket_price)
-        if self.ticket_type == 2:
-            return 'حمایتی'
 
     def get_status(self):
         NOW = timezone.now()

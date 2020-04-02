@@ -55,29 +55,27 @@ def event_detail(request, event_id):
 
 @login_required
 def event_booking(request, event_id):
-
     if request.method == 'POST':
-        ticket_list = request.POST.items()
-        #ticket_id = ticket_list['ticket-id']
-        book_ticket = get_object_or_404(Tickets, pk=10)
-        #book_seats = int(request.POST['book_seats'])
         event = get_object_or_404(Event, pk=event_id)
-        guests = event.event_guests.all()
-        #book_total_cost = int(book_ticket.ticket_price)*book_seats
-        ticket_status = book_ticket.get_status
+        i = 0
+        tickets = []
+        total_cost = 0
+        for key, value in request.POST.items():
+            if key.isdigit():
+                ticket = get_object_or_404(Tickets, pk=key)
+                seats = value
+                total_cost += int(ticket.ticket_price) * int(seats)
+                item = {
+                    'ticket': ticket,
+                    'seats': seats,
+                }
+                tickets.append(item)
+                i += 1
+
         context = {
-            #'ticket_id':ticket_id,
-            #'ticket_key': ticket_key,
-            #'ticket_value': ticket_value,
-            'ticket_list':ticket_list,
-            'ticket_status': ticket_status,
-            'book_ticket': book_ticket,
-            #'book_seats': book_seats,
-            #'book_total_cost': book_total_cost,
+            'tickets': tickets,
+            'total_cost': total_cost,
             'event': event,
-            'guests': guests,
-            'message': 'پروفایل با موفقیت ویرایش شد.',
-            'error': True,
         }
         return render(request, 'eventinfo/event_booking.html', context)
 
@@ -154,7 +152,8 @@ def account_profile(request):
 def index(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.all().order_by('-updated_at')
-    event_type_list = events.values('event_type', 'event_type__type_title', 'event_type__type_icon').annotate(count=Count('event_type'))
+    event_type_list = events.values('event_type', 'event_type__type_title', 'event_type__type_icon').annotate(
+        count=Count('event_type'))
     types = Event_types.objects.all()
     context = {
         'search_form': search_form,
@@ -164,6 +163,7 @@ def index(request):
     }
 
     return render(request, 'eventinfo/index.html', context)
+
 
 @login_required
 def booking_confirmation(request):
