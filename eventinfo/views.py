@@ -54,33 +54,51 @@ def event_detail(request, event_id):
 
 
 @login_required
-def event_booking(request, event_id):
+def booking_tickets(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
+    tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
+    time_slot_status = Time_slot_status(4)
+
+    context = {
+        'event': event,
+        'time_slots': time_slots,
+        'tickets': tickets,
+        'time_slot_status': time_slot_status,
+    }
+
     if request.method == 'POST':
-        event = get_object_or_404(Event, pk=event_id)
         i = 0
         tickets = []
         total_cost = 0
-        for key, value in request.POST.items():
-            if key.isdigit():
-                ticket = get_object_or_404(Tickets, pk=key)
-                seats = value
-                total_cost += int(ticket.ticket_price) * int(seats)
-                item = {
-                    'ticket': ticket,
-                    'seats': seats,
-                }
-                tickets.append(item)
-                i += 1
+        try:
+            for key, value in request.POST.items():
+                if key.isdigit():
+                    ticket = get_object_or_404(Tickets, pk=key)
+                    seats = int(value)
+                    assert ticket.ticket_status == ticket.SALE_OPEN, 'وضعیت'
+                    assert ticket.get_free_seats() >= seats, 'ظرفیت {}'.format(ticket.id)
+                    total_cost += ticket.ticket_price * seats
+                    item = {
+                        'ticket': ticket,
+                        'seats': seats,
+                    }
+                    tickets.append(item)
+                    i += 1
 
-        context = {
-            'tickets': tickets,
-            'total_cost': total_cost,
-            'event': event,
-        }
-        return render(request, 'eventinfo/event_booking.html', context)
+        except Exception as e:
+            context['error'] = str(e)
+            return render(request, 'eventinfo/booking_tickets.html', context)
 
-    else:
-        return HttpResponseRedirect(reverse('eventinfo:event_list'))
+        else:
+            context = {
+                'event': event,
+                'tickets': tickets,
+                'total_cost': total_cost,
+            }
+            return render(request, 'eventinfo/booking_detail.html', context)
+
+    return render(request, 'eventinfo/booking_tickets.html', context)
 
 
 def login_view(request):
@@ -200,7 +218,8 @@ def booking_confirmation(request, event_id):
                 assert ticket['ticket'].ticket_status == ticket['ticket'].SALE_OPEN, 'وضعیت'
                 free_seats = ticket['ticket'].get_free_seats
                 assert 25 >= int(ticket['seats']), 'ظرفیت'
-                Booking.objects.create(book_number=book_number, book_user=request.user, book_ticket=ticket['ticket'], book_seats=ticket['seats'], book_total_cost=total_cost)
+                Booking.objects.create(book_number=book_number, book_user=request.user, book_ticket=ticket['ticket'],
+                                       book_seats=ticket['seats'], book_total_cost=total_cost)
 
         except Exception as e:
             context['error'] = str(e)

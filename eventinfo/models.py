@@ -232,7 +232,7 @@ class Tickets(models.Model):
                                                      self.ticket_sold, self.ticket_order_start_date)
 
     def get_free_seats(self):
-        return int(self.ticket_seats - self.ticket_sold)
+        return self.ticket_seats - self.ticket_sold
 
     def get_price(self):
         if self.ticket_type == 2:

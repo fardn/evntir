@@ -11,6 +11,54 @@
 <div class="single-listing-page-titlebar"></div>
 {% endblock %}
 
+{% block book_popup %}
+    <!-- Book Popup -->
+    <!-- Sign In Popup -->
+			<div id="book-popup" class="zoom-anim-dialog mfp-hide">
+
+				<div class="small-dialog-header">
+					<h3>عنوان رویداد</h3>
+				</div>
+
+				<!--Tabs -->
+            <!-- Ticket List -->
+            <form method="POST" action="{% url "eventinfo:booking_detail" event_id=event.id %}">{% csrf_token %}
+			<div id="listing-pricing-list" class="listing-section">
+
+				<div class="show-more">
+					<div class="pricing-list-container">
+						<!--  Time slots -->
+                        {% for time_slot in time_slots %}
+                        <h4>
+                            {{ time_slot.event_start_date|date:'l j b' }}
+                             ساعت
+                            {{ time_slot.event_start_date|date:'H:i' }}
+                        </h4>
+                        <ul>
+                            {% for ticket in time_slot.get_tickets %}
+							<li>
+								<h5>{{ ticket.ticket_title }}</h5>
+                                <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>{{ ticket.get_price }}</div>
+                                <div class="listing-small-badge success-badge"><i class="fa fa-info"></i>{{ ticket.get_status.1 }}</div>
+								<p>{{ ticket.ticket_description }}</p>
+                                {% if ticket.ticket_status == 2 %}
+								<span><input name="{{ ticket.id }}" id="{{ ticket.id }}" type="number" min="0" max="10" value="0"></span>
+                                {% endif %}
+							</li>
+                            {% endfor %}
+						</ul>
+                        {% endfor %}
+					</div>
+				</div>
+				<a href="#" class="show-more-button" data-more-title="نمایش بیشتر" data-less-title="نمایش کمتر"><i class="fa fa-angle-down"></i></a>
+			</div>
+            <button class="button fullwidth margin-top-10" type="submit">رزرو بلیت</button>
+            </form>
+			<!-- Ticket List / End -->
+                </div>
+    <!-- Book Popup / End -->
+{% endblock %}
+
 {% block content %}
 <!-- Content
 ================================================== -->
@@ -425,7 +473,7 @@
 				
 				<!-- Book Now -->
                 {% if user.is_authenticated %}
-                <a href="{% url "eventinfo:booking_tickets" event_id=event.id %}" class="button book-now fullwidth margin-top-5">رزرو بلیت</a>
+                <a href="#book-popup" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">رزرو بلیت</a>
 				{% else %}
                 <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">ابتدا وارد شوید.</a>
                 {% endif %}
@@ -514,6 +562,41 @@
 <!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
 <script src="{% static 'eventinfo/scripts/moment.min.js' %}"></script>
 <script src="{% static 'eventinfo/scripts/daterangepicker.js' %}"></script>
+    <!-- Date Range Picker
+<script>
+// Calendar Init
+
+    jQuery(function($) {
+        $("#date-picker").daterangepicker({
+            singleDatePicker: true,
+            opens:'center',
+            isInvalidDate: function(date) {
+				var dateRanges = [
+					{ 'start': moment('2020-03-10'), 'end': moment('2020-03-13') },
+					{ 'start': moment('2020-03-13'), 'end': moment('2020-03-15') }
+				];
+				return dateRanges.reduce(function(bool, range) {
+					return bool || ( date <= range.start || date >= range.end );
+				}, false);
+            }
+        });
+    });
+
+
+// Calendar animation
+$('#date-picker').on('showCalendar.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-animated');
+});
+$('#date-picker').on('show.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-visible');
+	$('.daterangepicker').removeClass('calendar-hidden');
+});
+$('#date-picker').on('hide.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').removeClass('calendar-visible');
+	$('.daterangepicker').addClass('calendar-hidden');
+});
+</script>
+-->
 <script>
 $(".time-slot").each(function() {
 	var timeSlot = $(this);

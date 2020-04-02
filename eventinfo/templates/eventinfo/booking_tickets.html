@@ -1,0 +1,173 @@
+{% extends 'eventinfo/base_page.html' %}
+{% load static %}
+
+{% block title %}
+{{ salam }} |
+    ایونت‌اینفو
+{% endblock %}
+
+{% block titlebar %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<h2>رزرو بلیت</h2>
+
+				<!-- Breadcrumbs -->
+				<nav id="breadcrumbs">
+					<ul>
+						<li><a href="#">صفحه اصلی</a></li>
+						<li>رزرو</li>
+					</ul>
+				</nav>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Content
+================================================== -->
+
+<!-- Container -->
+<div class="container">
+	<div class="row">
+
+		<!-- Content
+		================================================== -->
+		<div class="col-lg-8 col-md-8 padding-right-30">
+            <h3 class="margin-top-0 margin-bottom-30">انتخاب بلیت</h3>
+            <div class="row">
+            {% if error %}
+            <div class="notification error margin-bottom-35">
+                <p>{{ error }}</p>
+            </div>
+            {% endif %}
+                <form method="POST" >{% csrf_token %}
+                <div id="listing-pricing-list" class="listing-section">
+                    <div class="show-more">
+                        <div class="pricing-list-container">
+                            <!--  Time slots -->
+                            {% for time_slot in time_slots %}
+                            <h4>
+                                {{ time_slot.event_start_date|date:'l j b' }}
+                                 ساعت
+                                {{ time_slot.event_start_date|date:'H:i' }}
+                            </h4>
+                            <ul>
+                                {% for ticket in time_slot.get_tickets %}
+                                <li>
+                                    <h5>{{ ticket.ticket_title }}</h5>
+                                    <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>{{ ticket.get_price }}</div>
+                                    <div class="listing-small-badge success-badge"><i class="fa fa-info"></i>{{ ticket.get_status.1 }}</div>
+                                    <p>{{ ticket.ticket_description }}</p>
+                                    {% if ticket.ticket_status == 2 %}
+                                    <span><input name="{{ ticket.id }}" id="{{ ticket.id }}" type="number" min="0" max="10" value="0"></span>
+                                    {% endif %}
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <a href="#" class="show-more-button" data-more-title="نمایش بیشتر" data-less-title="نمایش کمتر"><i class="fa fa-angle-down"></i></a>
+                </div>
+            <button class="button margin-top-10" type="submit">رزرو بلیت</button>
+            </form>
+        </div>
+        </div>
+
+
+
+		<!-- Sidebar
+		================================================== -->
+		<div class="col-lg-4 col-md-4 margin-top-0 margin-bottom-60">
+
+			<!-- Booking Summary -->
+			<div class="listing-item-container compact order-summary-widget">
+				<div class="listing-item">
+					<img src="{{ event.event_main_image.url}}" alt="">
+
+					<div class="listing-item-content">
+                        <span class="tag">گفت‌وگو</span>
+						<div class="numerical-rating" data-rating="5.0"></div>
+						<h3>{{ event.event_title }}</h3>
+						<span><i class="fa fa-map-marker"></i>
+							{{ event.event_venue.venue_city}}
+                            ،
+                            {{ event.event_venue.venue_name }}
+                        </span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Booking Summary / End -->
+            <!-- Contact -->
+			<div class="boxed-widget margin-top-35">
+				<div class="hosted-by-title">
+					<h4><span>برگزار کننده:</span> <a href="pages-user-profile.html">{{ event.event_organizer.organizer_name }}</a></h4>
+					<a href="pages-user-profile.html" class="hosted-by-avatar"><img src="{{ event.event_organizer.organizer_logo.url }}" alt=""></a>
+				</div>
+				<ul class="listing-details-sidebar">
+					<li><i class="sl sl-icon-phone"></i>02122267686</li>
+					<!-- <li><i class="sl sl-icon-globe"></i> <a href="#">http://example.com</a></li> -->
+					<!--<li><i class="fa fa-envelope-o"></i> <a href="#"><span class="__cf_email__" data-cfemail="a1d5cecce1c4d9c0ccd1cdc48fc2cecc">[email&#160;protected]</span></a></li> -->
+				</ul>
+
+				<ul class="listing-details-sidebar social-profiles">
+                    {%  if event.event_organizer.organizer_instagram %}
+                    <li>
+                        <a href="Https://instagram.com/{{ event.event_organizer.organizer_instagram }}" class="instagram-profile">
+                        <i class="fa fa-instagram"></i> اینستاگرام</a>
+                    </li>
+					{% endif %}
+                    <li><a href="#" class="twitter-profile"><i class="fa fa-twitter"></i> توییتر</a></li>
+					<!-- <li><a href="#" class="gplus-profile"><i class="fa fa-google-plus"></i> Google Plus</a></li> -->
+				</ul>
+
+				<!-- Reply to review popup -->
+				<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+					<div class="small-dialog-header">
+						<h3>ارسال پیام</h3>
+					</div>
+					<div class="message-reply margin-top-0">
+						<textarea cols="40" rows="3" placeholder="پیام شما به تام"></textarea>
+						<button class="button">ارسال پیام</button>
+					</div>
+				</div>
+                <!-- Folow Organizer -->
+                <!-- TODO: FOLLOW ORGANIZER -->
+
+
+
+
+				<a href="#small-dialog" class="send-message-to-owner button popup-with-zoom-anim"><i class="sl sl-icon-envelope-open"></i> ارسال پیام</a>
+			</div>
+			<!-- Contact / End-->
+
+
+			<!-- Share / Like -->
+			<div class="listing-share margin-top-40 margin-bottom-40 no-border">
+				<button class="like-button"><span class="like-icon"></span> این آگهی را لایک کنید</button>
+				<span>159 نفر این مکان را نشانه گذاری کرده اند</span>
+
+					<!-- Share Buttons -->
+					<ul class="share-buttons margin-top-40 margin-bottom-0">
+						<li><a class="fb-share" href="#"><i class="fa fa-facebook"></i> اشتراک</a></li>
+						<li><a class="twitter-share" href="#"><i class="fa fa-twitter"></i> توییت</a></li>
+						<li><a class="gplus-share" href="#"><i class="fa fa-google-plus"></i> اشتراک</a></li>
+						<!-- <li><a class="pinterest-share" href="#"><i class="fa fa-pinterest-p"></i> Pin</a></li> -->
+					</ul>
+					<div class="clearfix"></div>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- Container / End -->
+{% endblock %}
