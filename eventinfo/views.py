@@ -192,8 +192,8 @@ def booking_confirmation(request, event_id):
         for key, value in request.POST.items():
             if key.isdigit():
                 ticket = get_object_or_404(Tickets, pk=key)
-                seats = value
-                total_cost += int(ticket.ticket_price) * int(seats)
+                seats = int(value)
+                total_cost += ticket.ticket_price * seats
                 item = {
                     'ticket': ticket,
                     'seats': seats,
@@ -201,11 +201,11 @@ def booking_confirmation(request, event_id):
                 tickets.append(item)
                 i += 1
 
+        # TODO: booking model needs additional filed for changed user profile
         first_name = request.POST['first-name']
         last_name = request.POST['last-name']
         email = request.POST['email']
         mobile = request.POST['mobile']
-        book_number = 123
 
         context = {
             'tickets': tickets,
@@ -213,13 +213,12 @@ def booking_confirmation(request, event_id):
         }
 
         try:
-            assert int(total_cost) <= int(request.user.profile.balance), 'حساب'
+            assert request.user.profile.spend(total_cost), 'موجودی حساب شما کافی نیست.'
+            book_number = 234
             for ticket in tickets:
-                assert ticket['ticket'].ticket_status == ticket['ticket'].SALE_OPEN, 'وضعیت'
-                free_seats = ticket['ticket'].get_free_seats
-                assert 25 >= int(ticket['seats']), 'ظرفیت'
                 Booking.objects.create(book_number=book_number, book_user=request.user, book_ticket=ticket['ticket'],
                                        book_seats=ticket['seats'], book_total_cost=total_cost)
+                ticket['ticket'].reserve_seats(ticket['seats'])
 
         except Exception as e:
             context['error'] = str(e)

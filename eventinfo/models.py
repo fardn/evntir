@@ -143,6 +143,17 @@ class Profile(models.Model):
     def get_balance_display(self):
         return '{} تومان'.format(self.balance)
 
+    def deposit(self, amount):
+        self.balance += amount
+        self.save()
+
+    def spend(self, amount):
+        if self.balance < amount:
+            return False
+        self.balance -= amount
+        self.save()
+        return True
+
 
 class Time_Slots(models.Model):
     """
@@ -271,6 +282,18 @@ class Tickets(models.Model):
 
         return self.ticket_status, self.get_ticket_status_display
 
+    def reserve_seats(self, seat_count):
+        """
+        Reserves one or more seats for a customer
+        :param seat_count: An integer as the number of seats to be reserved
+        """
+        assert isinstance(seat_count, int) and seat_count > 0, 'Number of seats should be a positive integer'
+        assert self.ticket_status == Tickets.SALE_OPEN, 'Sale is not open'
+        assert self.get_free_seats() >= seat_count, 'Not enough free seats'
+        self.ticket_sold += seat_count
+        if self.get_free_seats() == 0:
+            self.ticket_status = Tickets.SOLD_OUT
+        self.save()
 
 
 class Booking(models.Model):
@@ -287,7 +310,6 @@ class Booking(models.Model):
 
 
 def Time_slot_status(time_slot_id):
-
     NOW = timezone.now()
     this_time_slot = get_object_or_404(Time_Slots, pk=time_slot_id)
     time_slot_tickets = Tickets.objects.filter(ticket_time_slot_id=time_slot_id).order_by(
