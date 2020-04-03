@@ -77,7 +77,7 @@
 
                 <div class="col-md-6">
 					<div class="input-with-icon medium-icons">
-                        {% for ticket in tickets %}
+                        {% for ticket in order.items.all %}
                             {% if ticket.seats > 0 %}
 						        <input name="{{ ticket.ticket.id }}" type="hidden" value="{{ ticket.seats }}">
                             {% endif %}
@@ -191,19 +191,19 @@
 
 			<div class="boxed-widget opening-hours summary margin-top-0">
 				<h3><i class="fa fa-calendar-check-o"></i> خلاصه رزرو</h3>
-                {% for ticket in tickets %}
-                {% if ticket.seats > 0 %}
+                {% for item in order.items.all %}
+                {% if item.seats > 0 %}
 				<ul>
-					<li>تاریخ <span>{{ ticket.ticket.ticket_time_slot.event_start_date|date:'l j b Y'}}</span></li>
-					<li>ساعت <span>{{ ticket.ticket.ticket_time_slot.event_start_date|date:'H:i' }}</span></li>
-					<li>{{ ticket.ticket.ticket_title }} <span>{{ ticket.seats }} عدد </span></li>
-                    <li>قیمت <span>{{ ticket.ticket.get_price }} </span></li>
+					<li>تاریخ <span>{{ item.ticket.ticket_time_slot.event_start_date|date:'l j b Y'}}</span></li>
+					<li>ساعت <span>{{ item.ticket.ticket_time_slot.event_start_date|date:'H:i' }}</span></li>
+					<li>{{ item.ticket.ticket_title }} <span>{{ item.seats }} عدد </span></li>
+                    <li>قیمت <span>{{ item.ticket.get_price }} </span></li>
                     <li class="total-costs"></li>
 				</ul>
                 {% endif %}
                 {% endfor %}
                 <ul>
-                    <li class="total-costs" style="border-top:0px; margin-top: 0px">هزینه کل <span>{{ total_cost }} تومان</span></li>
+                    <li class="total-costs" style="border-top:0px; margin-top: 0px">هزینه کل <span>{{ order.get_total_cost }} تومان</span></li>
                 </ul>
 
 			</div>

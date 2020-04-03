@@ -1,12 +1,18 @@
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 
-from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking
+from django.contrib import messages
+from django.utils import timezone
+
+from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order
 from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm
+
+import random
+import string
 
 
 def event_list(request):
@@ -74,29 +80,18 @@ def booking_tickets(request, event_id):
         try:
             for key, value in request.POST.items():
                 if key.isdigit():
+
                     ticket = get_object_or_404(Tickets, pk=key)
                     seats = int(value)
                     assert ticket.ticket_status == ticket.SALE_OPEN, 'وضعیت'
                     assert ticket.get_free_seats() >= seats, 'ظرفیت {}'.format(ticket.id)
-                    total_cost += ticket.ticket_price * seats
-                    item = {
-                        'ticket': ticket,
-                        'seats': seats,
-                    }
-                    tickets.append(item)
-                    i += 1
+                    add_to_cart(request, ticket.id, seats)
 
         except Exception as e:
             context['error'] = str(e)
             return render(request, 'eventinfo/booking_tickets.html', context)
-
         else:
-            context = {
-                'event': event,
-                'tickets': tickets,
-                'total_cost': total_cost,
-            }
-            return render(request, 'eventinfo/booking_detail.html', context)
+            return redirect("eventinfo:booking_checkout", event_id=event_id)
 
     return render(request, 'eventinfo/booking_tickets.html', context)
 
@@ -185,21 +180,9 @@ def index(request):
 
 @login_required
 def booking_confirmation(request, event_id):
+
     if request.method == 'POST':
-        i = 0
-        tickets = []
-        total_cost = 0
-        for key, value in request.POST.items():
-            if key.isdigit():
-                ticket = get_object_or_404(Tickets, pk=key)
-                seats = int(value)
-                total_cost += ticket.ticket_price * seats
-                item = {
-                    'ticket': ticket,
-                    'seats': seats,
-                }
-                tickets.append(item)
-                i += 1
+        order = Order.objects.get(user=request.user, ordered=False)
 
         # TODO: booking model needs additional filed for changed user profile
         first_name = request.POST['first-name']
@@ -208,17 +191,23 @@ def booking_confirmation(request, event_id):
         mobile = request.POST['mobile']
 
         context = {
-            'tickets': tickets,
+            'order': order,
             'first_name': first_name,
         }
 
         try:
-            assert request.user.profile.spend(total_cost), 'موجودی حساب شما کافی نیست.'
-            book_number = 234
-            for ticket in tickets:
-                Booking.objects.create(book_number=book_number, book_user=request.user, book_ticket=ticket['ticket'],
-                                       book_seats=ticket['seats'], book_total_cost=total_cost)
-                ticket['ticket'].reserve_seats(ticket['seats'])
+            assert request.user.profile.spend(order.get_total_cost()), 'موجودی حساب شما کافی نیست.'
+            order_items = order.items.all()
+            order_items.update(ordered=True)
+            for item in order_items:
+                item.save()
+                item.ticket.reserve_seats(item.seats)
+            order.ordered = True
+            # order.payment = payment
+            order.ref_code = create_ref_code()
+            ordered_date = timezone.now()
+            order.ordered_date = ordered_date
+            order.save()
 
         except Exception as e:
             context['error'] = str(e)
@@ -226,4 +215,48 @@ def booking_confirmation(request, event_id):
         return render(request, 'eventinfo/booking_confirmation.html', context)
 
     else:
-        return HttpResponseRedirect(reverse('eventinfo:event_list'))
+        return redirect("eventinfo:index:")
+
+
+@login_required
+def add_to_cart(request, ticket_id, seats):
+    ticket = get_object_or_404(Tickets, pk=ticket_id)
+    event_id = ticket.ticket_time_slot.event_id
+    order_item, created = Order_item.objects.get_or_create(
+        ticket=ticket,
+        user=request.user,
+        ordered=False,
+        defaults={'seats': seats}
+    )
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        # check if the order item is in the order
+        if order.items.filter(ticket_id=ticket.id).exists():
+            order_item.seats = seats
+            order_item.save()
+            messages.info(request, "This item quantity was updated.")
+        else:
+            order.items.add(order_item)
+            messages.info(request, "This item was added to your cart.")
+
+    else:
+        order = Order.objects.create(
+            user=request.user)
+        order.items.add(order_item)
+        messages.info(request, "This item was added to your cart.")
+
+
+@login_required
+def booking_checkout(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    order = Order.objects.get(user=request.user, ordered=False)
+    context = {
+        'event': event,
+        'order': order,
+    }
+    return render(request, 'eventinfo/booking_checkout.html', context)
+
+
+def create_ref_code():
+    return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))

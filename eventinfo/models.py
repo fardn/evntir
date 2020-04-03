@@ -336,3 +336,45 @@ def Time_slot_status(time_slot_id):
         this_time_slot.save()
 
     return this_time_slot.time_slot_status
+
+
+class Order_item(models.Model):
+
+    class Meta:
+        verbose_name = 'آیتم'
+        verbose_name_plural = 'آیتم'
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    ticket = models.ForeignKey('Tickets', on_delete=models.CASCADE, verbose_name='بلیت')
+    seats = models.IntegerField('تعداد')
+    ordered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return 'item: {} Ticket of ticket id {}'.format(self.seats, self.ticket.id)
+
+    def get_total_item_price(self):
+        return self.seats * self.ticket.ticket_price
+
+
+class Order(models.Model):
+
+    class Meta:
+        verbose_name = 'سبد خرید'
+        verbose_name_plural = 'سبد خرید'
+
+    ref_code = models.CharField(max_length=20, blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    items = models.ManyToManyField('Order_item')
+    start_date = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    ordered_date = models.DateTimeField(blank=True, null=True)
+    ordered = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.user.username
+
+    def get_total_cost(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.get_total_item_price()
+        return total
