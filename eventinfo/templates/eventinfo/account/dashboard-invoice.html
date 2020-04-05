@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+	<meta charset="utf-8">
+	<title>صورتحساب لیستئو</title>
+	<link rel="stylesheet" href="css/invoice.css">
+</head> 
+
+<body>
+
+<!-- Print Button -->
+<a href="javascript:window.print()" class="print-button">این فاکتور را چاپ کن</a>
+
+<!-- Invoice -->
+<div id="invoice">
+
+	<!-- Header -->
+	<div class="row">
+		<div class="col-md-6">
+			<div id="logo"><img src="images/logo.png" alt=""></div>
+		</div>
+
+		<div class="col-md-6">	
+
+			<p id="details">
+				<strong>سفارش:</strong> #00124 <br>
+				<strong>صادر شده:</strong> 20/07/2019 <br>
+				به مدت 7 روز از تاریخ انتشار
+			</p>
+		</div>
+	</div>
+
+
+	<!-- Client & Supplier -->
+	<div class="row">
+		<div class="col-md-12">
+			<h2>صورتحساب</h2>
+		</div>
+
+		<div class="col-md-6">	
+			<strong class="margin-bottom-5">تامین کننده</strong>
+			<p>
+				قالب لیستئو. <br>
+				خیابان دانش <br>
+				ارومیه، شاهین دژ <br>
+			</p>
+		</div>
+
+		<div class="col-md-6">	
+			<strong class="margin-bottom-5">مشتری</strong>
+			<p>
+				جعفر عباسی <br>
+				خیابان حافظ <br>
+				ارومیه <br>
+			</p>
+		</div>
+	</div>
+
+
+	<!-- Invoice -->
+	<div class="row">
+		<div class="col-md-12">
+			<table class="margin-top-20">
+				<tr>
+					<th>توضیحات</th>
+					<th>تعداد</th>
+					<th>مالیات</th>
+					<th>مجموع</th>
+				</tr>
+
+				<tr>
+					<td>پلن حرفه ای</td> 
+					<td>1</td>
+					<td>0 تومان</td>
+					<td>9,000 تومان</td>
+				</tr>
+			</table>
+		</div>
+		
+		<div class="col-md-4 col-md-offset-8">	
+			<table id="totals">
+				<tr>
+					<th>مجموع بدهی</th> 
+					<th><span>9.00 تومان</span></th>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+
+	<!-- Footer -->
+	<div class="row">
+		<div class="col-md-12">
+			<ul id="footer">
+				<li><span>www.example.com</span></li>
+				<li><a href="http://www.vasterad.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ef1f8f8f7fdfbdefbe6fff3eef2fbb0fdf1f3">[email&#160;protected]</a></li>
+				<li>(123) 123-456</li>
+			</ul>
+		</div>
+	</div>
+		
+</div>
+
+
+<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+
+</html>

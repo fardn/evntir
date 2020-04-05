@@ -1,0 +1,202 @@
+{% extends 'eventinfo/account/dashboard-base-page.html' %}
+{% load static %}
+
+{% block title %}
+{{ profile.user.get_full_name }} |
+    ایونت‌اینفو
+{% endblock %}
+{% block content %}
+	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>رزرو ها</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">صفحه اصلی</a></li>
+							<li><a href="#">داشبورد</a></li>
+							<li>رزرو ها</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			
+			<!-- Listings -->
+			<div class="col-lg-12 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+					
+					<!-- Booking Requests Filters  -->
+					<div class="booking-requests-filter">
+
+						<!-- Sort by -->
+						<div class="sort-by">
+							<div class="sort-by-select">
+								<select data-placeholder="سفارش پیش فرض" class="chosen-select-no-single">
+									<option>تمام دسته ها</option>	
+									<option>خانه برگر</option>
+									<option>رستوران جعفر</option>
+									<option>هتل پیروزی</option>
+								</select>
+							</div>
+						</div>
+
+						<!-- Date Range -->
+						<div id="booking-date-range">
+						    <span></span>
+						</div>
+					</div>
+
+					<!-- Reply to review popup -->
+					<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+						<div class="small-dialog-header">
+							<h3>ارسال پیام</h3>
+						</div>
+						<div class="message-reply margin-top-0">
+							<textarea cols="40" rows="3" placeholder="پیام شما به طاهر"></textarea>
+							<button class="button">ارسال</button>
+						</div>
+					</div>
+
+					<h4>درخواست رزرو</h4>
+					<ul>
+                        {% if orders %}
+                        {% for order in orders %}
+						<li class="{{ order.get_status_class }}">
+							<div class="list-box-listing bookings">
+								<div class="list-box-listing-img"><img src="{{ user.profile.user_image.url }}" alt=""></div>
+								<div class="list-box-listing-content">
+									<div class="inner">
+										<h3>
+                                            {{ order.get_event.event_title }}
+                                            {% if order.ordered %}
+                                            <span class="booking-status">تایید شده</span>
+                                            {% else %}
+                                            <span class="booking-status pending">در انتظار</span>
+                                            <span class="booking-status unpaid">بدون پرداخت هزینه</span>
+                                            {% endif %}
+                                        </h3>
+
+										<div class="inner-booking-list">
+											<h5>تاریخ رزرو:</h5>
+											<ul class="booking-list">
+												<li class="highlighted">{{ order.ordered_date }}</li>
+											</ul>
+										</div>
+													
+										<div class="inner-booking-list">
+											<h5>جزئیات رزرو:</h5>
+											<ul class="booking-list">
+												<li class="highlighted">{{ order.get_total_seats }} بلیت</li>
+											</ul>
+										</div>		
+													
+										<div class="inner-booking-list">
+											<h5>قیمت:</h5>
+											<ul class="booking-list">
+												<li class="highlighted">{{ order.get_total_cost }} تومان</li>
+											</ul>
+										</div>		
+
+										<div class="inner-booking-list">
+											<h5>شرکت‌کننده:</h5>
+											<ul class="booking-list">
+												<li>{{ order.user.get_full_name}}</li>
+												<li>{{ order.user.email|urlize }}</li>
+												<li>{{ order.user.profile.mobile }}</li>
+											</ul>
+										</div>
+
+                                        <div class="inner-booking-list">
+                                            {% if order.ordered %}
+                                            <a href="#" class="button"><i class="sl sl-icon-envelope-open"></i> مشاهده صورت حساب</a>
+                                            {% else %}
+                                            <a href="{% url 'eventinfo:booking_checkout' event_id=order.event_id %}" class="button approve"><i class="sl sl-icon-envelope-open"></i> تکمیل درخواست</a>
+                                            <a href="#" class="button reject"><i class="sl sl-icon-envelope-open"></i> لغو درخواست</a>
+                                            {% endif %}
+                                        </div>
+
+									</div>
+								</div>
+							</div>
+							<div class="buttons-to-right">
+								<a href="#" class="button gray reject"><i class="sl sl-icon-close"></i> رد کنید</a>
+								<a href="#" class="button gray approve"><i class="sl sl-icon-check"></i> تایید</a>
+							</div>
+						</li>
+                        {% endfor %}
+                        {% else %}
+                            <p>هیج رزروی یافت نشد</p>
+                        {% endif %}
+
+					</ul>
+				</div>
+			</div>
+
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 1398 لیستئو. تمامی حقوق محفوظ است.</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Content / End -->
+{%  endblock %}
+{% block script %}
+<!-- Date Range Picker - docs: http://www.daterangepicker.com/ -->
+<script src="{% static 'scripts/moment.min.js' %}"></script>
+<script src="{% static 'scripts/daterangepicker.js' %}"></script>
+
+<script>
+$(function() {
+
+    var start = moment().subtract(29, 'days');
+    var end = moment();
+
+    function cb(start, end) {
+        $('#booking-date-range span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+    }
+    cb(start, end);
+    $('#booking-date-range').daterangepicker({
+    	"opens": "left",
+	    "autoUpdateInput": false,
+	    "alwaysShowCalendars": true,
+        startDate: start,
+        endDate: end,
+        ranges: {
+           'امروز': [moment(), moment()],
+           'دیروز': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+           '7 روز قبل': [moment().subtract(6, 'days'), moment()],
+           '30 روز قبل': [moment().subtract(29, 'days'), moment()],
+           'ماه اخیر': [moment().startOf('month'), moment().endOf('month')],
+           'ماه های اخیر': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+        }
+    }, cb);
+
+    cb(start, end);
+
+});
+
+// Calendar animation and visual settings
+$('#booking-date-range').on('show.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').addClass('calendar-visible calendar-animated bordered-style');
+	$('.daterangepicker').removeClass('calendar-hidden');
+});
+$('#booking-date-range').on('hide.daterangepicker', function(ev, picker) {
+	$('.daterangepicker').removeClass('calendar-visible');
+	$('.daterangepicker').addClass('calendar-hidden');
+});
+</script>
+{% endblock %}
+
+</body>
+
+</html>

@@ -91,7 +91,7 @@
 							<ul>
 								<li><a href="dashboard.html">داشبورد</a></li>
 								<li><a href="dashboard-messages.html">پیام ها</a></li>
-								<li><a href="dashboard-bookings.html">رزرو ها</a></li>
+								<li><a href="{% url 'eventinfo:account_bookings' %}">رزرو ها</a></li>
 								<li><a href="dashboard-wallet.html">کیف پول</a></li>
 								<li><a href="dashboard-my-listings.html">آگهی های من</a></li>
 								<li><a href="dashboard-reviews.html">نظرات</a></li>
@@ -156,7 +156,7 @@
                             <ul>
                                 <li><a href="dashboard.html"><i class="sl sl-icon-settings"></i> داشبورد</a></li>
                                 <li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> پیام ها</a></li>
-                                <li><a href="dashboard-bookings.html"><i class="fa fa-calendar-check-o"></i> رزرو ها</a></li>
+                                <li><a href="{% url "eventinfo:account_bookings" %}"><i class="fa fa-calendar-check-o"></i> رزرو ها</a></li>
                                 <li><a href="{% url "eventinfo:account_profile" %}"><i class="sl sl-icon-user"></i>حساب کاربری </a></li>
                                 <li><a href="{% url "eventinfo:logout" %}"><i class="sl sl-icon-power"></i> خروج</a></li>
                             </ul>

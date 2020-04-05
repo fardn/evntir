@@ -162,6 +162,16 @@ def account_profile(request):
     return render(request, 'eventinfo/account/profile.html', context)
 
 
+@login_required
+def account_bookings(request):
+    orders = Order.objects.filter(user=request.user)
+
+    context = {
+        'orders': orders
+    }
+    return render(request, 'eventinfo/account/dashboard-bookings.html', context)
+
+
 def index(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.all().order_by('-updated_at')
@@ -221,7 +231,8 @@ def booking_confirmation(request, event_id):
 @login_required
 def add_to_cart(request, ticket_id, seats):
     ticket = get_object_or_404(Tickets, pk=ticket_id)
-    event_id = ticket.ticket_time_slot.event_id
+    event_id = ticket.ticket_time_slot.event_id.pk
+    event = get_object_or_404(Event, pk=event_id)
     order_item, created = Order_item.objects.get_or_create(
         ticket=ticket,
         user=request.user,
@@ -232,6 +243,7 @@ def add_to_cart(request, ticket_id, seats):
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
+        # TODO: check if all order have same event id
         if order.items.filter(ticket_id=ticket.id).exists():
             order_item.seats = seats
             order_item.save()
@@ -242,7 +254,7 @@ def add_to_cart(request, ticket_id, seats):
 
     else:
         order = Order.objects.create(
-            user=request.user)
+            user=request.user, event=event)
         order.items.add(order_item)
         messages.info(request, "This item was added to your cart.")
 

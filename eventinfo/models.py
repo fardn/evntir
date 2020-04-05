@@ -88,7 +88,7 @@ class Guest(models.Model):
     guest_email = models.EmailField('ایمیل', blank=True, null=True)
     guest_website = models.CharField('وبسایت', max_length=50)
     guest_instagram = models.CharField('اینستاگرام', max_length=50)
-    guest_image = models.ImageField('تصویر', upload_to='main_image/profiles/avatar/', null=True, blank=True)
+    guest_image = models.ImageField('تصویر', upload_to='profiles/avatar/', default='profiles/avatar/00.png')
 
     def __str__(self):
         return self.guest_name
@@ -364,6 +364,7 @@ class Order(models.Model):
 
     ref_code = models.CharField(max_length=20, blank=True, null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='کاربر')
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, verbose_name='رویداد')
     items = models.ManyToManyField('Order_item')
     start_date = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -378,3 +379,19 @@ class Order(models.Model):
         for order_item in self.items.all():
             total += order_item.get_total_item_price()
         return total
+
+    def get_total_seats(self):
+        total = 0
+        for order_item in self.items.all():
+            total += order_item.seats
+        return total
+
+    def get_status_class(self):
+        if self.ordered:
+            return 'approved-booking'
+        else:
+            return 'pending-booking'
+
+    def get_event(self):
+        event = get_object_or_404(Event, pk=self.event.pk)
+        return event
