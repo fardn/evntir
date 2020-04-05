@@ -412,7 +412,7 @@
 			</div>
 
 			<!-- Book Now -->
-            <div class="listing-item-container compact order-summary-widget margin-top-35">
+            <div id="booking-widget-anchor" class="listing-item-container compact order-summary-widget margin-top-35">
 				<div class="listing-item">
 					<img src="{{ event.event_main_image.url}}" alt="">
 
@@ -530,6 +530,20 @@
 	</div>
 </div>
 
+{% endblock %}
+
+{% block sticky_footer %}
+    <div class="booking-sticky-footer">
+			<div class="container">
+				<div class="bsf-left">
+                    <h4>رایگان!</h4>
+                    <div class="star-rating" data-rating="3"></div>
+				</div>
+				<div class="bsf-right">
+					<a href="#booking-widget-anchor" class="button">رزرو</a>
+				</div>
+			</div>
+		</div>
 {% endblock %}
 
 {% block script %}

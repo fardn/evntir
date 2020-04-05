@@ -19150,3 +19150,74 @@ div.layout-style {
 .listing-list-small-badges-container {
     margin-top: 10px;
 }
+
+
+/* Booking Sticky Footer */
+.booking-sticky-footer {
+	display: none;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	width: 100%;
+	min-height: 70px;
+	background: #fff;
+	box-shadow: 0 -5px 10px rgba(0,0,0,0.1);
+    flex-wrap: wrap;
+    padding: 12px 15px;
+    z-index: 10001;
+    box-shadow: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.booking-sticky-footer .container {
+	display: flex;
+}
+
+.booking-sticky-footer h4 {
+	font-size: 14px;
+	font-weight: 600;
+	line-height: 22px;
+	padding: 0;
+	margin: 0;
+}
+
+.booking-sticky-footer .button {
+	float: left;
+	margin: 0;
+	padding: 8px 26px;
+	line-height: 21px;
+	font-size: 16px;
+}
+
+.booking-sticky-footer .star-rating {
+	zoom: 0.9;
+	letter-spacing: -1.5px;
+	margin: -2px 0 0 0;
+	padding: 0;
+}
+
+.bsf-left,
+.bsf-right {
+	align-self: center;
+}
+
+.bsf-right {
+	justify-content: flex-end;
+	flex: 1;
+}
+
+.bsf-left {
+	justify-content: flex-start;
+	flex: 1.2;
+}
+
+@media (max-width: 992px) {
+	.booking-sticky-footer {
+		display: flex;
+	}
+}
+
+@media (max-width: 768px) {
+	.booking-sticky-footer .container { padding: 0; margin: 0; width: 100%; }
+}
