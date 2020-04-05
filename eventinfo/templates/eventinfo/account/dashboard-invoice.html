@@ -1,11 +1,12 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 
 <head>
 	<meta charset="utf-8">
-	<title>صورتحساب لیستئو</title>
-	<link rel="stylesheet" href="css/invoice.css">
+	<title>صورتحساب</title>
+	<link rel="stylesheet" href="{% static 'eventinfo/css/invoice.css' %}">
 </head> 
 
 <body>
@@ -13,6 +14,7 @@
 <!-- Print Button -->
 <a href="javascript:window.print()" class="print-button">این فاکتور را چاپ کن</a>
 
+{% for items in order.items.all %}
 <!-- Invoice -->
 <div id="invoice">
 
@@ -25,9 +27,8 @@
 		<div class="col-md-6">	
 
 			<p id="details">
-				<strong>سفارش:</strong> #00124 <br>
-				<strong>صادر شده:</strong> 20/07/2019 <br>
-				به مدت 7 روز از تاریخ انتشار
+				<strong>سفارش:</strong> {{ order.ref_code }} <br>
+				<strong>صادر شده:</strong> {{ order.ordered_date|date:'j b Y' }} <br>
 			</p>
 		</div>
 	</div>
@@ -40,21 +41,13 @@
 		</div>
 
 		<div class="col-md-6">	
-			<strong class="margin-bottom-5">تامین کننده</strong>
-			<p>
-				قالب لیستئو. <br>
-				خیابان دانش <br>
-				ارومیه، شاهین دژ <br>
-			</p>
+			<strong class="margin-bottom-5">رویداد</strong>
+			<p>{{ order.event.event_title }}</p>
 		</div>
 
 		<div class="col-md-6">	
-			<strong class="margin-bottom-5">مشتری</strong>
-			<p>
-				جعفر عباسی <br>
-				خیابان حافظ <br>
-				ارومیه <br>
-			</p>
+			<strong class="margin-bottom-5">شرکت‌کننده</strong>
+			<p>{{ order.user.get_full_name }}</p>
 		</div>
 	</div>
 
@@ -94,16 +87,16 @@
 	<div class="row">
 		<div class="col-md-12">
 			<ul id="footer">
-				<li><span>www.example.com</span></li>
-				<li><a href="http://www.vasterad.com/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9ef1f8f8f7fdfbdefbe6fff3eef2fbb0fdf1f3">[email&#160;protected]</a></li>
+				<li><span>{{ 'www.example.com'|urlize }}</span></li>
+				<li>{{ 'info@eeventinfo.ir'|urlize }}</li>
 				<li>(123) 123-456</li>
 			</ul>
 		</div>
 	</div>
-		
+
 </div>
+{% endfor %}
 
-
-<script data-cfasync="false" src="../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script></body>
+</body>
 
 </html>

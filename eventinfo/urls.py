@@ -13,6 +13,7 @@ urlpatterns = [
     path('account/login/', views.login_view, name='login'),
     path('account/logout/', views.logout_view, name='logout'),
     path('account/profile/', views.account_profile, name='account_profile'),
-    path('account/bookings/', views.account_bookings, name='account_bookings')
+    path('account/bookings/', views.account_bookings, name='account_bookings'),
+    path('account/invoice/<str:ref_code>/', views.account_invoice, name='account_invoice')
 
 ]

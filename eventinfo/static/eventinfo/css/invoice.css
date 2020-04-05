@@ -122,7 +122,7 @@ th span::after {
   bottom: -16px;
   position: absolute;
   right: 0;
-  border-bottom: 1px solid #f91942;
+  border-bottom: 1px solid #008bcc;
 }
 
 #footer {
@@ -142,10 +142,10 @@ th span::after {
 }
 
 #footer li:first-child {padding-right: 0;}
-#footer li:last-child {border:none;direction: ltr;}
+#footer li:last-child {border:none;direction: rtl;}
 
 #footer li span {
-   color: #f91942;
+   color: #008bcc;
 }
 
 .margin-top-20 { margin-top: 20px; }

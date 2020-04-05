@@ -172,6 +172,21 @@ def account_bookings(request):
     return render(request, 'eventinfo/account/dashboard-bookings.html', context)
 
 
+@login_required
+def account_invoice(request, ref_code):
+    order = get_object_or_404(Order, ref_code=ref_code)
+    if request.user == order.user:
+        context = {
+            'order': order
+        }
+    else:
+        context = {
+
+        }
+
+    return render(request, 'eventinfo/account/dashboard-invoice.html', context)
+
+
 def index(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.all().order_by('-updated_at')
