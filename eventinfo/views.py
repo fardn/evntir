@@ -46,6 +46,7 @@ def event_detail(request, event_id):
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
     time_slot_status = Time_slot_status(4)
+    order_qs = Order.objects.filter(user=request.user, ordered=False, event=event)
 
     context = {
         'booking_form': booking_form,
@@ -54,6 +55,7 @@ def event_detail(request, event_id):
         'time_slots': time_slots,
         'tickets': tickets,
         'time_slot_status': time_slot_status,
+        'order_qs': order_qs,
     }
 
     return render(request, 'eventinfo/event.html', context)
@@ -76,9 +78,6 @@ def booking_tickets(request, event_id):
     }
 
     if request.method == 'POST':
-        i = 0
-        tickets = []
-        total_cost = 0
         try:
             for key, value in request.POST.items():
                 if key.isdigit():
@@ -276,7 +275,6 @@ def add_to_cart(request, ticket_id, seats):
             order = Order.objects.create(user=request.user, event=event)
             order.items.add(order_item)
             messages.info(request, "This item was added to your cart.")
-
 
     else:
         order = Order.objects.create(user=request.user, event=event)
