@@ -65,12 +65,14 @@ def booking_tickets(request, event_id):
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
     time_slot_status = Time_slot_status(4)
+    order_qs = Order.objects.filter(user=request.user, ordered=False, event=event)
 
     context = {
         'event': event,
         'time_slots': time_slots,
         'tickets': tickets,
         'time_slot_status': time_slot_status,
+        'order_qs': order_qs,
     }
 
     if request.method == 'POST':
@@ -255,21 +257,29 @@ def add_to_cart(request, ticket_id, seats):
         defaults={'seats': seats}
     )
     order_qs = Order.objects.filter(user=request.user, ordered=False)
+
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
         # TODO: check if all order have same event id
-        if order.items.filter(ticket_id=ticket.id).exists():
-            order_item.seats = seats
-            order_item.save()
-            messages.info(request, "This item quantity was updated.")
+        if order.event == event:
+            if order.items.filter(ticket_id=ticket.id).exists():
+                order_item.seats = seats
+                order_item.save()
+                messages.info(request, "This item quantity was updated.")
+            else:
+                order.items.add(order_item)
+                messages.info(request, "This item was added to your cart.")
+
         else:
+            order.delete()
+            order = Order.objects.create(user=request.user, event=event)
             order.items.add(order_item)
             messages.info(request, "This item was added to your cart.")
 
+
     else:
-        order = Order.objects.create(
-            user=request.user, event=event)
+        order = Order.objects.create(user=request.user, event=event)
         order.items.add(order_item)
         messages.info(request, "This item was added to your cart.")
 
