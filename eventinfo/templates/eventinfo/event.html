@@ -2,6 +2,10 @@
 {% load static %}
 {% load jalali_tags %}
 
+{% block css %}
+    <link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+{% endblock %}
+
 {% block title %}
 {{ event.event_title}} |
     ایونت‌اینفو
@@ -142,8 +146,7 @@
 				<h3 class="listing-desc-headline margin-top-60 margin-bottom-30">موقعیت</h3>
 
 				<div id="singleListingMap-container">
-					<div id="singleListingMap" data-latitude="40.70437865245596" data-longitude="-73.98674011230469" data-map-icon="im im-icon-Hamburger"></div>
-					<a href="#" id="streetView">نمایش خیابان</a>
+                    <div id = "singleListingMap"></div>
 				</div>
 			</div>
 				
@@ -543,10 +546,13 @@
 
 {% block script %}
  <!-- Maps -->
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false&amp;language=en"></script>
 <script type="text/javascript" src="{% static 'eventinfo/scripts/infobox.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'eventinfo/scripts/markerclusterer.js' %}"></script>
 <script type="text/javascript" src="{% static 'eventinfo/scripts/maps.js' %}"></script>
+<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script type="text/javascript" src="{% static 'scripts/infobox.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/markerclusterer.js' %}"></script>
+<script type="text/javascript" src="{% static 'scripts/maps.js' %}"></script>
 
 <!-- Booking Widget - Quantity Buttons -->
 <script src="{% static 'eventinfo/scripts/quantityButtons.js' %}"></script>
@@ -598,6 +604,30 @@ $('#date-picker').on('hide.daterangepicker', function(ev, picker) {
 	$('.daterangepicker').removeClass('calendar-visible');
 	$('.daterangepicker').addClass('calendar-hidden');
 });
+</script>
+<script>
+// Creating map options
+var mapOptions = {
+center: [{{ event.event_venue.venue_map_lat }}, {{ event.event_venue.venue_map_long}}],
+zoom: 16
+}
+
+// Creating a map object
+var map = new L.map('singleListingMap', mapOptions);
+// Creating a Layer object
+var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+// Adding layer to the map
+map.addLayer(layer);
+var myIcon = L.divIcon({
+    iconSize:null,
+    html: '<div class="map-marker-container clicked" style="left: 0px; top: 0.203125px;"><div class="marker-container"><div class="marker-card"><div class="front face"><i class="im im-icon-Map-Marker2"></i></div><div class="back face"><i class="im im-icon-Map-Marker2"></i></div><div class="marker-arrow"></div></div></div></div>'
+    });
+// you can set .my-div-icon styles in CSS
+L.marker([{{ event.event_venue.venue_map_lat }}, {{ event.event_venue.venue_map_long}}], {icon: myIcon}).addTo(map);
+
+
 </script>
 
 

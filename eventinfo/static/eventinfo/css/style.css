@@ -19221,3 +19221,5 @@ div.layout-style {
 @media (max-width: 768px) {
 	.booking-sticky-footer .container { padding: 0; margin: 0; width: 100%; }
 }
+
+#mapid { height: 180px; }
