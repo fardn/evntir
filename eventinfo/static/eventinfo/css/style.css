@@ -13224,7 +13224,7 @@ a.dashboard-responsive-nav-trigger {
     line-height: 20px;
     font-size: 13px;
     font-weight: 600;
-    margin: 0
+    margin-top: 20px;
 }
 
 .dashboard-list-box .button.gray:before {
@@ -13717,7 +13717,7 @@ a.close-list-item {
 }
 
 .pending-booking .bookings .inner h3 span.booking-status {
-    background-color: #61b2db
+    background-color: #008bcc
 }
 
 .canceled-booking .bookings .inner h3 span.booking-status {

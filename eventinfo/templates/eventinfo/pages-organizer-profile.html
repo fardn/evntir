@@ -1,0 +1,221 @@
+{% extends 'eventinfo/base_page.html' %}
+
+{% block title %}
+صفحه اصلی
+{% endblock %}
+
+{% block titlebar %}
+<!-- Titlebar
+================================================== -->
+<div id="titlebar" class="gradient">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12">
+
+				<div class="user-profile-titlebar">
+					<div class="user-profile-avatar"><img src="{{ organizer.organizer_logo.url }}" alt=""></div>
+					<div class="user-profile-name">
+						<h2>{{ organizer.organizer_name }}</h2>
+						<div class="star-rating" data-rating="5">
+							<div class="rating-counter"><a href="#listing-reviews">(60 نظر)</a></div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}
+
+{% block content %}
+<!-- Content
+================================================== -->
+<div class="container">
+	<div class="row sticky-wrapper">
+
+
+		<!-- Sidebar
+		================================================== -->
+		<div class="col-lg-4 col-md-4 margin-top-0">
+				
+			<!-- Verified Badge -->
+			<div class="verified-badge with-tip" data-tip-content="حساب تأیید شده و متعلق به فرد یا سازمان نماینده است.">
+				<i class="sl sl-icon-user-following"></i> حساب تایید شده
+			</div>
+
+			<!-- Contact -->
+			<div class="boxed-widget margin-top-30 margin-bottom-50">
+				<h3>تماس</h3>
+				<ul class="listing-details-sidebar">
+					<li><i class="sl sl-icon-phone"></i> (123) 123-456</li>
+					<li><i class="fa fa-envelope-o"></i> <a href="#"><span class="__cf_email__" data-cfemail="fc889391bc99849d918c9099d29f9391">[email&#160;protected]</span></a></li>
+				</ul>
+
+				<ul class="listing-details-sidebar social-profiles">
+					<li><a href="#" class="facebook-profile"><i class="fa fa-facebook-square"></i> فیس بوک</a></li>
+					<li><a href="#" class="twitter-profile"><i class="fa fa-twitter"></i> توییتر</a></li>
+					<!-- <li><a href="#" class="gplus-profile"><i class="fa fa-google-plus"></i> Google Plus</a></li> -->
+				</ul>
+
+				<!-- Reply to review popup -->
+				<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
+					<div class="small-dialog-header">
+						<h3>ارسال پیام</h3>
+					</div>
+					<div class="message-reply margin-top-0">
+						<textarea cols="40" rows="3" placeholder="پیام شما به جعفر"></textarea>
+						<button class="button">ارسال پیام</button>
+					</div>
+				</div>
+
+				<a href="#small-dialog" class="send-message-to-owner button popup-with-zoom-anim"><i class="sl sl-icon-envelope-open"></i> ارسال پیام</a>
+			</div>
+			<!-- Contact / End-->
+
+		</div>
+		<!-- Sidebar / End -->
+
+
+		<!-- Content
+		================================================== -->
+		<div class="col-lg-8 col-md-8 padding-left-30">
+
+			<h3 class="margin-top-0 margin-bottom-40">رویدادهای برگزار شده توسط {{ organizer.organizer_name }}</h3>
+
+			<!-- Listings Container -->
+			<div class="row">
+
+                {% for event in organizer_events %}
+				<!-- Listing Item -->
+				<div class="col-lg-12 col-md-12">
+					<div class="listing-item-container list-layout">
+						<a href="listings-single-page.html" class="listing-item">
+							
+							<!-- Image -->
+							<div class="listing-item-image">
+								<img src="{{ event.event_main_image.url }}" alt="">
+								<span class="tag">{{ event.event_type }}</span>
+							</div>
+							
+							<!-- Content -->
+							<div class="listing-item-content">
+								<div class="listing-badge now-open">هم اکنون باز است</div>
+
+								<div class="listing-item-inner">
+									<h3>{{ event.event_title }}</h3>
+									<span>
+                                        <i class="fa fa-map-marker"></i>
+                                        {{ event.event_venue.venue_city}}
+                                        ،
+                                        {{ event.event_venue.venue_name }}
+                                    </span>
+									<div class="star-rating" data-rating="3.5">
+										<div class="rating-counter">(12 نظر)</div>
+									</div>
+								</div>
+
+								<span class="like-icon"></span>
+							</div>
+						</a>
+					</div>
+				</div>
+				<!-- Listing Item / End -->
+                {% endfor %}
+
+				<div class="col-md-12 browse-all-user-listings">
+					<a href="#">مرور همه آگهی ها <i class="fa fa-angle-right"></i> </a>
+				</div>
+
+			</div>
+			<!-- Listings Container / End -->
+
+				
+			<!-- Reviews -->
+			<div id="listing-reviews" class="listing-section">
+				<h3 class="margin-top-60 margin-bottom-20">نظرات</h3>
+
+				<div class="clearfix"></div>
+
+				<!-- Reviews -->
+				<section class="comments listing-reviews">
+
+					<ul>
+						<li>
+							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
+							<div class="comment-content"><div class="arrow-comment"></div>
+								<div class="comment-by">طاهر خان <div class="comment-by-listing">بر <a href="#">خانه برگر</a></div> <span class="date">خرداد 1398</span>
+									<div class="star-rating" data-rating="5"></div>
+								</div>
+								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+								
+								<div class="review-images mfp-gallery-container">
+									<a href="images/review-image-01.jpg" class="mfp-gallery"><img src="images/review-image-01.jpg" alt=""></a>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /> </div>
+							<div class="comment-content"><div class="arrow-comment"></div>
+								<div class="comment-by">مجتبی خان <div class="comment-by-listing">بر <a href="#">رستوران جعفر</a></div> <span class="date">خرداد 1398</span>
+									<div class="star-rating" data-rating="4"></div>
+								</div>
+								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+							</div>
+						</li>
+
+						<li>
+							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
+							<div class="comment-content"><div class="arrow-comment"></div>
+								<div class="comment-by">فرشید خان <div class="comment-by-listing">بر <a href="#">خانه برگر</a></div> <span class="date">خرداد 1398</span>
+									<div class="star-rating" data-rating="5"></div>
+								</div>
+								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+								
+								<div class="review-images mfp-gallery-container">
+									<a href="images/review-image-02.jpg" class="mfp-gallery"><img src="images/review-image-02.jpg" alt=""></a>
+									<a href="images/review-image-03.jpg" class="mfp-gallery"><img src="images/review-image-03.jpg" alt=""></a>
+								</div>
+							</div>
+						</li>
+
+						<li>
+							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /> </div>
+							<div class="comment-content"><div class="arrow-comment"></div>
+								<div class="comment-by">صیدار خان <div class="comment-by-listing">بر <a href="#">هتل پیروزی</a></div> <span class="date">خرداد 1398</span>
+									<div class="star-rating" data-rating="5"></div>
+								</div>
+								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+							</div>
+
+						</li>
+					 </ul>
+				</section>
+
+				<!-- Pagination -->
+				<div class="clearfix"></div>
+				<div class="row">
+					<div class="col-md-12">
+						<!-- Pagination -->
+						<div class="pagination-container margin-top-30">
+							<nav class="pagination">
+								<ul>
+									<li><a href="#" class="current-page">1</a></li>
+									<li><a href="#">2</a></li>
+									<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+				<div class="clearfix"></div>
+				<!-- Pagination / End -->
+			</div>
+
+
+		</div>
+
+	</div>
+</div>
+{% endblock %}

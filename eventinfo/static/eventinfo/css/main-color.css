@@ -360,7 +360,7 @@ body .user-menu ul li a:hover {
 }
 
 section.fullwidth .icon-box-2 i {
-    background-color: rgba(249, 25, 66, .07)
+    background: rgba(16, 139, 204, .06);
 }
 
 .slick-current .testimonial-author h4 span {

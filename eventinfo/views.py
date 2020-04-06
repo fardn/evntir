@@ -8,11 +8,13 @@ from django.urls import reverse
 from django.contrib import messages
 from django.utils import timezone
 
-from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order
+from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order, \
+    Event_organizers
 from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm
 
 import random
 import string
+
 
 
 def event_list(request):
@@ -46,7 +48,10 @@ def event_detail(request, event_id):
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
     time_slot_status = Time_slot_status(4)
-    order_qs = Order.objects.filter(user=request.user, ordered=False, event=event)
+    if request.user.is_authenticated:
+        order_qs = Order.objects.filter(user=request.user, ordered=False, event=event)
+    else:
+        order_qs = None
 
     context = {
         'booking_form': booking_form,
@@ -165,7 +170,7 @@ def account_profile(request):
 
 @login_required
 def account_bookings(request):
-    orders = Order.objects.filter(user=request.user)
+    orders = Order.objects.filter(user=request.user).order_by('-updated_at')
 
     context = {
         'orders': orders
@@ -295,3 +300,15 @@ def booking_checkout(request, event_id):
 
 def create_ref_code():
     return ''.join(random.choices(string.ascii_lowercase + string.digits, k=20))
+
+
+def organizer_profile(request, organizer_id):
+    organizer = get_object_or_404(Event_organizers, pk=organizer_id)
+    organizer_events = Event.objects.filter(event_organizer=organizer)
+    context = {
+        'organizer': organizer,
+        'organizer_events': organizer_events,
+
+    }
+
+    return render(request, 'eventinfo/pages-organizer-profile.html', context)
