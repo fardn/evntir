@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 import datetime
 
-from django.db.models import F
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 
@@ -118,6 +117,12 @@ class Event(models.Model):
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
+
+    '''
+    def get_start_date(self):
+        min_start_date = Time_Slots.objects.filter(event_id_id=self.id).values_list('event_start_date').annotate(Min('event_start_date')).order_by('event_start_date').first()
+        return min_start_date
+    '''
 
 
 class Profile(models.Model):
