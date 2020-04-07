@@ -16,21 +16,22 @@ import random
 import string
 
 
-
 def event_list(request):
     search_form = EventSearchForm(request.GET)
-    events = Event.objects.all()
+    events = Event.objects.filter(published=True)
     if search_form.is_valid():
         events = events.filter(event_title__contains=search_form.cleaned_data['q'])
         if search_form.cleaned_data['event_type']:
             events = events.filter(event_type=search_form.cleaned_data['event_type'])
         # TODO: get time slots for every events
-        '''
-        if search_form.cleaned_data['sort']:
-            if search_form.cleaned_data['sort'] == 'date-desc'
-                events = events.order_by('event_')
 
-        '''
+        if search_form.cleaned_data['sort']:
+            if search_form.cleaned_data['sort'] == 'date-desc':
+                events = events.order_by('-event_start_date')
+            if search_form.cleaned_data['sort'] == 'date-asc':
+                events = events.order_by('event_start_date')
+
+
     types = Event_types.objects.all()
     context = {
         'search_form': search_form,

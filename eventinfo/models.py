@@ -2,8 +2,11 @@ from django.contrib.auth.models import User
 from django.db import models
 import datetime
 
+from django.db.models import Min, Max
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
+
+from jalali_date import datetime2jalali, date2jalali
 
 
 class Cities(models.Model):
@@ -114,15 +117,67 @@ class Event(models.Model):
     event_guests = models.ManyToManyField('Guest', blank=True, default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=False)
+    event_start_date = models.DateTimeField('تاریخ و ساعت شروع', null=True, blank=True)
+    event_end_date = models.DateTimeField('تاریخ و ساعت پایان', null=True, blank=True)
+    min_price = models.IntegerField('شروع قیمت', null=True, blank=True)
+    max_price = models.IntegerField('بیشترین قیمت', null=True, blank=True)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
 
-    '''
     def get_start_date(self):
-        min_start_date = Time_Slots.objects.filter(event_id_id=self.id).values_list('event_start_date').annotate(Min('event_start_date')).order_by('event_start_date').first()
-        return min_start_date
-    '''
+        min_start_date = \
+        Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('event_start_date')[0]
+        return min_start_date['event_start_date']
+
+    def get_end_date(self):
+        min_start_date = \
+        Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('-event_start_date')[0]
+        return min_start_date['event_start_date']
+
+    def get_min_price(self):
+        min_start_date = \
+        Tickets.objects.filter(ticket_time_slot__event_id_id=self.id).values('ticket_price').order_by('ticket_price')[0]
+        return min_start_date['ticket_price']
+
+    def get_max_price(self):
+        min_start_date = \
+        Tickets.objects.filter(ticket_time_slot__event_id_id=self.id).values('ticket_price').order_by('-ticket_price')[
+            0]
+        return min_start_date['ticket_price']
+
+    def get_price_display(self):
+        min_price = self.min_price
+        max_price = self.max_price
+
+        if min_price == max_price and min_price == 0:
+            return 'رایگان'
+        elif min_price == max_price:
+            return '{} تومان'.format(min_price)
+        else:
+            return 'از {} تا {} تومان'.format(min_price, max_price)
+
+    def get_start_date_display(self):
+        event_start_date = self.event_start_date
+        event_end_date = self.event_end_date
+
+        if event_start_date.date() == event_end_date.date():
+            return datetime2jalali(event_start_date).strftime('%B %d %A ساعت %H:%M ')
+        else:
+            return 'از {}'.format(self.event_start_date.strftime('%B %d %A ساعت %H:%M '))
+
+    def get_published(self):
+        try:
+            self.event_start_date = self.get_start_date()
+            self.event_end_date = self.get_end_date()
+            self.min_price = self.get_min_price()
+            self.max_price = self.get_max_price()
+            self.published = True
+            self.save()
+
+        except Exception as e:
+            return str(e)
 
 
 class Profile(models.Model):
@@ -344,7 +399,6 @@ def Time_slot_status(time_slot_id):
 
 
 class Order_item(models.Model):
-
     class Meta:
         verbose_name = 'آیتم'
         verbose_name_plural = 'آیتم'
@@ -362,7 +416,6 @@ class Order_item(models.Model):
 
 
 class Order(models.Model):
-
     class Meta:
         verbose_name = 'سبد خرید'
         verbose_name_plural = 'سبد خرید'

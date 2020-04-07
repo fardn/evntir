@@ -3835,15 +3835,15 @@ button.fs-map-btn.button {
     display: inline-block;
     width: 20px;
     height: 20px;
-    font-size: 22px;
+    font-size: 19px;
     color: #19b453;
     font-style: normal;
     font-weight: 500;
-    line-height: 20px;
+    line-height: 27px;
     text-align: center;
     position: relative;
     top: 3px;
-    margin-right: 2px;
+    margin-right: 5px;
 }
 
 .verified-icon:before {

@@ -51,92 +51,15 @@
 				<nav id="navigation" class="style-1">
 					<ul id="responsive">
 
-						<li><a href="{% url 'eventinfo:index' %}">صفحه اصلی</a>
+						<li><a href="{% url 'eventinfo:index' %}">صفحه اصلی</a></li>
+
+						<li><a class="current" href="{% url 'eventinfo:event_list' %}">رویداد‌ها</a>
 						</li>
 
-						<li><a class="current" href="{% url 'eventinfo:event_list' %}">آگهی ها</a>
-							<ul>
-								<li><a href="#">طرح آگهی</a>
-									<ul>
-										<li><a href="events.html">با نوار کناری</a></li>
-										<li><a href="listings-list-full-width.html">تمام عرض</a></li>
-										<li><a href="listings-list-full-width-with-map.html">عرض کامل + نقشه</a></li>
-									</ul>
-								</li>
-								<li><a href="#">طرح شبکه</a>
-									<ul>
-										<li><a href="listings-grid-with-sidebar-1.html">با نوار کناری 1</a></li>
-										<li><a href="listings-grid-with-sidebar-2.html">با نوار کناری 2</a></li>
-										<li><a href="listings-grid-full-width.html">تمام عرض</a></li>
-										<li><a href="listings-grid-full-width-with-map.html">عرض کامل + نقشه</a></li>
-									</ul>
-								</li>
-								<li><a href="#">نقشه نیمه صفحه</a>
-									<ul>
-										<li><a href="listings-half-screen-map-list.html">چیدمان لیست</a></li>
-										<li><a href="listings-half-screen-map-grid-1.html">چیدمان شبکه 1</a></li>
-										<li><a href="listings-half-screen-map-grid-2.html">چیدمان شبکه 2</a></li>
-									</ul>
-								</li>
-								<li><a href="#">آگهی های تک</a>
-									<ul>
-										<li><a href="listings-single-page.html">آگهی های تک 1</a></li>
-										<li><a href="listings-single-page-2.html">آگهی های تک 2</a></li>
-										<li><a href="listings-single-page-3.html">آگهی های تک 3</a></li>
-									</ul>
-								</li>
-							</ul>
+						<li><a href="#">برگزار کننده‌ها</a>
 						</li>
 
-						<li><a href="#">پنل کاربری</a>
-							<ul>
-								<li><a href="dashboard.html">داشبورد</a></li>
-								<li><a href="dashboard-messages.html">پیام ها</a></li>
-								<li><a href="dashboard-bookings.html">رزرو ها</a></li>
-								<li><a href="dashboard-wallet.html">کیف پول</a></li>
-								<li><a href="dashboard-my-listings.html">آگهی های من</a></li>
-								<li><a href="dashboard-reviews.html">نظرات</a></li>
-								<li><a href="dashboard-bookmarks.html">نشانکها</a></li>
-								<li><a href="dashboard-add-listing.html">افزودن آگهی</a></li>
-								<li><a href="dashboard-my-profile.html">پروفایل من</a></li>
-								<li><a href="dashboard-invoice.html">صورتحساب</a></li>
-							</ul>
-						</li>
-
-						<li><a href="#">صفحات</a>
-							<div class="mega-menu mobile-styles three-columns">
-
-									<div class="mega-menu-section">
-										<ul>
-											<li class="mega-menu-headline">صفحات #1</li>
-											<li><a href="pages-organizer-profile.html"><i class="sl sl-icon-user"></i> پروفایل کاربر</a></li>
-											<li><a href="pages-booking.html"><i class="sl sl-icon-check"></i> صفحه رزرو</a></li>
-											<li><a href="pages-add-listing.html"><i class="sl sl-icon-plus"></i> افزودن آگهی</a></li>
-											<li><a href="pages-blog.html"><i class="sl sl-icon-docs"></i> بلاگ</a></li>
-										</ul>
-									</div>
-
-									<div class="mega-menu-section">
-										<ul>
-											<li class="mega-menu-headline">صفحات #2</li>
-											<li><a href="pages-contact.html"><i class="sl sl-icon-envelope-open"></i> تماس</a></li>
-											<li><a href="pages-coming-soon.html"><i class="sl sl-icon-hourglass"></i> به زودی</a></li>
-											<li><a href="pages-404.html"><i class="sl sl-icon-close"></i> صفحه 404</a></li>
-											<li><a href="pages-masonry-filtering.html"><i class="sl sl-icon-equalizer"></i> ساختار فیلتر</a></li>
-										</ul>
-									</div>
-
-									<div class="mega-menu-section">
-										<ul>
-											<li class="mega-menu-headline">و دیگر</li>
-											<li><a href="pages-elements.html"><i class="sl sl-icon-settings"></i> المنت ها</a></li>
-											<li><a href="pages-pricing-tables.html"><i class="sl sl-icon-tag"></i> جداول قیمت</a></li>
-											<li><a href="pages-typography.html"><i class="sl sl-icon-pencil"></i> تایپوگرافی</a></li>
-											<li><a href="pages-icons.html"><i class="sl sl-icon-diamond"></i> آیکن ها</a></li>
-										</ul>
-									</div>
-
-							</div>
+						<li><a href="#">پشتیبانی</a>
 						</li>
 
 					</ul>
@@ -165,7 +88,7 @@
                         <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim">
                         <i class="sl sl-icon-login"></i> ورود</a>
                     {% endif %}
-					<a href="dashboard-add-listing.html" class="button border with-icon">افزودن آگهی <i class="sl sl-icon-plus"></i></a>
+					<a href="dashboard-add-listing.html" class="button border with-icon">پیگیری خرید <i class="fa fa-ticket"></i></a>
 				</div>
 			</div>
 			<!-- Right Side Content / End -->
