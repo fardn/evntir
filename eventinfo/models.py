@@ -1,8 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-import datetime
 
-from django.db.models import Min, Max
 from django.shortcuts import get_object_or_404
 from django.utils import timezone
 

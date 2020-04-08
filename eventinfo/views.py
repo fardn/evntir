@@ -4,6 +4,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 from django.contrib import messages
 from django.utils import timezone
@@ -19,6 +20,7 @@ import string
 def event_list(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.filter(published=True)
+
     if search_form.is_valid():
         events = events.filter(event_title__contains=search_form.cleaned_data['q'])
         if search_form.cleaned_data['event_type']:
@@ -31,6 +33,9 @@ def event_list(request):
             if search_form.cleaned_data['sort'] == 'date-asc':
                 events = events.order_by('event_start_date')
 
+    paginator = Paginator(events, 2)
+    page = request.GET.get('page')
+    events = paginator.get_page(page)
 
     types = Event_types.objects.all()
     context = {
@@ -87,7 +92,6 @@ def booking_tickets(request, event_id):
         try:
             for key, value in request.POST.items():
                 if key.isdigit():
-
                     ticket = get_object_or_404(Tickets, pk=key)
                     seats = int(value)
                     assert ticket.ticket_status == ticket.SALE_OPEN, 'وضعیت'
@@ -212,7 +216,6 @@ def index(request):
 
 @login_required
 def booking_confirmation(request, event_id):
-
     if request.method == 'POST':
         order = Order.objects.get(user=request.user, ordered=False)
 
