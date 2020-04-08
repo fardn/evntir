@@ -52,28 +52,13 @@
 					  
 					<div class="highlighted-categories">
 						<!-- Box -->
-						<a href="listings-list-with-sidebar.html" class="highlighted-category">
-					    	<i class="im im-icon-Home"></i>
-					    	<h4>آپارتمان ها</h4>
-						</a>	
+                        {% for type in types %}
+						<a href="events/?event_type={{ type.id }}" class="highlighted-category">
+					    	<i class="{{ type.type_icon}}"></i>
+					    	<h4>{{ type.type_title }}</h4>
+						</a>
+                        {% endfor %}
 
-						<!-- Box -->
-						<a href="listings-list-full-width.html" class="highlighted-category">
-					    	<i class="im im-icon-Hamburger"></i>
-					    	<h4>خوردن و نوشیدن</h4>
-						</a>	
-
-						<!-- Box -->
-						<a href="listings-half-screen-map-list.html" class="highlighted-category">
-					    	<i class="im im-icon-Electric-Guitar"></i>
-					    	<h4>رویداد</h4>
-						</a>	
-
-						<!-- Box -->
-						<a href="listings-half-screen-map-list.html" class="highlighted-category">
-					    	<i class="im im-icon-Dumbbell"></i>
-					    	<h4>باشگاه</h4>
-						</a>		
 					</div>
 					
 				</div>
@@ -141,8 +126,8 @@
 						<div class="listing-item">
                             <div class="listing-small-badges-container">
                                 <!-- TODO: listing badge load from model -->
-                                <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>رایگان</div>
-                                <div class="listing-small-badge"><i class="fa fa-calendar-check-o"></i>دوشنبه ۱۴ فروردین</div>
+                                <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>{{ event.get_price_display}}</div>
+                                <div class="listing-small-badge"><i class="fa fa-calendar-check-o"></i>{{ event.get_start_date_display}}</div>
                             </div>
 							<img src="{{ event.event_main_image.url}}" alt="">
 							<div class="listing-item-content">

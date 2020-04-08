@@ -161,9 +161,9 @@ class Event(models.Model):
         event_end_date = self.event_end_date
 
         if event_start_date.date() == event_end_date.date():
-            return datetime2jalali(event_start_date).strftime('%B %d %A ساعت %H:%M ')
+            return datetime2jalali(event_start_date).strftime('%Y/%m/%d ساعت %H:%M ')
         else:
-            return 'از {}'.format(self.event_start_date.strftime('%B %d %A ساعت %H:%M '))
+            return 'از {}'.format(datetime2jalali(event_start_date).strftime('%Y/%m/%d ساعت %H:%M '))
 
     def get_published(self):
         try:

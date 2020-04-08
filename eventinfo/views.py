@@ -204,9 +204,10 @@ def account_invoice(request, ref_code):
 
 def index(request):
     search_form = EventSearchForm(request.GET)
-    events = Event.objects.all().order_by('-updated_at')
+    events = Event.objects.all()
     event_type_list = events.values('event_type', 'event_type__type_title', 'event_type__type_icon').annotate(
         count=Count('event_type'))
+    events = events.order_by('-updated_at')
     types = Event_types.objects.all()
     context = {
         'index_page': 'class=current',
