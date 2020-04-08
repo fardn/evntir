@@ -51,15 +51,15 @@
 				<nav id="navigation" class="style-1">
 					<ul id="responsive">
 
-						<li><a href="{% url 'eventinfo:index' %}">صفحه اصلی</a></li>
+						<li><a {{index_page}} href="{% url 'eventinfo:index' %}">صفحه اصلی</a></li>
 
-						<li><a class="current" href="{% url 'eventinfo:event_list' %}">رویداد‌ها</a>
+						<li><a {{events_page}} href="{% url 'eventinfo:event_list' %}">رویداد‌ها</a>
 						</li>
 
-						<li><a href="#">برگزار کننده‌ها</a>
+						<li><a {{organizers_page}} href="#">برگزار کننده‌ها</a>
 						</li>
 
-						<li><a href="#">پشتیبانی</a>
+						<li><a {{support_page}} href="#">پشتیبانی</a>
 						</li>
 
 					</ul>
@@ -104,7 +104,7 @@
 				<div class="sign-in-form style-1">
 
 					<ul class="tabs-nav">
-						<li class=""><a href="#tab1">ورود</a></li>
+						<li><a href="#tab1">ورود</a></li>
 						<li><a href="#tab2">ثبت نام</a></li>
 					</ul>
 

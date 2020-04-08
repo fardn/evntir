@@ -39,9 +39,11 @@ def event_list(request):
 
     types = Event_types.objects.all()
     context = {
+        'events_page': 'class=current',
         'search_form': search_form,
         'events': events,
         'types': types,
+
     }
 
     return render(request, 'eventinfo/events.html', context)
@@ -122,7 +124,8 @@ def login_view(request):
             context = {
                 'user': username,
                 'error': False,
-                'message': 'کاربری با این مشخصات یافت نشد.'
+                'message': 'کاربری با این مشخصات یافت نشد.',
+
             }
             return render(request, 'eventinfo/account/login.html/', context)
 
@@ -130,7 +133,8 @@ def login_view(request):
         if request.user.is_authenticated:
             return HttpResponseRedirect(reverse('eventinfo:event_list'))
         else:
-            context = {}
+            context = {
+            }
 
     return render(request, 'eventinfo/account/login.html/', context)
 
@@ -205,6 +209,7 @@ def index(request):
         count=Count('event_type'))
     types = Event_types.objects.all()
     context = {
+        'index_page': 'class=current',
         'search_form': search_form,
         'event_type_list': event_type_list,
         'events': events,
