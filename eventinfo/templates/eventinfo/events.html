@@ -1,4 +1,5 @@
 {% extends 'eventinfo/base_page.html' %}
+{% load poll_extras %}
 
 {% block title %}
 رویدادها
@@ -104,8 +105,13 @@
                                     </span>
 
 								</div>
-
-                                <span class="like-icon"></span>
+                                {% if user.is_authenticated %}
+                                    {% if event|is_bookmarked:user.id %}
+                                        <span class="like-icon liked" event-id="{{ event.id }}"></span>
+                                    {% else %}
+                                        <span class="like-icon" event-id="{{ event.id }}"></span>
+                                    {% endif %}
+                                {% endif %}
 
 
 							</div>
@@ -200,6 +206,29 @@
 	    }, 300);
 	}
 }
+</script>
+{% csrf_token %}
+<script type="text/javascript">
+    $(document).ready(function (event) {
+        $(document).on('click', '.like-icon, .like-button', function (event) {
+            event.preventDefault();
+            var pk = $(this).attr('event-id');
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'eventinfo:bookmark_toggle' %}',
+                data: {'event_id': pk, 'csrfmiddlewaretoken':csrftoken},
+                dataType: 'json',
+                success: function (response) {
+                    $('#bookmark-section').html(response['form']);
+                    console.log($('#bookmark-section').html(response['form']));
+                },
+                error: function (rs, e) {
+                    console.log(rs.responseText);
+                },
+            });
+        });
+    });
 </script>
 
 {% endblock %}

@@ -510,7 +510,6 @@
 			<!-- Share / Like -->
 			<div class="listing-share margin-top-40 margin-bottom-40 no-border">
                 <div id="bookmark-section">
-				<button class="like-button"><span class="like-icon"></span> این آگهی را لایک کنید</button>
                     {% include 'eventinfo/widgets/event_bookmark.html' %}
                 </div>
 
@@ -631,11 +630,10 @@ L.marker([{{ event.event_venue.venue_map_lat }}, {{ event.event_venue.venue_map_
 
 
 </script>
-
 {% csrf_token %}
 <script type="text/javascript">
     $(document).ready(function (event) {
-        $(document).on('click', '#bookmark', function (event) {
+        $(document).on('click', '.like-icon, .like-button', function (event) {
             event.preventDefault();
             var pk = $(this).attr('event-id');
             var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -645,7 +643,7 @@ L.marker([{{ event.event_venue.venue_map_lat }}, {{ event.event_venue.venue_map_
                 data: {'event_id': pk, 'csrfmiddlewaretoken':csrftoken},
                 dataType: 'json',
                 success: function (response) {
-                    $('#bookmark-section').html(response['form'])
+                    $('#bookmark-section').html(response['form']);
                     console.log($('#bookmark-section').html(response['form']));
                 },
                 error: function (rs, e) {
@@ -655,7 +653,6 @@ L.marker([{{ event.event_venue.venue_map_lat }}, {{ event.event_venue.venue_map_
         });
     });
 </script>
-
 
 
 {% endblock %}

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.template.defaultfilters import register
 from django.urls import reverse
 from django.core.paginator import Paginator
 from django.template.loader import render_to_string
@@ -21,6 +22,8 @@ import string
 def event_list(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.filter(published=True)
+
+    is_bookmarked = False
 
     if search_form.is_valid():
         events = events.filter(event_title__contains=search_form.cleaned_data['q'])
@@ -350,3 +353,5 @@ def bookmark_toggle(request):
     if request.is_ajax():
         html = render_to_string('eventinfo/widgets/event_bookmark.html', context, request=request)
         return JsonResponse({'form': html})
+
+

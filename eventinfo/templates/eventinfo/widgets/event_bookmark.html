@@ -1,6 +1,7 @@
-<span>{{ total_bookmarks }} نفر این مکان را نشانه گذاری کرده اند</span>
 {% if is_bookmarked %}
-<a id="bookmark" event-id="{{ event.id }}" href="#" >unbookmark</a>
+<button class="like-button liked" event-id="{{ event.id }}"><span class="like-icon liked"></span> این آگهی را لایک کنید</button>
 {% else %}
-<a id="bookmark" event-id="{{ event.id }}" href="#" >bookmark</a>
+<button class="like-button" event-id="{{ event.id }}"><span class="like-icon"></span> این آگهی را لایک کنید</button>
 {% endif %}
+<span>{{ total_bookmarks }} نفر این مکان را نشانه گذاری کرده اند</span>
+
