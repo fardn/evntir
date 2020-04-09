@@ -17,6 +17,6 @@ urlpatterns = [
     path('account/bookings/', views.account_bookings, name='account_bookings'),
     path('account/invoice/<str:ref_code>/', views.account_invoice, name='account_invoice'),
 
-    path(r'bookmark/<int:event_id>', views.bookmark_toggle, name='bookmark_toggle')
+    path('bookmark/', views.bookmark_toggle, name='bookmark_toggle')
 
 ]

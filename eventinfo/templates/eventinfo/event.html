@@ -509,13 +509,10 @@
 
 			<!-- Share / Like -->
 			<div class="listing-share margin-top-40 margin-bottom-40 no-border">
+                <div id="bookmark-section">
 				<button class="like-button"><span class="like-icon"></span> این آگهی را لایک کنید</button>
-				<span>{{ total_bookmarks }} نفر این مکان را نشانه گذاری کرده اند</span>
-                {% if is_bookmarked %}
-                <a href="{% url 'eventinfo:bookmark_toggle' event_id=event.id %}?next={{ request.path|urlencode }}" >unbookmark</a>
-                {% else %}
-                <a href="{% url 'eventinfo:bookmark_toggle' event_id=event.id %}?next={{ request.path|urlencode }}" >bookmark</a>
-                {% endif %}
+                    {% include 'eventinfo/widgets/event_bookmark.html' %}
+                </div>
 
 					<!-- Share Buttons -->
 					<ul class="share-buttons margin-top-40 margin-bottom-0">
@@ -633,6 +630,30 @@ var myIcon = L.divIcon({
 L.marker([{{ event.event_venue.venue_map_lat }}, {{ event.event_venue.venue_map_long}}], {icon: myIcon}).addTo(map);
 
 
+</script>
+
+{% csrf_token %}
+<script type="text/javascript">
+    $(document).ready(function (event) {
+        $(document).on('click', '#bookmark', function (event) {
+            event.preventDefault();
+            var pk = $(this).attr('event-id');
+            var csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            $.ajax({
+                type: 'POST',
+                url: '{% url 'eventinfo:bookmark_toggle' %}',
+                data: {'event_id': pk, 'csrfmiddlewaretoken':csrftoken},
+                dataType: 'json',
+                success: function (response) {
+                    $('#bookmark-section').html(response['form'])
+                    console.log($('#bookmark-section').html(response['form']));
+                },
+                error: function (rs, e) {
+                    console.log(rs.responseText);
+                },
+            });
+        });
+    });
 </script>
 
 

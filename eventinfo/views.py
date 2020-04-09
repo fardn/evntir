@@ -1,10 +1,11 @@
 from django.db.models import Count
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django.template.loader import render_to_string
 
 from django.contrib import messages
 from django.utils import timezone
@@ -330,13 +331,22 @@ def organizer_profile(request, organizer_id):
 
 
 @login_required
-def bookmark_toggle(request, event_id):
+def bookmark_toggle(request):
+    event_id = request.POST.get('event_id')
     event = get_object_or_404(Event, pk=event_id)
-    next = request.GET['next']
 
     if event.bookmarks.filter(id=request.user.id).exists():
         event.bookmarks.remove(request.user)
+        is_bookmarked = False
     else:
         event.bookmarks.add(request.user)
+        is_bookmarked = True
+    context = {
+        'event': event,
+        'is_bookmarked': is_bookmarked,
+        'total_bookmarks': event.get_total_bookmarks(),
+        }
 
-    return redirect(next)
+    if request.is_ajax():
+        html = render_to_string('eventinfo/widgets/event_bookmark.html', context, request=request)
+        return JsonResponse({'form': html})

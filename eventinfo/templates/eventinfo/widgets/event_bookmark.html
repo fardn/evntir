@@ -1,0 +1,6 @@
+<span>{{ total_bookmarks }} نفر این مکان را نشانه گذاری کرده اند</span>
+{% if is_bookmarked %}
+<a id="bookmark" event-id="{{ event.id }}" href="#" >unbookmark</a>
+{% else %}
+<a id="bookmark" event-id="{{ event.id }}" href="#" >bookmark</a>
+{% endif %}
