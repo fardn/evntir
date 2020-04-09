@@ -56,8 +56,11 @@ def event_detail(request, event_id):
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
     time_slot_status = Time_slot_status(4)
+    is_bookmarked =False
     if request.user.is_authenticated:
         order_qs = Order.objects.filter(user=request.user, ordered=False, event=event)
+        if event.bookmarks.filter(id=request.user.id).exists():
+            is_bookmarked = True
     else:
         order_qs = None
 
@@ -69,6 +72,8 @@ def event_detail(request, event_id):
         'tickets': tickets,
         'time_slot_status': time_slot_status,
         'order_qs': order_qs,
+        'is_bookmarked': is_bookmarked,
+        'total_bookmarks': event.get_total_bookmarks(),
     }
 
     return render(request, 'eventinfo/event.html', context)
@@ -322,3 +327,16 @@ def organizer_profile(request, organizer_id):
     }
 
     return render(request, 'eventinfo/pages-organizer-profile.html', context)
+
+
+@login_required
+def bookmark_toggle(request, event_id):
+    event = get_object_or_404(Event, pk=event_id)
+    next = request.GET['next']
+
+    if event.bookmarks.filter(id=request.user.id).exists():
+        event.bookmarks.remove(request.user)
+    else:
+        event.bookmarks.add(request.user)
+
+    return redirect(next)

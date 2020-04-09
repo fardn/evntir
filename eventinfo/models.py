@@ -120,6 +120,7 @@ class Event(models.Model):
     event_end_date = models.DateTimeField('تاریخ و ساعت پایان', null=True, blank=True)
     min_price = models.IntegerField('شروع قیمت', null=True, blank=True)
     max_price = models.IntegerField('بیشترین قیمت', null=True, blank=True)
+    bookmarks = models.ManyToManyField(User, related_name='bookmarks', null=True, blank=True)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
@@ -176,6 +177,9 @@ class Event(models.Model):
 
         except Exception as e:
             return str(e)
+
+    def get_total_bookmarks(self):
+        return self.bookmarks.count()
 
 
 class Profile(models.Model):
