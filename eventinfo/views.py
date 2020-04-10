@@ -13,7 +13,7 @@ from django.utils import timezone
 
 from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order, \
     Event_organizers
-from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm
+from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm, SignupForm
 
 import random
 import string
@@ -119,30 +119,76 @@ def booking_tickets(request, event_id):
 
 
 def login_view(request):
+    form = SignupForm()
+    context = {
+        'form': form
+    }
     if request.method == 'POST':
-        username = request.POST.get('username')
-        password = request.POST.get('password')
-        user = authenticate(request, username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return HttpResponseRedirect(reverse('eventinfo:event_list'))
-        else:
+        if request.POST.get('submit') == 'ورود':
+            username = request.POST.get('username')
+            password = request.POST.get('password')
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                return redirect('eventinfo:index')
+            else:
 
-            # TODO: LOAD ERROR MESSAGES IN POPUP FORM
+                # TODO: LOAD ERROR MESSAGES IN POPUP FORM
 
-            context = {
-                'user': username,
-                'error': False,
-                'message': 'کاربری با این مشخصات یافت نشد.',
+                context = {
+                    'user': username,
+                    'error': False,
+                    'message': 'کاربری با این مشخصات یافت نشد.',
 
-            }
-            return render(request, 'eventinfo/account/login.html/', context)
+                }
+                return render(request, 'eventinfo/account/login.html/', context)
+
+        elif request.POST.get('submit') == 'ثبت نام':
+            form = SignupForm(request.POST)
+            try:
+                if form.is_valid():
+                    user = form.save(commit=False)
+                    user.is_active = False
+                    user.save()
+
+                    '''
+                    current_site = get_current_site(request)
+                    mail_subject = 'Activate your blog account.'
+                    message = render_to_string('acc_active_email.html', {
+                        'user': user,
+                        'domain': current_site.domain,
+                        'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                        'token': account_activation_token.make_token(user),
+                    })
+                    to_email = form.cleaned_data.get('email')
+                    email = EmailMessage(
+                        mail_subject, message, to=[to_email]
+                    )
+                    email.send()
+                    '''
+                    context['error'] = True
+                    context['message'] = 'Please confirm your email address to complete the registration'
+
+                else:
+                    context = {
+                        'form': form,
+                        'error': True,
+                        'message': form.errors,
+                    }
+
+            except Exception as e:
+                context['error'] = True
+                context['message'] = str(e)
+
+            return render(request, 'eventinfo/account/login.html', context)
 
     else:
         if request.user.is_authenticated:
-            return HttpResponseRedirect(reverse('eventinfo:event_list'))
+            return redirect('eventinfo:index')
+
         else:
             context = {
+                'form': form
             }
 
     return render(request, 'eventinfo/account/login.html/', context)

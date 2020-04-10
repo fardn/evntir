@@ -132,7 +132,7 @@
 								</p>
 
 								<div class="form-row">
-									<input type="submit" class="button border margin-top-5" name="login" value="ورود" />
+									<input type="submit" class="button border margin-top-5" name="submit" value="ورود" />
 									<div class="checkboxes margin-top-10">
 										<input id="remember-me" type="checkbox" name="check">
 										<label for="remember-me">مرا به خاطر داشته باش</label>
@@ -145,7 +145,7 @@
 						<!-- Register -->
 						<div class="tab-content" id="tab2" style="display: none;">
 
-							<form method="post" class="register">
+                            <form action="{% url "eventinfo:login" %}" method="post" class="register">{% csrf_token %}
 
 							<p class="form-row form-row-wide">
 								<label for="username2">نام کاربری:
@@ -175,7 +175,7 @@
 								</label>
 							</p>
 
-							<input type="submit" class="button border fw margin-top-10" name="register" value="ثبت نام" />
+							<input type="submit" class="button border fw margin-top-10" name="submit" value="ثبت نام" />
 
 							</form>
 						</div>

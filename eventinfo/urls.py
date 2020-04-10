@@ -13,6 +13,7 @@ urlpatterns = [
     path('event/<int:event_id>/booking/confirmation/', views.booking_confirmation, name='booking_confirmation'),
 
     path('account/', views.account_dashboard, name='account_dashboard'),
+    #path('account/signup/', views.signup, name='signup'),
     path('account/login/', views.login_view, name='login'),
     path('account/logout/', views.logout_view, name='logout'),
     path('account/profile/', views.account_profile, name='account_profile'),

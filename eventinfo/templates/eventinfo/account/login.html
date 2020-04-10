@@ -63,7 +63,7 @@
                                 <a href="#">فراموشی رمز عبور؟</a>
                             </span>
                         <div class="form-row">
-                            <input type="submit" class="button border margin-top-5" name="login" value="ورود">
+                            <input type="submit" class="button border margin-top-5" name="submit" value="ورود">
                             <div class="checkboxes margin-top-10">
                                 <input id="remember-me" type="checkbox" name="check">
                                 <label for="remember-me">مرا به خاطر داشته باش</label>
@@ -81,9 +81,8 @@
 					<h4 class="gray">ثبت نام</h4>
 					<div class="dashboard-list-box-static">
 
-						<!-- Change Password -->
 						<div class="my-profile">
-                        <form method="post" class="register">
+                        <form action="{% url "eventinfo:login" %}" method="post" class="register">{% csrf_token %}
 
 								<label for="username2">نام کاربری:
 									<i class="im im-icon-Male"></i>
@@ -105,7 +104,7 @@
 									<input class="input-text" type="password" name="password2" id="password2">
 								</label>
 
-							<input type="submit" class="button border fw margin-top-10" name="register" value="ثبت نام">
+							<input type="submit" class="button border fw margin-top-10" name="submit" value="ثبت نام">
 
 							</form>
 
