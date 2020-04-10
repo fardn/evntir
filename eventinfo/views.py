@@ -213,8 +213,14 @@ def account_invoice(request, ref_code):
 
 @login_required
 def account_dashboard(request):
-    context = {
+    user = request.user
+    # TODO: recent activities order_by
+    recent_activities = user.bookmarks.all()[:5]
+    orders = Order.objects.filter(user=request.user).order_by('-updated_at')[:4]
 
+    context = {
+        'orders': orders,
+        'recent_activities': recent_activities,
     }
 
     return render(request, 'eventinfo/account/dashboard.html', context)

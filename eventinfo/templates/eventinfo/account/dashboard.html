@@ -84,40 +84,18 @@
 				<div class="dashboard-list-box with-icons margin-top-20">
 					<h4>فعالیت های اخیر</h4>
 					<ul>
+                        {% for activity in recent_activities %}
 						<li>
-							<i class="list-box-icon sl sl-icon-layers"></i> آگهی شما<strong><a href="#">هتل پیروزی</a></strong> تایید شده است!
+							<i class="list-box-icon sl sl-icon-heart"></i>
+                            رویداد
+                            <a href="{% url 'eventinfo:event_detail' event_id=activity.id %}">
+                            {{ activity.event_title }}
+                            </a>
+                            را به لیست اضافه کرده‌اید.
 							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
 						</li>
+                        {% endfor %}
 
-						<li>
-							<i class="list-box-icon sl sl-icon-star"></i> جعفر عباسی بررسی را ترک کرد <div class="numerical-rating" data-rating="5.0"></div> بر <strong><a href="#">خانه برگر</a></strong>
-							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
-						</li>
-
-						<li>
-							<i class="list-box-icon sl sl-icon-heart"></i> کسی شما را نشانه گذاری کرده است <strong><a href="#">خانه برگر</a></strong> آگهی!
-							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
-						</li>
-
-						<li>
-							<i class="list-box-icon sl sl-icon-star"></i> کتی براون بررسی را ترک کرد <div class="numerical-rating" data-rating="3.0"></div> بر <strong><a href="#">فرودگاه</a></strong>
-							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
-						</li>
-
-						<li>
-							<i class="list-box-icon sl sl-icon-heart"></i> کسی شما را نشانه گذاری کرده است <strong><a href="#">خانه برگر</a></strong> آگهی!
-							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
-						</li>
-
-						<li>
-							<i class="list-box-icon sl sl-icon-star"></i> طاهر نصیری بررسی را ترک کرد <div class="numerical-rating" data-rating="4.0"></div> بر <strong><a href="#">خانه برگر</a></strong>
-							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
-						</li>
-
-						<li>
-							<i class="list-box-icon sl sl-icon-star"></i> فرشید بررسی را ترک کرد <div class="numerical-rating" data-rating="2.5"></div> بر <strong><a href="#">رستوران تام</a></strong>
-							<a href="#" class="close-list-item"><i class="fa fa-close"></i></a>
-						</li>
 					</ul>
 				</div>
 			</div>
@@ -125,56 +103,28 @@
 			<!-- Invoices -->
 			<div class="col-lg-6 col-md-12">
 				<div class="dashboard-list-box invoices with-icons margin-top-20">
-					<h4>فاکتورها</h4>
+					<h4>بلیت‌ها</h4>
 					<ul>
-						
+						{% for order in orders %}
 						<li><i class="list-box-icon sl sl-icon-doc"></i>
-							<strong>پلن حرفه ای</strong>
+							<strong>{{ order.event.event_title }}</strong>
 							<ul>
-								<li class="unpaid">پرداخت نشده</li>
-								<li>سفارش: #00124</li>
-								<li>تاریخ: 20/07/2019</li>
-							</ul>
-							<div class="buttons-to-right">
-								<a href="dashboard-invoice.html" class="button gray">مشاهده صورتحساب</a>
-							</div>
-						</li>
-						
-						<li><i class="list-box-icon sl sl-icon-doc"></i>
-							<strong>پلن گسترده</strong>
-							<ul>
+                                {% if order.ordered %}
 								<li class="paid">پرداخت شده</li>
-								<li>سفارش: #00108</li>
-								<li>تاریخ: 14/07/2019</li>
+                                {% else %}
+                                <li class="unpaid">پرداخت نشده</li>
+                                {% endif %}
+								<li>تاریخ: {{ order.updated_at }}</li>
 							</ul>
 							<div class="buttons-to-right">
-								<a href="dashboard-invoice.html" class="button gray">مشاهده صورتحساب</a>
+                                {% if order.ordered %}
+								<a href="{% url 'eventinfo:account_invoice' ref_code=order.ref_code %}" class="button gray">دریافت بلیت</a>
+                                {% else %}
+                                <a href="{% url 'eventinfo:booking_checkout' event_id=order.event_id %}" class="button gray">تکمیل درخواست</a>
+                                {% endif %}
 							</div>
 						</li>
-
-						<li><i class="list-box-icon sl sl-icon-doc"></i>
-							<strong>پلن سفارشی</strong>
-							<ul>
-								<li class="paid">پرداخت شده</li>
-								<li>سفارش: #00097</li>
-								<li>تاریخ: 10/07/2019</li>
-							</ul>
-							<div class="buttons-to-right">
-								<a href="dashboard-invoice.html" class="button gray">مشاهده صورتحساب</a>
-							</div>
-						</li>
-						
-						<li><i class="list-box-icon sl sl-icon-doc"></i>
-							<strong>پلن اصلی</strong>
-							<ul>
-								<li class="paid">پرداخت شده</li>
-								<li>سفارش: #00091</li>
-								<li>تاریخ: 30/06/2019</li>
-							</ul>
-							<div class="buttons-to-right">
-								<a href="dashboard-invoice.html" class="button gray">مشاهده صورتحساب</a>
-							</div>
-						</li>
+                        {% endfor %}
 
 					</ul>
 				</div>
