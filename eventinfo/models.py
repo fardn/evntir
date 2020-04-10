@@ -182,6 +182,15 @@ class Event(models.Model):
         return self.bookmarks.count()
 
 
+'''class EventBookmarks(models.Model):
+    class Meta:
+        db_table = 'eventinfo_event_bookmarks'
+
+    event_id = models.ForeignKey(Event, on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)'''
+
+
 class Profile(models.Model):
     """
     Representing user profile

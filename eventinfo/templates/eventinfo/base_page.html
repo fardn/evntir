@@ -77,7 +77,7 @@
                         <div class="user-menu">
                             <div class="user-name"><span><img src="{{ user.profile.user_image.url }}" alt=""></span>حساب من</div>
                             <ul>
-                                <li><a href="dashboard.html"><i class="sl sl-icon-settings"></i> داشبورد</a></li>
+                                <li><a href="{% url 'eventinfo:account_dashboard' %}"><i class="sl sl-icon-settings"></i> داشبورد</a></li>
                                 <li><a href="dashboard-messages.html"><i class="sl sl-icon-envelope-open"></i> پیام ها</a></li>
                                 <li><a href="{% url 'eventinfo:account_bookings' %}"><i class="fa fa-calendar-check-o"></i> رزرو ها</a></li>
                                 <li><a href="{% url "eventinfo:account_profile" %}"><i class="sl sl-icon-user"></i>حساب کاربری </a></li>

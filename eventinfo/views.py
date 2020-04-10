@@ -211,6 +211,15 @@ def account_invoice(request, ref_code):
     return render(request, 'eventinfo/account/dashboard-invoice.html', context)
 
 
+@login_required
+def account_dashboard(request):
+    context = {
+
+    }
+
+    return render(request, 'eventinfo/account/dashboard.html', context)
+
+
 def index(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.all()
