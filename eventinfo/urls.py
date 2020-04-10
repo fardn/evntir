@@ -12,8 +12,9 @@ urlpatterns = [
     path('event/<int:event_id>/booking/checkout/', views.booking_checkout, name='booking_checkout'),
     path('event/<int:event_id>/booking/confirmation/', views.booking_confirmation, name='booking_confirmation'),
 
+    path(r'^activate/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/$',
+         views.activate, name='activate'),
     path('account/', views.account_dashboard, name='account_dashboard'),
-    #path('account/signup/', views.signup, name='signup'),
     path('account/login/', views.login_view, name='login'),
     path('account/logout/', views.logout_view, name='logout'),
     path('account/profile/', views.account_profile, name='account_profile'),

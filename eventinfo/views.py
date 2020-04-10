@@ -1,3 +1,6 @@
+from django.contrib.auth.models import User
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import EmailMessage
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
@@ -10,13 +13,17 @@ from django.template.loader import render_to_string
 
 from django.contrib import messages
 from django.utils import timezone
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order, \
-    Event_organizers
+    Event_organizers, Profile
 from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm, SignupForm
 
 import random
 import string
+
+from eventinfo.tokens import account_activation_token
 
 
 def event_list(request):
@@ -151,10 +158,10 @@ def login_view(request):
                     user.is_active = False
                     user.save()
 
-                    '''
+
                     current_site = get_current_site(request)
                     mail_subject = 'Activate your blog account.'
-                    message = render_to_string('acc_active_email.html', {
+                    message = render_to_string('eventinfo/account/acc_active_email.html', {
                         'user': user,
                         'domain': current_site.domain,
                         'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -165,7 +172,7 @@ def login_view(request):
                         mail_subject, message, to=[to_email]
                     )
                     email.send()
-                    '''
+
                     context['error'] = True
                     context['message'] = 'Please confirm your email address to complete the registration'
 
@@ -192,6 +199,24 @@ def login_view(request):
             }
 
     return render(request, 'eventinfo/account/login.html/', context)
+
+
+def activate(request, uidb64, token):
+    try:
+        uid = force_text(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        Profile.objects.create(user=user)
+        login(request, user)
+        # return redirect('home')
+        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+    else:
+        return HttpResponse('Activation link is invalid!')
+
 
 
 def logout_view(request):

@@ -201,7 +201,7 @@ class Profile(models.Model):
         verbose_name = 'پروفایل کاربری'
 
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='حساب کاربری')
-    mobile = models.CharField('موبایل', max_length=11)
+    mobile = models.CharField('موبایل', max_length=11, null=True, blank=True)
     GENDER_CHOICES = ((1, 'مرد'), (0, 'زن'))
     gender = models.IntegerField('جنسیت', choices=GENDER_CHOICES, null=True, blank=True)
     bday = models.DateField('تاریخ تولد', null=True, blank=True)
