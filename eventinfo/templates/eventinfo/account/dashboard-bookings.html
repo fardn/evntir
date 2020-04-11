@@ -67,7 +67,6 @@
 
 					<h4>درخواست رزرو</h4>
 					<ul>
-                        {% if orders %}
                         {% for order in orders %}
 						<li class="{{ order.get_status_class }}">
 							<div class="list-box-listing bookings">
@@ -127,10 +126,13 @@
 								</div>
 							</div>
 						</li>
+                        {% empty %}
+                            <li>
+                                <div class="list-box-listing bookings">
+                                <span>هیچ بلیتی یافت نشد.</span>
+                                </div>
+                            </li>
                         {% endfor %}
-                        {% else %}
-                            <p>هیج رزروی یافت نشد</p>
-                        {% endif %}
 
 					</ul>
 				</div>

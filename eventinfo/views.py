@@ -174,7 +174,7 @@ def login_view(request):
                     email.send()
 
                     context['error'] = True
-                    context['message'] = 'Please confirm your email address to complete the registration'
+                    context['message'] = 'برای تکمیل ثبت‌نام، لطفا ایمیل خودتون را تایید کنید.'
 
                 else:
                     context = {
@@ -210,13 +210,20 @@ def activate(request, uidb64, token):
     if user is not None and account_activation_token.check_token(user, token):
         user.is_active = True
         user.save()
-        Profile.objects.create(user=user)
+        Profile.objects.create(user=user, user_image='profiles/avatar/00.png')
         login(request, user)
-        # return redirect('home')
-        return HttpResponse('Thank you for your email confirmation. Now you can login your account.')
+        context = {
+            'error': True,
+            'message': 'ایمیل شما تایید شد، به ایونت‌اینفو خوش آمدید!',
+        }
+        return render(request, 'eventinfo/account/dashboard.html', context)
     else:
-        return HttpResponse('Activation link is invalid!')
+        context = {
+            'error': False,
+            'message': 'کد تایید ایمیل معتبر نمی‌باشد. لطفا مجددا تلاش کنید.',
+        }
 
+        return render(request, 'eventinfo/account/login.html', context)
 
 
 def logout_view(request):
@@ -253,7 +260,7 @@ def account_profile(request):
             'user_form': user_form,
             'profile_form': profile_form
         }
-
+    context['account_profile'] = 'class=active'
     return render(request, 'eventinfo/account/profile.html', context)
 
 
@@ -262,6 +269,7 @@ def account_bookings(request):
     orders = Order.objects.filter(user=request.user).order_by('-updated_at')
 
     context = {
+        'account_bookings': 'class=active',
         'orders': orders
     }
     return render(request, 'eventinfo/account/dashboard-bookings.html', context)
@@ -290,11 +298,25 @@ def account_dashboard(request):
     orders = Order.objects.filter(user=request.user).order_by('-updated_at')[:4]
 
     context = {
+        'account_dashboard': 'class=active',
         'orders': orders,
         'recent_activities': recent_activities,
     }
 
     return render(request, 'eventinfo/account/dashboard.html', context)
+
+
+@login_required
+def account_bookmarks(request):
+    user = request.user
+    bookmarks = user.bookmarks.all()
+    context = {
+        'account_bookmarks': 'class=active',
+        'bookmarks': bookmarks,
+
+    }
+
+    return render(request, 'eventinfo/account/dashboard-bookmarks.html', context)
 
 
 def index(request):

@@ -1,0 +1,82 @@
+{% extends 'eventinfo/account/dashboard-base-page.html' %}
+{% load static %}
+
+{% block title %}
+{{ profile.user.get_full_name }} |
+    ایونت‌اینفو
+{% endblock %}
+
+
+{% block content %}
+	<!-- Content
+	================================================== -->
+	<div class="dashboard-content">
+
+		<!-- Titlebar -->
+		<div id="titlebar">
+			<div class="row">
+				<div class="col-md-12">
+					<h2>نشانکها</h2>
+					<!-- Breadcrumbs -->
+					<nav id="breadcrumbs">
+						<ul>
+							<li><a href="#">صفحه اصلی</a></li>
+							<li><a href="#">داشبورد</a></li>
+							<li>نشانکها</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			
+			<!-- Listings -->
+			<div class="col-lg-12 col-md-12">
+				<div class="dashboard-list-box margin-top-0">
+
+					<h4>آگهی های نشانه گذاری شده</h4>
+					<ul>
+                        {% for bookmark in bookmarks %}
+						<li>
+							<div class="list-box-listing">
+								<div class="list-box-listing-img"><a href="#"><img src="{{ bookmark.event_main_image.url }}" alt=""></a></div>
+								<div class="list-box-listing-content">
+									<div class="inner">
+										<h3>{{ bookmark.event_title}} </h3>
+										<span>{{ bookmark.event_organizer }}</span>
+										<div class="star-rating" data-rating="5.0">
+											<div class="rating-counter">(23 نظر)</div>
+										</div>
+                                        <a href="{% url 'eventinfo:event_detail' event_id=bookmark.id %}" class="button">رزرو بلیت</a>
+									</div>
+								</div>
+							</div>
+							<div class="buttons-to-right">
+								<a href="#" class="button gray"><i class="sl sl-icon-close"></i> حذف</a>
+							</div>
+						</li>
+                        {% empty %}
+                            <li>
+							<div class="list-box-listing">
+				            <span>تا کنون هیج رویدادی را نشانه‌گذاری نکرده‌اید.</span>
+							</div>
+
+						</li>
+                        {% endfor %}
+
+
+					</ul>
+				</div>
+			</div>
+
+
+			<!-- Copyrights -->
+			<div class="col-md-12">
+				<div class="copyrights">© 1398 لیستئو. تمامی حقوق محفوظ است.</div>
+			</div>
+		</div>
+
+	</div>
+	<!-- Content / End -->
+{% endblock %}

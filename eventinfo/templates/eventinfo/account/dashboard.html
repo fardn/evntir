@@ -17,7 +17,7 @@
 		<div id="titlebar">
 			<div class="row">
 				<div class="col-md-12">
-					<h2>سلام، جعفر</h2>
+					<h2>سلام، {{ user.first_name }}</h2>
 					<!-- Breadcrumbs -->
 					<nav id="breadcrumbs">
 						<ul>
@@ -30,12 +30,15 @@
 		</div>
 
 		<!-- Notice -->
+
 		<div class="row">
 			<div class="col-md-12">
-				<div class="notification success closeable margin-bottom-30">
-					<p>آگهی شما <strong>هتل پیروزی</strong> تایید شده است!</p>
-					<a class="close" href="#"></a>
-				</div>
+                {% if message %}
+                <div class="notification {% if error %}{{ 'success' }}{% else %}{{ 'error' }}{% endif %} closeable margin-bottom-35">
+                    <p>{{ message }}</p>
+                    <a class="close"></a>
+                </div>
+                {% endif %}
 			</div>
 		</div>
 

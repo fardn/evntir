@@ -33,6 +33,18 @@
 <!-- Content
 ================================================== -->
 <div class="container">
+		<!-- Notice -->
+
+		<div class="row">
+			<div class="col-md-12">
+                {% if message %}
+                <div class="notification {% if error %}{{ 'success' }}{% else %}{{ 'error' }}{% endif %} closeable margin-bottom-35">
+                    <p>{{ message }}</p>
+                    <a class="close"></a>
+                </div>
+                {% endif %}
+			</div>
+		</div>
     <div class="row">
 
 			<!-- Profile -->
@@ -44,12 +56,6 @@
 
 						<!-- Details -->
 						<div class="my-profile">
-                            {% if message %}
-                            <div class="notification {% if error %}{{ 'success' }}{% else %}{{ 'error' }}{% endif %} closeable margin-bottom-35">
-                                <p>{{ message }}</p>
-                                <a class="close"></a>
-                            </div>
-                            {% endif %}
                             <label for="username">نام کاربری:
                                 <i class="im im-icon-Male"></i>
                                 <input type="text" class="input-text" name="username" id="username" value="">
