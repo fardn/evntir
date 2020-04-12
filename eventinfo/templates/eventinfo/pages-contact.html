@@ -1,0 +1,151 @@
+{% extends 'eventinfo/base_page.html' %}
+{% load static %}
+
+{% block css %}
+<link rel = "stylesheet" href = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+{% endblock %}
+
+{% block title %}
+{{ event.event_title}} |
+    ایونت‌اینفو
+{% endblock %}
+
+{% block content %}
+<!-- Content
+================================================== -->
+
+<!-- Map Container -->
+<div class="contact-map margin-bottom-60">
+
+	<!--  Maps -->
+	<div id="singleListingMap-container">
+		 <div id = "singleListingMap"></div>
+	</div>
+	<!-- Maps / End -->
+
+	<!-- Office -->
+	<div class="address-box-container">
+		<div class="address-container" data-background-image="images/our-office.jpg">
+			<div class="office-address">
+				<h3>آدرس ما</h3>
+				<ul>
+					<li>تهران، سه‌راه طالقانی</li>
+					<li>پلاک ۳۱۶</li>
+					<li>تلفن ۰۲۱۲۲۶۴۶۴۶۸</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<!-- Office / End -->
+
+</div>
+<div class="clearfix"></div>
+<!-- Map Container / End -->
+
+
+<!-- Container / Start -->
+<div class="container">
+
+	<div class="row">
+
+		<!-- Contact Details -->
+		<div class="col-md-4">
+
+			<h4 class="headline margin-bottom-30">ما را پیدا کن</h4>
+
+			<!-- Contact Details -->
+			<div class="sidebar-textbox">
+				<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
+
+				<ul class="contact-details">
+					<li><i class="im im-icon-Phone-2"></i> <strong>تلفن:</strong> <span>۰۲۱۲۲۶۴۶۴۶۸ </span></li>
+					<li><i class="im im-icon-Globe"></i> <strong>وب:</strong> <span><a href="#">www.eventinfo.ir.com</a></span></li>
+					<li><i class="im im-icon-Envelope"></i> <strong>ایمیل:</strong> <span>{{ 'support@eventinfo.ir'|urlize }}</span></li>
+				</ul>
+			</div>
+
+		</div>
+
+		<!-- Contact Form -->
+		<div class="col-md-8">
+            <!-- Notice -->
+            <div class="row">
+                <div class="col-md-12">
+                    {% if message %}
+                    <div class="notification {% if error %}{{ 'success' }}{% else %}{{ 'error' }}{% endif %} closeable margin-bottom-35">
+                        <p>{{ message }}</p>
+                        <a class="close"></a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+			<section id="contact">
+				<h4 class="headline margin-bottom-35">فرم تماس</h4>
+
+				<div id="contact-message"></div> 
+
+					<form method="post" name="contactform" autocomplete="on">{% csrf_token %}
+
+					<div class="row">
+						<div class="col-md-6">
+							<div>
+								<input name="name" type="text" id="name" placeholder="نام شما" value="{{name_placeholder}}" required="required" />
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div>
+								<input name="email" type="email" id="email" placeholder="آدرس ایمیل" value="{{ email_placeholder }}" pattern="^[A-Za-z0-9](([_\.\-]?[a-zA-Z0-9]+)*)@([A-Za-z0-9]+)(([\.\-]?[a-zA-Z0-9]+)*)\.([A-Za-z]{2,})$" required="required" />
+							</div>
+						</div>
+					</div>
+
+					<div>
+						<input name="subject" type="text" id="subject" placeholder="موضوع" value="{{ subject_placeholder }}" required="required" />
+					</div>
+
+					<div>
+						<textarea name="comments" cols="40" rows="3" id="comments" placeholder="پیام" spellcheck="true" required="required">{{ comments_placeholder }}</textarea>
+					</div>
+
+					<input type="submit" class="submit button" id="submit" value="ارسال پیام" />
+
+					</form>
+			</section>
+		</div>
+		<!-- Contact Form / End -->
+
+	</div>
+
+</div>
+<!-- Container / End -->
+{% endblock %}
+{% block script %}
+<script src = "http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+<script>
+// Creating map options
+var mapOptions = {
+center: [35.706465, 51.434657],
+zoom: 16
+}
+
+// Creating a map object
+var map = new L.map('singleListingMap', mapOptions);
+// Creating a Layer object
+var layer = new L.TileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+});
+// Adding layer to the map
+map.addLayer(layer);
+var myIcon = L.divIcon({
+    iconSize:null,
+    html: '<div class="map-marker-container clicked" style="left: 0px; top: 0.203125px;"><div class="marker-container"><div class="marker-card"><div class="front face"><i class="im im-icon-Map-Marker2"></i></div><div class="back face"><i class="im im-icon-Map-Marker2"></i></div><div class="marker-arrow"></div></div></div></div>'
+    });
+// you can set .my-div-icon styles in CSS
+L.marker([35.706465, 51.434657], {icon: myIcon}).addTo(map);
+
+
+</script>
+{% endblock %}
+

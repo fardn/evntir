@@ -67,7 +67,7 @@ def event_detail(request, event_id):
     time_slots = Time_Slots.objects.filter(event_id=event_id).order_by('event_start_date')
     tickets = Tickets.objects.filter(ticket_time_slot__event_id=event_id)
     time_slot_status = Time_slot_status(4)
-    is_bookmarked =False
+    is_bookmarked = False
     if request.user.is_authenticated:
         order_qs = Order.objects.filter(user=request.user, ordered=False, event=event)
         if event.bookmarks.filter(id=request.user.id).exists():
@@ -158,9 +158,8 @@ def login_view(request):
                     user.is_active = False
                     user.save()
 
-
                     current_site = get_current_site(request)
-                    mail_subject = 'Activate your blog account.'
+                    mail_subject = 'Activate your Eventinfo account.'
                     message = render_to_string('eventinfo/account/acc_active_email.html', {
                         'user': user,
                         'domain': current_site.domain,
@@ -456,10 +455,60 @@ def bookmark_toggle(request):
         'event': event,
         'is_bookmarked': is_bookmarked,
         'total_bookmarks': event.get_total_bookmarks(),
-        }
+    }
 
     if request.is_ajax():
         html = render_to_string('eventinfo/widgets/event_bookmark.html', context, request=request)
         return JsonResponse({'form': html})
 
 
+def terms(request):
+    context = {
+
+    }
+
+    return render(request, 'eventinfo/pages-terms.html', context)
+
+
+def contact(request):
+
+    context = {}
+
+    if request.user.is_authenticated:
+        user = request.user
+        name_placeholder = user.get_full_name
+        email_placeholder = user.email
+        context = {
+            'name_placeholder': name_placeholder,
+            'email_placeholder': email_placeholder,
+        }
+
+    if request.method == 'POST':
+
+        mail_subject = 'Message From Eventinfo.ir Contact Page'
+        message = render_to_string('eventinfo/contact_page_email.html', {
+            'name': request.POST.get('name'),
+            'email': request.POST.get('email'),
+            'subject': request.POST.get('subject'),
+            'comments': request.POST.get('comments'),
+        })
+        to_email = 'eventinfo.ir@gmail.com'
+        email = EmailMessage(
+            mail_subject, message, to=[to_email]
+        )
+        try:
+            email.send()
+            context['error'] = True
+            context['message'] = 'پیام شما با موفقیت ارسال شد.'
+
+        except:
+            context = {
+                'error': False,
+                'message': 'خطا! لطفا مجددا تلاش کنید.',
+                'name_placeholder': request.POST.get('name'),
+                'email_placeholder': request.POST.get('email'),
+                'subject_placeholder': request.POST.get('subject'),
+                'comments_placeholder': request.POST.get('comments'),
+            }
+
+    return render(request, 'eventinfo/pages-contact.html', context)
