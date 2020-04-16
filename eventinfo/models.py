@@ -84,14 +84,18 @@ class Guest(models.Model):
         verbose_name = 'مهمان'
         verbose_name_plural = 'مهمان'
 
-    guest_name = models.CharField('نام و نام خانوادگی', max_length=50)
+    guest_firstname = models.CharField('نام', max_length=50)
+    guest_lastname = models.CharField('نام خانوادگی', max_length=50)
     guest_email = models.EmailField('ایمیل', blank=True, null=True)
-    guest_website = models.CharField('وبسایت', max_length=50)
-    guest_instagram = models.CharField('اینستاگرام', max_length=50)
+    guest_website = models.CharField('وبسایت', max_length=50, blank=True, null=True)
+    guest_instagram = models.CharField('اینستاگرام', max_length=50, blank=True, null=True)
     guest_image = models.ImageField('تصویر', upload_to='profiles/avatar/', default='profiles/avatar/00.png')
 
     def __str__(self):
-        return self.guest_name
+        return '{} {}'.format(self.guest_firstname, self.guest_lastname)
+
+    def get_full_name(self):
+        return '{} {}'.format(self.guest_firstname, self.guest_lastname)
 
 
 class Event(models.Model):
@@ -102,6 +106,7 @@ class Event(models.Model):
     class Meta:
         verbose_name = 'رویداد'
         verbose_name_plural = 'رویداد'
+        ordering = ('-id',)
 
     event_title = models.CharField(max_length=200, verbose_name='عنوان')
     event_type = models.ForeignKey('Event_types', on_delete=models.PROTECT, null=True, blank=True, default=None,
@@ -121,6 +126,7 @@ class Event(models.Model):
     min_price = models.IntegerField('شروع قیمت', null=True, blank=True)
     max_price = models.IntegerField('بیشترین قیمت', null=True, blank=True)
     bookmarks = models.ManyToManyField(User, related_name='bookmarks', blank=True)
+    is_online = models.BooleanField('رویداد آنلاین', default=False)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
@@ -165,6 +171,12 @@ class Event(models.Model):
             return datetime2jalali(event_start_date).strftime('%Y/%m/%d ساعت %H:%M ')
         else:
             return 'از {}'.format(datetime2jalali(event_start_date).strftime('%Y/%m/%d ساعت %H:%M '))
+
+    def get_venue_display(self):
+        if self.is_online:
+            return 'آنلاین'
+        else:
+            return '{}، {}'.format(self.event_venue.venue_city, self.event_venue.venue_name)
 
     def get_published(self):
         try:
@@ -257,8 +269,8 @@ class Time_Slots(models.Model):
     )
 
     time_slot_status = models.IntegerField(choices=status_choices, null=True, blank=True)
-    total_seats = models.IntegerField(default=0)
-    free_seats = models.IntegerField()
+    total_seats = models.IntegerField(default=0, null=True, blank=True)
+    free_seats = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.event_id.event_title, self.event_start_date)
@@ -266,6 +278,32 @@ class Time_Slots(models.Model):
     def get_tickets(self):
         time_slot_tickets = Tickets.objects.filter(ticket_time_slot_id=self.id).order_by('ticket_order_start_date')
         return time_slot_tickets
+
+
+class Digital_links(models.Model):
+    """
+    Representing Event's Digital Links
+    """
+    class Meta:
+        verbose_name = 'لینک‌های دیجیتال'
+        verbose_name_plural = 'لینک‌های دیجیتال'
+
+    WEBINAR = 1
+    LIVESTREAM = 2
+    FILE = 3
+    VIDEO = 4
+
+    LINK_TYPE_CHOICES = (
+        (WEBINAR, 'وبینار'),
+        (LIVESTREAM, 'پخش زنده'),
+        (FILE, 'فایل'),
+        (VIDEO, 'ویدیو'),
+    )
+
+    event = models.ForeignKey('Event', on_delete=models.CASCADE, verbose_name='رویداد')
+    link_type = models.IntegerField('نوع لینک', choices=LINK_TYPE_CHOICES)
+    link_title = models.CharField('عنوان لینک', max_length=200, null=True, blank=True)
+    link = models.URLField('آدرس', max_length=300)
 
 
 class Tickets(models.Model):

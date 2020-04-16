@@ -29,6 +29,7 @@ from eventinfo.tokens import account_activation_token
 def event_list(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.filter(published=True)
+    #events = Event.objects.all()
 
     is_bookmarked = False
 
@@ -320,9 +321,8 @@ def account_bookmarks(request):
 
 def index(request):
     search_form = EventSearchForm(request.GET)
-    events = Event.objects.all()
-    event_type_list = events.values('event_type', 'event_type__type_title', 'event_type__type_icon').annotate(
-        count=Count('event_type'))
+    events = Event.objects.filter(published=True)
+    event_type_list = events.values('event_type', 'event_type__type_icon', 'event_type__type_title').annotate(count=Count('event_type')).order_by()
     events = events.order_by('-updated_at')
     types = Event_types.objects.all()
     context = {

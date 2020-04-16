@@ -30,9 +30,7 @@
 					<span>
 						<a href="#listing-location" class="listing-address">
 							<i class="fa fa-map-marker"></i>
-							{{ event.event_venue.venue_city}}
-                            ،
-                            {{ event.event_venue.venue_name }}
+							{{ event.get_venue_display }}
 						</a>
 					</span>
 					<div class="star-rating" data-rating="5">
@@ -46,8 +44,6 @@
 				<ul class="listing-nav">
 					<li><a href="#listing-overview" class="active">توضیحات</a></li>
 					<li><a href="#event-guest">سخنرانان</a></li>
-					<li><a href="#listing-reviews">نظرات</a></li>
-					<li><a href="#add-review">افزودن نظر</a></li>
 				</ul>
 			</div>
 			
@@ -71,25 +67,6 @@
 
 				
 				<!-- Listing Contacts -->
-				<div class="listing-links-container">
-
-					<ul class="listing-links contact-links">
-						<li><a href="tel:12-345-678" class="listing-links"><i class="fa fa-phone"></i> +12 345 6578</a></li>
-						<li><a href="http://www.vasterad.com/cdn-cgi/l/email-protection#5835393134183d20393528343d763b3735" class="listing-links"><i class="fa fa-envelope-o"></i> <span class="__cf_email__" data-cfemail="a0cdc1c9cce0c5d8c1cdd0ccc58ec3cfcd">[email&#160;protected]</span></a>
-						</li>
-						<li><a href="#" target="_blank"  class="listing-links"><i class="fa fa-link"></i> www.example.com</a></li>
-					</ul>
-					<div class="clearfix"></div>
-
-					<ul class="listing-links">
-						<li><a href="#" target="_blank" class="listing-links-fb"><i class="fa fa-facebook-square"></i> فیس بوک</a></li>
-						<li><a href="#" target="_blank" class="listing-links-yt"><i class="fa fa-youtube-play"></i> یوتیوب</a></li>
-						<li><a href="#" target="_blank" class="listing-links-ig"><i class="fa fa-instagram"></i> اینستاگرام</a></li>
-						<li><a href="#" target="_blank" class="listing-links-tt"><i class="fa fa-twitter"></i> توییتر</a></li>
-					</ul>
-					<div class="clearfix"></div>
-
-				</div>
 				<div class="clearfix"></div>
 
 
@@ -102,7 +79,7 @@
                 {% for guest in guests %}
                 <div class="boxed-widget margin-top-35 col-md-4">
 				<div class="hosted-by-title">
-					<h4><a href="pages-organizer-profile.html">{{ guest.guest_name }}</a><span>هنرمند</span></h4>
+					<h4><a href="pages-organizer-profile.html">{{ guest.get_full_name }}</a><span>هنرمند</span></h4>
 					<a href="pages-organizer-profile.html" class="hosted-by-avatar"><img src="{{ guest.guest_image.url }}" alt=""></a>
 				</div>
 
@@ -113,17 +90,7 @@
 				</ul>
 
 				<!-- Reply to review popup -->
-				<div id="small-dialog" class="zoom-anim-dialog mfp-hide">
-					<div class="small-dialog-header">
-						<h3>ارسال پیام</h3>
-					</div>
-					<div class="message-reply margin-top-0">
-						<textarea cols="40" rows="3" placeholder="پیام شما به تام"></textarea>
-						<button class="button">ارسال پیام</button>
-					</div>
-				</div>
 
-				<a href="#small-dialog" class="send-message-to-owner button popup-with-zoom-anim"><i class="sl sl-icon-envelope-open"></i> ارسال پیام</a>
 			</div>
             {% endfor %}
             </div>
@@ -131,16 +98,15 @@
 
 
 			<!-- Slider -->
+            {% if gallery %}
 			<div id="listing-gallery" class="listing-section">
 				<h3 class="listing-desc-headline margin-top-70">گالری</h3>
 				<div class="listing-slider-small mfp-gallery-container margin-bottom-0">
 					<a href="images/single-listing-02a.jpg" data-background-image="images/single-listing-02a.jpg" class="item mfp-gallery" title="عکس 2"></a>
-					<a href="images/single-listing-01a.jpg" data-background-image="images/single-listing-01a.jpg" class="item mfp-gallery" title="عکس 1"></a>
-					<a href="images/single-listing-03a.jpg" data-background-image="images/single-listing-03a.jpg" class="item mfp-gallery" title="عکس 3"></a>
-					<a href="images/single-listing-04a.jpg" data-background-image="images/single-listing-04a.jpg" class="item mfp-gallery" title="عکس 3"></a>
 				</div>
 			</div>
-
+            {% endif %}
+            {% if not event.is_online  %}
 			<!-- Location -->
 			<div id="listing-location" class="listing-section">
 				<h3 class="listing-desc-headline margin-top-60 margin-bottom-30">موقعیت</h3>
@@ -149,257 +115,7 @@
                     <div id = "singleListingMap"></div>
 				</div>
 			</div>
-				
-			<!-- Reviews -->
-			<div id="listing-reviews" class="listing-section">
-				<h3 class="listing-desc-headline margin-top-75 margin-bottom-20">نظرات <span>(12)</span></h3>
-
-				<!-- Rating Overview -->
-				<div class="rating-overview">
-					<div class="rating-overview-box">
-						<span class="rating-overview-box-total">4.7</span>
-						<span class="rating-overview-box-percent">از 5.0</span>
-						<div class="star-rating" data-rating="5"></div>
-					</div>
-
-					<div class="rating-bars">
-							<div class="rating-bars-item">
-								<span class="rating-bars-name">خدمات <i class="tip" data-tip-content="کیفیت خدمات مشتری و نگرش به کار با شما"></i></span>
-								<span class="rating-bars-inner">
-									<span class="rating-bars-rating" data-rating="4.7">
-										<span class="rating-bars-rating-inner"></span>
-									</span>
-									<strong>4.7</strong>
-								</span>
-							</div>
-							<div class="rating-bars-item">
-								<span class="rating-bars-name">ارزش پول <i class="tip" data-tip-content="در مجموع تجربه دریافت شده برای مقدار صرف شده است"></i></span>
-								<span class="rating-bars-inner">
-									<span class="rating-bars-rating" data-rating="4.8">
-										<span class="rating-bars-rating-inner"></span>
-									</span>
-									<strong>43.8</strong>
-								</span>
-							</div>
-							<div class="rating-bars-item">
-								<span class="rating-bars-name">موقعیت <i class="tip" data-tip-content="دید، پارکینگ در محل کار یا محل کار"></i></span>
-								<span class="rating-bars-inner">
-									<span class="rating-bars-rating" data-rating="3.7">
-										<span class="rating-bars-rating-inner"></span>
-									</span>
-									<strong>2.7</strong>
-								</span>
-							</div>
-							<div class="rating-bars-item">
-								<span class="rating-bars-name">پاکیزگی <i class="tip" data-tip-content="شرایط فیزیکی کسب و کار"></i></span>
-								<span class="rating-bars-inner">
-									<span class="rating-bars-rating" data-rating="4.0">
-										<span class="rating-bars-rating-inner"></span>
-									</span>
-									<strong>5.0</strong>
-								</span>
-							</div>
-					</div>
-				</div>
-				<!-- Rating Overview / End -->
-
-
-				<div class="clearfix"></div>
-
-				<!-- Reviews -->
-				<section class="comments listing-reviews">
-					<ul>
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /></div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">کتی براون <i class="tip" data-tip-content="شخصی که این بازبینی را ترک کرد در واقع مشتری بود"></i> <span class="date">1398 خرداد</span>
-									<div class="star-rating" data-rating="5"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-								<a href="#" class="rate-review"><i class="sl sl-icon-like"></i> مرور مفید <span>12</span></a>
-							</div>
-						</li>
-
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /> </div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">جعفر عباسی<span class="date">1398 خرداد</span>
-									<div class="star-rating" data-rating="4"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است..</p>
-								<a href="#" class="rate-review"><i class="sl sl-icon-like"></i> مرور مفید <span>2</span></a>
-							</div>
-						</li>
-
-						<li>
-							<div class="avatar"><img src="http://www.gravatar.com/avatar/00000000000000000000000000000000?d=mm&amp;s=70" alt="" /> </div>
-							<div class="comment-content"><div class="arrow-comment"></div>
-								<div class="comment-by">طاهر نصیری<span class="date">1398 خرداد</span>
-									<div class="star-rating" data-rating="5"></div>
-								</div>
-								<p>لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است.</p>
-								<a href="#" class="rate-review"><i class="sl sl-icon-like"></i> مرور مفید</a>
-							</div>
-
-						</li>
-					 </ul>
-				</section>
-
-				<!-- Pagination -->
-				<div class="clearfix"></div>
-				<div class="row">
-					<div class="col-md-12">
-						<!-- Pagination -->
-						<div class="pagination-container margin-top-30">
-							<nav class="pagination">
-								<ul>
-									<li><a href="#" class="current-page">1</a></li>
-									<li><a href="#">2</a></li>
-									<li><a href="#"><i class="sl sl-icon-arrow-right"></i></a></li>
-								</ul>
-							</nav>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix"></div>
-				<!-- Pagination / End -->
-			</div>
-
-
-			<!-- Add Review Box -->
-			<div id="add-review" class="add-review-box">
-
-				<!-- Add Review -->
-				<h3 class="listing-desc-headline margin-bottom-10">افزودن نظر</h3>
-				<p class="comment-notes">ایمیل شما منتشر نخواهد شد.</p>
-
-				<!-- Subratings Container -->
-				<div class="sub-ratings-container">
-
-					<!-- Subrating #1 -->
-					<div class="add-sub-rating">
-						<div class="sub-rating-title">خدمات <i class="tip" data-tip-content="کیفیت خدمات مشتری و نگرش به کار با شما"></i></div>
-						<div class="sub-rating-stars">
-							<!-- Leave Rating -->
-							<div class="clearfix"></div>
-							<form class="leave-rating">
-								<input type="radio" name="rating" id="rating-1" value="1"/>
-								<label for="rating-1" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-2" value="2"/>
-								<label for="rating-2" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-3" value="3"/>
-								<label for="rating-3" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-4" value="4"/>
-								<label for="rating-4" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-5" value="5"/>
-								<label for="rating-5" class="fa fa-star"></label>
-							</form>
-						</div>
-					</div>
-
-					<!-- Subrating #2 -->
-					<div class="add-sub-rating">
-						<div class="sub-rating-title">ارزش پول <i class="tip" data-tip-content="در مجموع تجربه دریافت شده برای مقدار صرف شده است"></i></div>
-						<div class="sub-rating-stars">
-							<!-- Leave Rating -->
-							<div class="clearfix"></div>
-							<form class="leave-rating">
-								<input type="radio" name="rating" id="rating-11" value="1"/>
-								<label for="rating-11" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-12" value="2"/>
-								<label for="rating-12" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-13" value="3"/>
-								<label for="rating-13" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-14" value="4"/>
-								<label for="rating-14" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-15" value="5"/>
-								<label for="rating-15" class="fa fa-star"></label>
-							</form>
-						</div>
-					</div>
-
-					<!-- Subrating #3 -->
-					<div class="add-sub-rating">
-						<div class="sub-rating-title">موقعیت <i class="tip" data-tip-content="دید، پارکینگ در محل کار یا محل کار"></i></div>
-						<div class="sub-rating-stars">
-							<!-- Leave Rating -->
-							<div class="clearfix"></div>
-							<form class="leave-rating">
-								<input type="radio" name="rating" id="rating-21" value="1"/>
-								<label for="rating-21" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-22" value="2"/>
-								<label for="rating-22" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-23" value="3"/>
-								<label for="rating-23" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-24" value="4"/>
-								<label for="rating-24" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-25" value="5"/>
-								<label for="rating-25" class="fa fa-star"></label>
-							</form>
-						</div>
-					</div>
-					
-					<!-- Subrating #4 -->
-					<div class="add-sub-rating">
-						<div class="sub-rating-title">پاکیزگی <i class="tip" data-tip-content="شرایط فیزیکی کسب و کار"></i></div>
-						<div class="sub-rating-stars">
-							<!-- Leave Rating -->
-							<div class="clearfix"></div>
-							<form class="leave-rating">
-								<input type="radio" name="rating" id="rating-31" value="1"/>
-								<label for="rating-31" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-32" value="2"/>
-								<label for="rating-32" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-33" value="3"/>
-								<label for="rating-33" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-34" value="4"/>
-								<label for="rating-34" class="fa fa-star"></label>
-								<input type="radio" name="rating" id="rating-35" value="5"/>
-								<label for="rating-35" class="fa fa-star"></label>
-							</form>
-						</div>
-					</div>	
-
-					<!-- Uplaod Photos -->
-	                <div class="uploadButton margin-top-15">
-	                    <input class="uploadButton-input" type="file"  name="attachments[]" accept="image/*, application/pdf" id="upload" multiple/>
-	                    <label class="uploadButton-button ripple-effect" for="upload">افزودن عکس</label>
-	                    <span class="uploadButton-file-name"></span>
-	                </div>
-	                <!-- Uplaod Photos / End -->
-
-				</div>
-				<!-- Subratings Container / End -->
-
-				<!-- Review Comment -->
-				<form id="add-comment" class="add-comment">
-					<fieldset>
-
-						<div class="row">
-							<div class="col-md-6">
-								<label>نام:</label>
-								<input type="text" value=""/>
-							</div>
-								
-							<div class="col-md-6">
-								<label>ایمیل:</label>
-								<input type="text" value=""/>
-							</div>
-						</div>
-
-						<div>
-							<label>نظر:</label>
-							<textarea cols="40" rows="3"></textarea>
-						</div>
-
-					</fieldset>
-
-					<button class="button">ارسال نظر</button>
-					<div class="clearfix"></div>
-				</form>
-
-			</div>
-			<!-- Add Review Box / End -->
+            {% endif %}
 
 
 		</div>
@@ -419,9 +135,7 @@
 						<div class="numerical-rating" data-rating="5.0"></div>
 						<h3>{{ event.event_title }}</h3>
 						<span><i class="fa fa-map-marker"></i>
-							{{ event.event_venue.venue_city}}
-                            ،
-                            {{ event.event_venue.venue_name }}
+							{{ event.get_venue_display }}
                         </span>
 					</div>
 				</div>
@@ -514,12 +228,6 @@
                 </div>
 
 					<!-- Share Buttons -->
-					<ul class="share-buttons margin-top-40 margin-bottom-0">
-						<li><a class="fb-share" href="#"><i class="fa fa-facebook"></i> اشتراک</a></li>
-						<li><a class="twitter-share" href="#"><i class="fa fa-twitter"></i> توییت</a></li>
-						<li><a class="gplus-share" href="#"><i class="fa fa-google-plus"></i> اشتراک</a></li>
-						<!-- <li><a class="pinterest-share" href="#"><i class="fa fa-pinterest-p"></i> Pin</a></li> -->
-					</ul>
 					<div class="clearfix"></div>
 			</div>
 
