@@ -215,20 +215,20 @@
 			<div class="col-md-4 col-sm-6 ">
 				<h4>لینک های کمکی</h4>
 				<ul class="footer-links">
-					<li><a href="#">ورود</a></li>
-					<li><a href="#">ثبت نام</a></li>
-					<li><a href="#">حساب من</a></li>
-					<li><a href="#">افزودن آگهی</a></li>
-					<li><a href="#">قیمت ها</a></li>
-					<li><a href="#">حریم خصوصی</a></li>
+					<li><a href="{% url 'eventinfo:login' %}">ورود</a></li>
+					<li><a href="{% url 'eventinfo:login' %}">ثبت نام</a></li>
+					<li><a href="{% url 'eventinfo:account_dashboard' %}">حساب من</a></li>
+					<li><a href="{% url 'eventinfo:account_bookmarks' %}">رویدادهای من</a></li>
+					<li><a href="{% url 'eventinfo:account_bookings' %}">پیگیری خرید</a></li>
 				</ul>
 
 				<ul class="footer-links">
-					<li><a href="#">گفت و گو</a></li>
-					<li><a href="#">بلاگ</a></li>
-					<li><a href="#">همکاران ما</a></li>
+					<li><a href="{% url 'eventinfo:event_list' %}">رویدادها</a></li>
+					<li><a href="#">برگزارکننده‌ها</a></li>
+					<li><a href="#">پشتیبانی</a></li>
 					<li><a href="#">داستان ما</a></li>
-					<li><a href="#">تماس</a></li>
+					<li><a href="{% url 'eventinfo:contact' %}">تماس</a></li>
+                    <li><a href="{% url 'eventinfo:terms' %}">شرایط استفاده</a></li>
 				</ul>
 				<div class="clearfix"></div>
 			</div>
@@ -236,16 +236,14 @@
 			<div class="col-md-3  col-sm-12">
 				<h4>تماس با ما</h4>
 				<div class="text-widget">
-					<span>ایران، ارومیه، شاهین دژ</span> <br>
-					تلفن: <span>(123) 123-456 </span><br>
-					ایمیل:<span> <a href="#"><span class="__cf_email__" data-cfemail="8ce3eaeae5efe9cce9f4ede1fce0e9a2efe3e1">[email&#160;protected]</span></a> </span><br>
+					<span>تهران، سه‌راه طالقانی، پلاک ۳۱۶</span> <br>
+					تلفن: <span>۰۲۱۲۲۶۴۶۴۶۵</span><br>
+					ایمیل:<span>{{ 'support@eventinfo.ir'|urlize }}</span><br>
 				</div>
 
 				<ul class="social-icons margin-top-20">
-					<li><a class="facebook" href="#"><i class="icon-facebook"></i></a></li>
-					<li><a class="twitter" href="#"><i class="icon-twitter"></i></a></li>
-					<li><a class="gplus" href="#"><i class="icon-gplus"></i></a></li>
-					<li><a class="vimeo" href="#"><i class="icon-vimeo"></i></a></li>
+					<li><a class="instagram" href="https://instagram.com/eventinfo.ir"><i class="icon-instagram"></i></a></li>
+					<li><a class="twitter" href="https://twitter.com/eventinfo_ir"><i class="icon-twitter"></i></a></li>
 				</ul>
 
 			</div>
