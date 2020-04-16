@@ -106,9 +106,7 @@
 									<h3>{{ event.event_title }}</h3>
 									<span>
                                         <i class="fa fa-map-marker"></i>
-                                        {{ event.event_venue.venue_city}}
-                                        ،
-                                        {{ event.event_venue.venue_name }}
+                                        {{ event.get_venue_display }}
                                     </span>
 									<div class="star-rating" data-rating="3.5">
 										<div class="rating-counter">(12 نظر)</div>
