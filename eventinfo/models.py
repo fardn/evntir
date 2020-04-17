@@ -108,6 +108,23 @@ class Event(models.Model):
         verbose_name_plural = 'رویداد'
         ordering = ('-id',)
 
+    SALE_NOT_STARTED = 1
+    SALE_OPEN = 2
+    SOLD_OUT = 3
+    SALE_CLOSED = 4
+    EVENT_PASSED = 5
+    EVENT_CANCELED = 6
+    EVENT_ARCHIVED = 7
+    status_choices = (
+        (SALE_NOT_STARTED, 'بلیت فروشی آغاز نشده.'),
+        (SALE_OPEN, 'بلیت فروشی آغاز شده.'),
+        (SOLD_OUT, 'بلیت‌ها تمام شد.'),
+        (SALE_CLOSED, 'بلیت فروشی بسته شد.'),
+        (EVENT_PASSED, 'رویداد به پایان رسیده'),
+        (EVENT_CANCELED, 'رویداد لغو شده'),
+        (EVENT_ARCHIVED, 'رویداد حذف شده'),
+    )
+
     event_title = models.CharField(max_length=200, verbose_name='عنوان')
     event_type = models.ForeignKey('Event_types', on_delete=models.PROTECT, null=True, blank=True, default=None,
                                    verbose_name='نوع رویداد')
@@ -127,29 +144,31 @@ class Event(models.Model):
     max_price = models.IntegerField('بیشترین قیمت', null=True, blank=True)
     bookmarks = models.ManyToManyField(User, related_name='bookmarks', blank=True)
     is_online = models.BooleanField('رویداد آنلاین', default=False)
+    event_status = models.IntegerField(choices=status_choices, null=True, blank=True)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
 
     def get_start_date(self):
         min_start_date = \
-        Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('event_start_date')[0]
+            Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('event_start_date')[0]
         return min_start_date['event_start_date']
 
     def get_end_date(self):
         min_start_date = \
-        Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('-event_start_date')[0]
+            Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('-event_start_date')[0]
         return min_start_date['event_start_date']
 
     def get_min_price(self):
         min_start_date = \
-        Tickets.objects.filter(ticket_time_slot__event_id_id=self.id).values('ticket_price').order_by('ticket_price')[0]
+            Tickets.objects.filter(ticket_time_slot__event_id_id=self.id).values('ticket_price').order_by(
+                'ticket_price')[0]
         return min_start_date['ticket_price']
 
     def get_max_price(self):
         min_start_date = \
-        Tickets.objects.filter(ticket_time_slot__event_id_id=self.id).values('ticket_price').order_by('-ticket_price')[
-            0]
+            Tickets.objects.filter(ticket_time_slot__event_id_id=self.id).values('ticket_price').order_by(
+                '-ticket_price')[0]
         return min_start_date['ticket_price']
 
     def get_price_display(self):
@@ -177,6 +196,15 @@ class Event(models.Model):
             return 'آنلاین'
         else:
             return '{}، {}'.format(self.event_venue.venue_city, self.event_venue.venue_name)
+
+    def get_status(self):
+        NOW = timezone.now()
+        if self.event_status not in (Event.EVENT_CANCELED, Event.EVENT_ARCHIVED, Event.EVENT_PASSED):
+            if self.event_end_date < NOW:
+                self.event_status = Event.EVENT_PASSED
+                self.save()
+
+        return self.event_status, self.get_event_status_display
 
     def get_published(self):
         try:
@@ -284,6 +312,7 @@ class Digital_links(models.Model):
     """
     Representing Event's Digital Links
     """
+
     class Meta:
         verbose_name = 'لینک‌های دیجیتال'
         verbose_name_plural = 'لینک‌های دیجیتال'

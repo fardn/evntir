@@ -87,6 +87,7 @@
 								<div class="listing-item-inner">
 									<h3>{{ event.event_title }}</h3>
 									<span>{{ event.event_organizer }}</span><br>
+                                    {{ event.get_status.1 }}
 
                                     <div class="listing-list-small-badges-container">
                                     <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>{{ event.get_price_display }}</div><br>
