@@ -131,7 +131,7 @@
 					<img src="{{ event.event_main_image.url}}" alt="">
 
 					<div class="listing-item-content">
-                        <span class="tag">گفت‌وگو</span>
+                        <span class="tag">{{ event.event_type }}</span>
 						<div class="numerical-rating" data-rating="5.0"></div>
 						<h3>{{ event.event_title }}</h3>
 						<span><i class="fa fa-map-marker"></i>
@@ -166,12 +166,20 @@
 
             {% if not order_qs %}
 			<div class="boxed-widget booking-widget margin-top-0">
-                <h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
-                <!-- Book Now -->
-                {% if user.is_authenticated %}
-                <a href="{% url "eventinfo:booking_tickets" event_id=event.id %}" class="button book-now fullwidth margin-top-5">رزرو بلیت</a>
+                    <h3><i class="fa fa-calendar-check-o "></i> رزرو بلیت </h3>
+                    <!-- Book Now -->
+                {% if event.get_status.0 == 2 %}
+                    {% if user.is_authenticated %}
+                        {% if event.is_unlimited %}
+                            <a href="{{ digital_link.link }}" class="button book-now fullwidth margin-top-5">{{ digital_link.link_title }}</a>
+                        {% else %}
+                            <a href="{% url "eventinfo:booking_tickets" event_id=event.id %}" class="button book-now fullwidth margin-top-5">رزرو بلیت</a>
+                        {% endif %}
+                    {% else %}
+                    <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">ابتدا وارد شوید.</a>
+                    {% endif %}
                 {% else %}
-                <a href="#sign-in-dialog" class="sign-in popup-with-zoom-anim button book-now fullwidth margin-top-5">ابتدا وارد شوید.</a>
+                    <button type="button" class="button fullwidth margin-top-5" disabled>{{ event.get_status.1 }}</button>
                 {% endif %}
 			</div>
             {% endif %}

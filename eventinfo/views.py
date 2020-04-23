@@ -17,7 +17,7 @@ from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order, \
-    Event_organizers, Profile
+    Event_organizers, Profile, Digital_links
 from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm, SignupForm
 
 import random
@@ -76,6 +76,7 @@ def event_detail(request, event_id):
     else:
         order_qs = None
 
+
     context = {
         'booking_form': booking_form,
         'guests': guests,
@@ -87,6 +88,9 @@ def event_detail(request, event_id):
         'is_bookmarked': is_bookmarked,
         'total_bookmarks': event.get_total_bookmarks(),
     }
+    if event.is_unlimited:
+        digital_link = Digital_links.objects.get(event_id=event_id)
+        context['digital_link'] = digital_link
 
     return render(request, 'eventinfo/event.html', context)
 
@@ -323,7 +327,6 @@ def index(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.filter(published=True)
     event_type_list = events.values('event_type', 'event_type__type_icon', 'event_type__type_title').annotate(count=Count('event_type')).order_by()
-    events = events.order_by('-updated_at')
     types = Event_types.objects.all()
     context = {
         'index_page': 'class=current',

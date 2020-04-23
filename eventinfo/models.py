@@ -145,6 +145,7 @@ class Event(models.Model):
     bookmarks = models.ManyToManyField(User, related_name='bookmarks', blank=True)
     is_online = models.BooleanField('رویداد آنلاین', default=False)
     event_status = models.IntegerField(choices=status_choices, null=True, blank=True)
+    is_unlimited = models.BooleanField('تعداد نامحدود و رایگان', default=False)
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event_title, self.event_organizer, self.event_venue)
@@ -156,8 +157,8 @@ class Event(models.Model):
 
     def get_end_date(self):
         min_start_date = \
-            Time_Slots.objects.filter(event_id_id=self.id).values('event_start_date').order_by('-event_start_date')[0]
-        return min_start_date['event_start_date']
+            Time_Slots.objects.filter(event_id_id=self.id).values('event_end_date').order_by('-event_end_date')[0]
+        return min_start_date['event_end_date']
 
     def get_min_price(self):
         min_start_date = \

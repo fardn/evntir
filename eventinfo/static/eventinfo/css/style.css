@@ -263,7 +263,7 @@ header.fullwidth .container {
 }
 
 #logo {
-    margin-left: 50px;
+    margin-left: 10px;
 }
 
 .header-widget {
@@ -19223,3 +19223,11 @@ div.layout-style {
 }
 
 #mapid { height: 180px; }
+
+button:disabled,
+button[disabled]{
+  pointer-events: none;
+  background-color: #eee !important;
+  color: #9d9d9d;
+
+}
