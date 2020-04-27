@@ -1,10 +1,11 @@
+from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.db.models import Count
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import register
 from django.urls import reverse
@@ -29,7 +30,7 @@ from eventinfo.tokens import account_activation_token
 def event_list(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.filter(published=True)
-    #events = Event.objects.all()
+    # events = Event.objects.all()
 
     is_bookmarked = False
 
@@ -75,7 +76,6 @@ def event_detail(request, event_id):
             is_bookmarked = True
     else:
         order_qs = None
-
 
     context = {
         'booking_form': booking_form,
@@ -240,30 +240,58 @@ def account_profile(request):
     if request.method == 'POST':
         profile_form = ProfileForm(request.POST, files=request.FILES, instance=request.user.profile)
         user_form = UserForm(request.POST, instance=request.user)
-        try:
-            profile_form.save() and user_form.save()
-            context = {
-                'user_form': user_form,
-                'profile_form': profile_form,
-                'message': 'پروفایل با موفقیت ویرایش شد.',
-                'error': True
-            }
+        password_form = PasswordChangeForm(request.user, request.POST)
+        if request.POST.get('submit') == 'ذخیره تنظیمات':
+            try:
+                profile_form.save() and user_form.save()
+                context = {
+                    'user_form': user_form,
+                    'profile_form': profile_form,
+                    'password_form': password_form,
+                    'message': 'پروفایل با موفقیت ویرایش شد.',
+                    'error': True
+                }
 
-        except:
-            context = {
-                'user_form': user_form,
-                'profile_form': profile_form,
-                'message': 'خطا در ویرایش اطلاعات',
-                'error': False
-            }
+            except:
+                context = {
+                    'user_form': user_form,
+                    'profile_form': profile_form,
+                    'password_form': password_form,
+                    'message': 'خطا در ویرایش اطلاعات',
+                    'error': False
+                }
+
+        elif request.POST.get('submit') == 'تغییر رمز عبور':
+            if password_form.is_valid():
+                user = password_form.save()
+                update_session_auth_hash(request, user)
+                context = {
+                    'message': 'رمز عبور با موفقیت ویرایش شد.',
+                    'error': True,
+                    'user_form': user_form,
+                    'profile_form': profile_form,
+                    'password_form': password_form,
+                }
+            else:
+                context = {
+                    'message': 'خطا در تغییر رمز عبور',
+                    'error': False,
+                    'user_form': user_form,
+                    'profile_form': profile_form,
+                    'password_form': password_form,
+                }
+
 
     else:
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=request.user.profile)
+        password_form = PasswordChangeForm(request.user)
         context = {
             'user_form': user_form,
-            'profile_form': profile_form
+            'profile_form': profile_form,
+            'password_form': password_form,
         }
+
     context['account_profile'] = 'class=active'
     return render(request, 'eventinfo/account/profile.html', context)
 
@@ -326,7 +354,8 @@ def account_bookmarks(request):
 def index(request):
     search_form = EventSearchForm(request.GET)
     events = Event.objects.filter(published=True)
-    event_type_list = events.values('event_type', 'event_type__type_icon', 'event_type__type_title').annotate(count=Count('event_type')).order_by()
+    event_type_list = events.values('event_type', 'event_type__type_icon', 'event_type__type_title').annotate(
+        count=Count('event_type')).order_by()
     types = Event_types.objects.all()
     context = {
         'index_page': 'class=current',
@@ -474,7 +503,6 @@ def terms(request):
 
 
 def contact(request):
-
     context = {}
 
     if request.user.is_authenticated:

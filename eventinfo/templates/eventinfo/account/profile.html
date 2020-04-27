@@ -45,7 +45,7 @@
                         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
 						<!-- Avatar -->
 						<div class="edit-profile-photo">
-                            {{ profile_form.user_image }}
+
 							<img src="{{ profile.user_image.url}}" alt="">
 							<div class="change-photo-btn">
 								<div class="photoUpload">
@@ -54,6 +54,7 @@
 								</div>
 							</div>
 						</div>
+                            {{ profile_form.user_image }}
 
 						<!-- Details -->
 						<div class="my-profile">
@@ -79,12 +80,9 @@
                             {{ user_form.email }}
 
 
-							<label>یادداشت</label>
-							<textarea name="notes" id="notes" cols="30" rows="10"> از صنعت چاپ و با استفاده از طراحان گرافیک است. چاپگرها و متون بلکه روزنامه و مجله در ستون واز صنعت چاپ و با استفاده از طراحان گرافیک اس. </textarea>
-
 						</div>
 
-						<button class="button margin-top-15">ذخیره تنظیمات</button>
+                        <input type="submit" class="button margin-top-15" name="submit" value="ذخیره تنظیمات">
                         </form>
 					</div>
 				</div>
@@ -96,21 +94,21 @@
 				<div class="dashboard-list-box margin-top-0">
 					<h4 class="gray">تغییر رمز عبور</h4>
 					<div class="dashboard-list-box-static">
-
+                        <form method="POST">{% csrf_token %}
 						<!-- Change Password -->
 						<div class="my-profile">
 							<label class="margin-top-0">رمز عبور فعلی</label>
-							<input type="password">
+                            {{ password_form.old_password }}
 
 							<label>رمز عبور جدید</label>
-							<input type="password">
+							{{ password_form.new_password1 }}
 
 							<label>تایید رمز عبور جدید</label>
-							<input type="password">
+							{{ password_form.new_password2 }}
 
-							<button class="button margin-top-15">تغییر رمز عبور</button>
+							<input type="submit" class="button margin-top-15" name="submit" value="تغییر رمز عبور">
 						</div>
-
+                        </form>
 					</div>
 				</div>
 			</div>
