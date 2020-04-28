@@ -117,6 +117,7 @@ def booking_tickets(request, event_id):
                 if key.isdigit():
                     ticket = get_object_or_404(Tickets, pk=key)
                     seats = int(value)
+                    ticket.check_reserve_expire()
                     assert ticket.ticket_status == ticket.SALE_OPEN, 'وضعیت'
                     assert ticket.get_free_seats() >= seats, 'ظرفیت {}'.format(ticket.id)
                     add_to_cart(request, ticket.id, seats)
@@ -389,8 +390,8 @@ def booking_confirmation(request, event_id):
             order_items = order.items.all()
             order_items.update(ordered=True)
             for item in order_items:
-                item.save()
                 item.ticket.reserve_seats(item.seats)
+                item.save()
             order.ordered = True
             # order.payment = payment
             order.ref_code = create_ref_code()
@@ -423,26 +424,37 @@ def add_to_cart(request, ticket_id, seats):
     if order_qs.exists():
         order = order_qs[0]
         # check if the order item is in the order
-        # TODO: check if all order have same event id
         if order.event == event:
             if order.items.filter(ticket_id=ticket.id).exists():
+                diff_seats = seats - order_item.seats
+                ticket.ticket_reserved += diff_seats
+                ticket.save()
                 order_item.seats = seats
                 order_item.save()
                 messages.info(request, "This item quantity was updated.")
             else:
                 order.items.add(order_item)
+                ticket.ticket_reserved += seats
+                ticket.save()
                 messages.info(request, "This item was added to your cart.")
 
         else:
             order.delete()
             order = Order.objects.create(user=request.user, event=event)
             order.items.add(order_item)
+            ticket.ticket_reserved += seats
+            ticket.save()
             messages.info(request, "This item was added to your cart.")
 
     else:
         order = Order.objects.create(user=request.user, event=event)
         order.items.add(order_item)
+        ticket.ticket_reserved += seats
+        ticket.save()
         messages.info(request, "This item was added to your cart.")
+
+    if order_item.seats == 0:
+        order_item.delete()
 
 
 @login_required

@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -352,6 +354,7 @@ class Tickets(models.Model):
     ticket_description = models.TextField('توضیحات بلیت', null=True, blank=True)
     ticket_seats = models.IntegerField('تعداد بلیت')
     ticket_sold = models.IntegerField('بلیت‌های فروخته شده', default=0)
+    ticket_reserved = models.IntegerField('بلیت‌های رزرو', default=0)
     ticket_price = models.IntegerField('قیمت بلیت', null=True, blank=True)
     ticket_order_start_date = models.DateTimeField('ساعت شروع فروش بلیت', null=True, blank=True, default=timezone.now)
     ticket_order_end_date = models.DateTimeField('ساعت پایان فروش بلیت', null=True, blank=True)
@@ -382,7 +385,7 @@ class Tickets(models.Model):
                                                      self.ticket_sold, self.ticket_order_start_date)
 
     def get_free_seats(self):
-        return self.ticket_seats - self.ticket_sold
+        return self.ticket_seats - self.ticket_sold - self.ticket_reserved
 
     def get_price(self):
         if self.ticket_type == 2:
@@ -415,11 +418,23 @@ class Tickets(models.Model):
                 self.ticket_status = Tickets.TICKET_PASSED
                 self.save()
 
-            if self.get_free_seats() == 0:
+            if self.get_free_seats() + self.ticket_reserved == 0:
                 self.ticket_status = Tickets.SOLD_OUT
                 self.save()
 
         return self.ticket_status, self.get_ticket_status_display
+
+    def check_reserve_expire(self):
+        NOW = datetime.now()
+        extra_seat = 0
+        time_limit = NOW - timedelta(seconds=1200)
+        reserved_item = Order_item.objects.filter(ticket_id=self.id, ordered=False, order__start_date__lte=time_limit)
+        for item in reserved_item:
+            self.ticket_reserved -= item.seats
+            self.save()
+            item.delete()
+            extra_seat += item.seats
+        return extra_seat
 
     def reserve_seats(self, seat_count):
         """
@@ -428,7 +443,8 @@ class Tickets(models.Model):
         """
         assert isinstance(seat_count, int) and seat_count > 0, 'Number of seats should be a positive integer'
         assert self.ticket_status == Tickets.SALE_OPEN, 'Sale is not open'
-        assert self.get_free_seats() >= seat_count, 'Not enough free seats'
+        assert self.ticket_reserved >= seat_count, 'Not enough free seats'
+        self.ticket_reserved -= seat_count
         self.ticket_sold += seat_count
         if self.get_free_seats() == 0:
             self.ticket_status = Tickets.SOLD_OUT

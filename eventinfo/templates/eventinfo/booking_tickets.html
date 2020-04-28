@@ -65,7 +65,13 @@
                             <ul>
                                 {% for ticket in time_slot.get_tickets %}
                                 <li>
-                                    <h5>{{ ticket.ticket_title }}</h5>
+                                    <h5>
+                                        {{ ticket.ticket_title }}
+                                        | ظرفیت باقی‌مانده:
+                                        {{ ticket.get_free_seats }}
+                                        {{ ticket.check_reserve_expire }}
+                                        {{ ticket.ticket_reserved }}
+                                    </h5>
                                     <div class="listing-small-badge pricing-badge"><i class="fa fa-tag"></i>{{ ticket.get_price }}</div>
                                     <div class="listing-small-badge success-badge"><i class="fa fa-info"></i>{{ ticket.get_status.1 }}</div>
                                     <p>{{ ticket.ticket_description }}</p>
@@ -120,6 +126,7 @@
 					<li>ساعت <span>{{ item.ticket.ticket_time_slot.event_start_date|date:'H:i' }}</span></li>
 					<li>{{ item.ticket.ticket_title }} <span>{{ item.seats }} عدد </span></li>
                     <li>قیمت <span>{{ item.ticket.get_price }} </span></li>
+
                     <li class="total-costs"></li>
 				</ul>
                 {% endif %}

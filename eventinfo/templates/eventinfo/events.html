@@ -72,6 +72,7 @@
 				<!-- Listing Item -->
                 {% for event in events %}
                 {%  comment %}{{ event.get_published }}{% endcomment %}
+
 				<div class="col-lg-12 col-md-12">
 					<div class="listing-item-container list-layout">
 						<a href="{% url "eventinfo:event_detail" event_id=event.id %}" class="listing-item">
