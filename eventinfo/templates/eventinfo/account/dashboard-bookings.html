@@ -118,7 +118,7 @@
                                             <a href="{% url 'eventinfo:account_invoice' ref_code=order.ref_code %}" class="button"><i class="sl sl-icon-envelope-open"></i> مشاهده صورت حساب</a>
                                             {% else %}
                                             <a href="{% url 'eventinfo:booking_checkout' event_id=order.event_id %}" class="button approve"><i class="sl sl-icon-check"></i> تکمیل درخواست</a>
-                                            <a href="#" class="button reject"><i class="sl sl-icon-close"></i> لغو درخواست</a>
+                                            <a href="{% url 'eventinfo:remove-card' %}?next={{ request.path|urlize }}" class="button reject"><i class="sl sl-icon-close"></i> لغو درخواست</a>
                                             {% endif %}
                                         </div>
 

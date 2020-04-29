@@ -159,7 +159,8 @@
                     <li class="total-costs" style="border-top:0px; margin-top: 0px">هزینه کل <span>{{ order_qs.0.get_total_cost }} تومان</span></li>
                 </ul>
                 <a class="button fullwidth margin-top-35" href="{% url 'eventinfo:booking_checkout' event_id=event.id %}">تایید و پرداخت</a>
-            <a class="button fullwidth margin-top-5" href="{% url 'eventinfo:booking_tickets' event_id=event.id %}">ویرایش بلیت‌ها</a>
+                <a class="button fullwidth margin-top-5" href="{% url 'eventinfo:booking_tickets' event_id=event.id %}">ویرایش بلیت‌ها</a>
+                <a class="button fullwidth margin-top-5" href="{% url 'eventinfo:remove-card' %}?next={{ request.path|urlize }}">لغو درخواست</a>
 
 			</div>
             {% endif %}

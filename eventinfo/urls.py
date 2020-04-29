@@ -23,6 +23,7 @@ urlpatterns = [
     path('account/invoice/<str:ref_code>/', views.account_invoice, name='account_invoice'),
 
     path('bookmark/', views.bookmark_toggle, name='bookmark_toggle'),
+    path('remove-card/', views.remove_card, name='remove-card'),
 
     path('terms/', views.terms, name='terms'),
     path('contact/', views.contact, name='contact'),

@@ -184,12 +184,12 @@ def login_view(request):
                 else:
                     context = {
                         'form': form,
-                        'error': True,
+                        'error': False,
                         'message': form.errors,
                     }
 
             except Exception as e:
-                context['error'] = True
+                context['error'] = False
                 context['message'] = str(e)
 
             return render(request, 'eventinfo/account/login.html', context)
@@ -455,6 +455,27 @@ def add_to_cart(request, ticket_id, seats):
 
     if order_item.seats == 0:
         order_item.delete()
+
+
+@login_required
+def remove_card(request):
+
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    next = request.GET.get('next')
+    if order_qs.exists():
+        order = order_qs[0]
+        items = order.items.all()
+        for item in items:
+            item.ticket.ticket_reserved -= item.seats
+            item.ticket.save()
+            item.delete()
+        order.delete()
+        messages.info(request, "Order was removed.")
+        return redirect(next)
+    else:
+        messages.info(request, "You do not have an active order")
+        return redirect(next)
+
 
 
 @login_required
