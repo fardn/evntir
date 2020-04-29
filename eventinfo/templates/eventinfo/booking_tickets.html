@@ -1,5 +1,6 @@
 {% extends 'eventinfo/base_page.html' %}
 {% load static %}
+{% load poll_extras %}
 
 {% block title %}
 {{ salam }} |
@@ -76,7 +77,13 @@
                                     <div class="listing-small-badge success-badge"><i class="fa fa-info"></i>{{ ticket.get_status.1 }}</div>
                                     <p>{{ ticket.ticket_description }}</p>
                                     {% if ticket.ticket_status == 2 %}
-                                    <span><input name="{{ ticket.id }}" id="{{ ticket.id }}" type="number" min="0" max="10" value="0"></span>
+                                        {% if order_qs %}
+                                            <span><input name="{{ ticket.id }}" id="{{ ticket.id }}" type="number" min="0" max="10" value="{{ order_qs|item_seats:ticket.id }}"></span>
+                                        {% else %}
+                                            <span><input name="{{ ticket.id }}" id="{{ ticket.id }}" type="number" min="0" max="10" value="0"></span>
+                                        {% endif %}
+
+
                                     {% endif %}
                                 </li>
                                 {% endfor %}
