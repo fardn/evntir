@@ -125,6 +125,7 @@ def booking_tickets(request, event_id):
                     assert ticket.ticket_status == ticket.SALE_OPEN, 'وضعیت'
                     assert ticket.get_free_seats() >= seats, 'ظرفیت {}'.format(ticket.id)
                     add_to_cart(request, ticket.id, seats)
+            assert order_qs.exists(), 'هیچ بلیتی انتخاب نکرده‌اید.'
 
         except Exception as e:
             context['error'] = str(e)
@@ -571,6 +572,9 @@ def add_to_cart(request, ticket_id, seats):
 
     if order_item.seats == 0:
         order_item.delete()
+
+    if order.items.count() == 0:
+        order.delete()
 
 
 @login_required
