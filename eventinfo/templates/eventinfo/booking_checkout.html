@@ -42,6 +42,14 @@
 		<!-- Content
 		================================================== -->
 		<div class="col-lg-8 col-md-8 padding-right-30">
+        {% if messages %}
+                {% for message in messages %}
+                    <div class="notification {% if message.tags %}{{ message.tags }}{% endif %} closeable margin-bottom-35">
+                        <p>{{ message }}</p>
+                        <a class="close"></a>
+                    </div>
+                {% endfor %}
+        {% endif %}
 
 			<h3 class="margin-top-0 margin-bottom-30">مشخصات شرکت‌کننده</h3>
 
@@ -51,18 +59,18 @@
 
 				<div class="col-md-6">
 					<label>نام</label>
-                    <input name="first-name" type="text" value="{{ user.first_name }}">
+                    <input name="first-name" type="text" required value="{{ user.first_name }}">
 				</div>
 
 				<div class="col-md-6">
 					<label>نام خانوادگی</label>
-					<input name="last-name" type="text" value="{{ user.last_name }}">
+					<input name="last-name" type="text" required value="{{ user.last_name }}">
 				</div>
 
 				<div class="col-md-6">
 					<div class="input-with-icon medium-icons">
 						<label>آدرس ایمیل</label>
-						<input name="email" type="text" value="{{ user.email }}">
+						<input name="email" type="text" required value="{{ user.email }}">
 						<i class="im im-icon-Mail"></i>
 					</div>
 				</div>
@@ -70,7 +78,7 @@
 				<div class="col-md-6">
 					<div class="input-with-icon medium-icons">
 						<label>موبایل</label>
-						<input name="mobile" type="text" value="{{ user.profile.mobile }}">
+						<input name="mobile" type="text" required value="{{ user.profile.mobile }}">
 						<i class="im im-icon-Phone-2"></i>
 					</div>
 				</div>
