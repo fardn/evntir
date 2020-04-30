@@ -35,14 +35,21 @@
 <div class="container">
 	<div class="row">
 		<div class="col-md-12">
-
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="notification {% if message.tags %}{{ message.tags }}{% endif %} closeable margin-bottom-35">
+                        <p>{{ message }}</p>
+                        <a class="close"></a>
+                    </div>
+                {% endfor %}
+            {% else %}
 			<div class="booking-confirmation-page">
 				<i class="fa fa-check-circle"></i>
 				<h2 class="margin-top-30">{{ first_name }} از رزرو شما متشکرم!</h2>
 				<p>شما یک ایمیل تأیید دریافت خواهید کرد </p>
-				<p>{{ error }}</p>
                 <a href="{% url 'eventinfo:account_invoice' ref_code=order.ref_code %}" target="_blank" class="button margin-top-30">مشاهده صورتحساب</a>
 			</div>
+            {% endif %}
 
 		</div>
 	</div>

@@ -264,9 +264,10 @@ class Profile(models.Model):
     def spend(self, amount):
         if self.balance < amount:
             return False
-        self.balance -= amount
-        self.save()
-        return True
+        else:
+            self.balance -= amount
+            self.save()
+            return True
 
 
 class Time_Slots(models.Model):

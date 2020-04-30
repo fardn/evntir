@@ -1,11 +1,14 @@
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
+from django.core.exceptions import ValidationError
 from django.core.mail import EmailMessage
-from django.db.models import Count
+from django.core.validators import validate_email
+from django.db.models import Count, Q
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash, get_user_model
 from django.contrib.auth.decorators import login_required
 from django.template.defaultfilters import register
 from django.urls import reverse
@@ -19,7 +22,8 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 from eventinfo.models import Event, Event_types, Time_Slots, Tickets, Time_slot_status, Booking, Order_item, Order, \
     Event_organizers, Profile, Digital_links
-from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm, SignupForm
+from eventinfo.forms import EventSearchForm, ProfileForm, UserForm, BookingForm, SignupForm, PasswordResetRequestForm, \
+    SetPasswordForm
 
 import random
 import string
@@ -129,6 +133,117 @@ def booking_tickets(request, event_id):
             return redirect("eventinfo:booking_checkout", event_id=event_id)
 
     return render(request, 'eventinfo/booking_tickets.html', context)
+
+
+def validate_email_address(email):
+    '''
+    This method here validates the if the input is an email address or not. Its return type is boolean, True if the input is a email address or False if its not.
+    '''
+    try:
+        validate_email(email)
+        return True
+    except ValidationError:
+        return False
+
+
+def reset_password(request):
+    form = PasswordResetRequestForm()
+    context = {
+        'form': form
+    }
+    if request.method == 'POST':
+        '''
+        A normal post request which takes input from field "email_or_username" (in ResetPasswordRequestForm).
+        '''
+        form = PasswordResetRequestForm(request.POST)
+        try:
+            if form.is_valid():
+                data = form.cleaned_data["email_or_username"]
+                if validate_email_address(data) is True:
+                    '''
+                    If the input is an valid email address, then the following code will lookup for users associated with that email address. If found then an email will be sent to the address, else an error message will be printed on the screen.
+                    '''
+                    associated_users = User.objects.filter(Q(email=data) | Q(username=data))
+                    current_site = get_current_site(request)
+                    if associated_users.exists():
+                        for user in associated_users:
+                            c = {
+                                'email': user.email,
+                                'domain': current_site.domain,
+                                'site_name': 'eventinfo.ir',
+                                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                'user': user,
+                                'token': default_token_generator.make_token(user),
+                                'protocol': 'http',
+                                }
+
+                            subject = 'Reset your Eventinfo account password.'
+                            email = render_to_string('eventinfo/account/password_reset_email.html', c)
+                            email = EmailMessage(subject, email, to=[user.email])
+                            email.send()
+                            messages.success(request, 'An email has been sent to ' + data +". Please check its inbox to continue reseting password.")
+                    else:
+                        messages.error(request, 'No user is associated with this email address')
+                else:
+                    '''
+                    If the input is an username, then the following code will lookup for users associated with that user. If found then an email will be sent to the user's address, else an error message will be printed on the screen.
+                    '''
+                    associated_users = User.objects.filter(username=data)
+                    current_site = get_current_site(request)
+                    if associated_users.exists():
+                        for user in associated_users:
+                            c = {
+                                'email': user.email,
+                                'domain': current_site.domain,
+                                'site_name': 'eventinfo.ir',
+                                'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                                'user': user,
+                                'token': default_token_generator.make_token(user),
+                                'protocol': 'http',
+                                }
+
+                            subject = 'Reset your Eventinfo account password.'
+                            email = render_to_string('eventinfo/account/password_reset_email.html', c)
+                            email = EmailMessage(subject, email, to=[user.email])
+                            email.send()
+                            messages.success(request, 'Email has been sent to ' + data +"'s email address. Please check its inbox to continue reseting password.")
+                    else:
+                        messages.error(request, 'This username does not exist in the system.')
+
+        except Exception as e:
+            messages.error(request, str(e))
+
+    return render(request, 'eventinfo/account/reset_password.html', context)
+
+
+def reset_password_confirm(request, uidb64, token):
+    form = SetPasswordForm()
+    context = {
+        'form': form
+    }
+    if request.method == 'POST':
+        form = SetPasswordForm(request.POST)
+        UserModel = get_user_model()
+        assert uidb64 is not None and token is not None  # checked by URLconf
+        try:
+            uid = urlsafe_base64_decode(uidb64)
+            user = UserModel._default_manager.get(pk=uid)
+
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, token):
+            if form.is_valid():
+                new_password = form.cleaned_data['new_password2']
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password has been reset.')
+            else:
+                messages.error(request, 'Password reset has not been unsuccessful.')
+        else:
+            messages.error(request, 'The reset password link is no longer valid.')
+
+    return render(request, 'eventinfo/account/reset_password_confirm.html', context)
 
 
 def login_view(request):
@@ -386,7 +501,7 @@ def booking_confirmation(request, event_id):
         }
 
         try:
-            assert request.user.profile.spend(order.get_total_cost()), 'موجودی حساب شما کافی نیست.'
+            assert request.user.profile.spend(order.get_total_cost()), messages.error(request, 'موجودی حساب شما کافی نیست.')
             order_items = order.items.all()
             order_items.update(ordered=True)
             for item in order_items:
@@ -400,7 +515,8 @@ def booking_confirmation(request, event_id):
             order.save()
 
         except Exception as e:
-            context['error'] = str(e)
+            messages.error(request, str(e))
+            
 
         return render(request, 'eventinfo/booking_confirmation.html', context)
 
@@ -475,7 +591,6 @@ def remove_card(request):
     else:
         messages.info(request, "You do not have an active order")
         return redirect(next)
-
 
 
 @login_required
